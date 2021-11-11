@@ -9,24 +9,29 @@
                 <?php
                 echo $this->Form->control('result_tar', [
                     'type' => 'file',
-                    'label' => 'Results File (.tar.gz)'
+                    'label' => 'Results File (.tar.gz)',
+                    'required' => false
                 ]);
                 echo $submission->result_tar;
 
                 echo $this->Form->control('job_script', [
-                    'type' => 'file'
+                    'type' => 'file',
+                    'required' => false
                 ]);
                 echo $submission->job_script;
 
                 echo $this->Form->control('job_output', [
-                    'type' => 'file'
+                    'type' => 'file',
+                    'required' => false
                 ]);
                 echo $submission->job_output;
                 
                 echo $this->Form->control('system_information', [
                     'type' => 'file',
-                    'label' => 'System Information File (.json)'
+                    'label' => 'System Information File (.json)',
+                    'required' => false
                 ]);
+                echo $submission->system_information;
                 ?>
             </fieldset>
         </div>
@@ -43,8 +48,6 @@
                 <legend>Submission Details</legend>
 
                 <?php
-                echo $submission->system_information;
-
                 echo $this->Form->control('information_system', [
                     'label' => 'System'
                 ]);
@@ -151,7 +154,7 @@
                     </div>
                     <div class="column">
                         <?php
-                        echo $this->Form->control('io500_score', [
+                        echo $this->Form->control('original_io500_score', [
                             'label' => 'Score',
                             'readonly'
                         ]);

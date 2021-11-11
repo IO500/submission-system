@@ -72,7 +72,7 @@
                 <tr class="<?php echo $submission->is_duplicated ? 'highlight' : ''; ?>">
                     <td class="tb-id">
                         <?php
-                        echo $this->Form->checkbox('selected[]', ['value' => $submission->id, 'checked' => false]);
+                        echo $this->Form->checkbox('selected[]', ['value' => $submission->id, 'checked' => !$submission->is_new]);
                         echo $this->Form->control('score[]', ['value' => $submission->io500_score, 'type' => 'hidden']);
                         ?>
                     </td>
@@ -131,8 +131,7 @@
     ?>
 </div>
 
-<?php
-/*
+<script type="text/javascript">
 $("td").click(function(e) {
     var chk = $(this).closest("tr").find("input:checkbox").get(0);
     if(e.target != chk)
@@ -140,5 +139,4 @@ $("td").click(function(e) {
         chk.checked = !chk.checked;
     }
 });
-*/
-?>
+</script>

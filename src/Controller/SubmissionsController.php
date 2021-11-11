@@ -117,7 +117,7 @@ class SubmissionsController extends AppController
 
                 $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
 
-                $submission->io500_score = $json['DATA']['childs'][0]['att']['score'];
+                $submission->original_io500_score = $json['DATA']['childs'][0]['att']['score'];
                 $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
                 $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
 
@@ -141,9 +141,6 @@ class SubmissionsController extends AppController
 
                 $submission->information_client_operating_system = $json['DATA']['childs'][1]['childs'][0]['att']['distribution'];
                 $submission->information_client_operating_system_version = $json['DATA']['childs'][1]['childs'][0]['att']['distribution version'];
-
-                dd($submission);
-                //dd($json);die();
 
                 $this->Submissions->save($submission);
 
@@ -175,7 +172,7 @@ class SubmissionsController extends AppController
         ]);
 
         // Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.
-        if (date('Y-m-d') > $submission->release->release_date) {
+        if (date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
             $this->Flash->error(__('This submission was already released in a list. To modify its metadata, open a GitHub pull request with the change.'));
 
             return $this->redirect(['action' => 'mine']);
@@ -184,47 +181,50 @@ class SubmissionsController extends AppController
         $this->Flash->warning(__('Notice that if you re-upload your system information JSON file, all changes will reflect the current file state.'));
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $previous_hash = sha1(file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information));
+
             $submission = $this->Submissions->patchEntity($submission, $this->request->getData());
 
             if ($this->Submissions->save($submission)) {
 
-                $string = file_get_contents(ROOT . DS . $submission->result_tar_dir . $submission->result_tar);
-                $json = json_decode($string, true);
+                $new_hash = sha1(file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information));
+                
+                if ($previous_hash != $new_hash) {
+                    $string = file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information);
+                    $json = json_decode($string, true);
 
-                $submission->information_institution = $json['DATA']['att']['institution'];
-                $submission->information_storage_vendor = $json['DATA']['childs'][2]['att']['vendor'];
+                    $submission->information_institution = $json['DATA']['att']['institution'];
+                    $submission->information_storage_vendor = $json['DATA']['childs'][2]['att']['vendor'];
 
-                $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
+                    $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
 
-                $submission->io500_score = $json['DATA']['childs'][0]['att']['score'];
-                $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
-                $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
+                    $submission->original_io500_score = $json['DATA']['childs'][0]['att']['score'];
+                    $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
+                    $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
 
-                $submission->information_client_nodes = $json['DATA']['childs'][0]['childs'][0]['att']['clientNodes'];
-                $submission->information_client_procs_per_node = $json['DATA']['childs'][0]['childs'][0]['att']['procsPerNode']; 
+                    $submission->information_client_nodes = $json['DATA']['childs'][0]['childs'][0]['att']['clientNodes'];
+                    $submission->information_client_procs_per_node = $json['DATA']['childs'][0]['childs'][0]['att']['procsPerNode']; 
 
-                $submission->ior_easy_write = $json['DATA']['childs'][0]['childs'][1]['att']['easy write'][0];
-                $submission->ior_easy_read = $json['DATA']['childs'][0]['childs'][1]['att']['easy read'][0];
-                $submission->ior_hard_write = $json['DATA']['childs'][0]['childs'][1]['att']['hard write'][0];
-                $submission->ior_hard_read = $json['DATA']['childs'][0]['childs'][1]['att']['hard read'][0];
+                    $submission->ior_easy_write = $json['DATA']['childs'][0]['childs'][1]['att']['easy write'][0];
+                    $submission->ior_easy_read = $json['DATA']['childs'][0]['childs'][1]['att']['easy read'][0];
+                    $submission->ior_hard_write = $json['DATA']['childs'][0]['childs'][1]['att']['hard write'][0];
+                    $submission->ior_hard_read = $json['DATA']['childs'][0]['childs'][1]['att']['hard read'][0];
 
-                $submission->mdtest_easy_write = $json['DATA']['childs'][0]['childs'][2]['att']['easy write'][0];
-                $submission->mdtest_easy_stat = $json['DATA']['childs'][0]['childs'][2]['att']['easy stat'][0];
-                $submission->mdtest_easy_delete = $json['DATA']['childs'][0]['childs'][2]['att']['easy delete'][0];
-                $submission->mdtest_hard_write = $json['DATA']['childs'][0]['childs'][2]['att']['hard write'][0];
-                $submission->mdtest_hard_stat = $json['DATA']['childs'][0]['childs'][2]['att']['hard stat'][0];
-                $submission->mdtest_hard_read = $json['DATA']['childs'][0]['childs'][2]['att']['hard read'][0];
-                $submission->mdtest_hard_delete = $json['DATA']['childs'][0]['childs'][2]['att']['hard delete'][0];
+                    $submission->mdtest_easy_write = $json['DATA']['childs'][0]['childs'][2]['att']['easy write'][0];
+                    $submission->mdtest_easy_stat = $json['DATA']['childs'][0]['childs'][2]['att']['easy stat'][0];
+                    $submission->mdtest_easy_delete = $json['DATA']['childs'][0]['childs'][2]['att']['easy delete'][0];
+                    $submission->mdtest_hard_write = $json['DATA']['childs'][0]['childs'][2]['att']['hard write'][0];
+                    $submission->mdtest_hard_stat = $json['DATA']['childs'][0]['childs'][2]['att']['hard stat'][0];
+                    $submission->mdtest_hard_read = $json['DATA']['childs'][0]['childs'][2]['att']['hard read'][0];
+                    $submission->mdtest_hard_delete = $json['DATA']['childs'][0]['childs'][2]['att']['hard delete'][0];
 
-                $submission->find_mixed = $json['DATA']['childs'][0]['childs'][3]['att']['midex'][0];
+                    $submission->find_mixed = $json['DATA']['childs'][0]['childs'][3]['att']['mixed'][0];
 
-                $submission->information_client_operating_system = $json['DATA']['childs'][1]['childs'][0]['distribution'];
-                $submission->information_client_operating_system_version = $json['DATA']['childs'][1]['childs'][0]['distribution version'];
+                    $submission->information_client_operating_system = $json['DATA']['childs'][1]['childs'][0]['att']['distribution'];
+                    $submission->information_client_operating_system_version = $json['DATA']['childs'][1]['childs'][0]['att']['distribution version'];
 
-                dd($submission);
-                dd($json);die();
-
-                $this->Submissions->save($submission);
+                    $this->Submissions->save($submission);
+                }
 
                 $this->Flash->success(__('The submission has been saved.'));
 

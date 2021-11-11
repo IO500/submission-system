@@ -164,13 +164,13 @@ class ListingsController extends AppController
                         'Releases'
                     ])
                     ->where([
-                        'Submissions.information_submission_date >=' => $previous_release->release_date
+                        'Submissions.information_submission_date >=' => $previous_release->release_date->i18nFormat('yyyy-MM-dd')
                     ])
                     ->limit($limit);
 //dd($new_submissions);
                 foreach ($new_submissions as $submission) {
                     // We will use the latest valid score to display
-                    $scores[$submission->id] = $submission->previous_io500_score;
+                    $scores[$submission->id] = $submission->original_io500_score;
                 }
 //dd($scores);
 //die();
