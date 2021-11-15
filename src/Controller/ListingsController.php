@@ -170,7 +170,7 @@ class ListingsController extends AppController
 //dd($new_submissions);
                 foreach ($new_submissions as $submission) {
                     // We will use the latest valid score to display
-                    $scores[$submission->id] = $submission->original_io500_score;
+                    $scores[$submission->id] = $submission->io500_score;
                 }
 //dd($scores);
 //die();

@@ -154,7 +154,7 @@
                     </div>
                     <div class="column">
                         <?php
-                        echo $this->Form->control('original_io500_score', [
+                        echo $this->Form->control('io500_score', [
                             'label' => 'Score',
                             'readonly'
                         ]);

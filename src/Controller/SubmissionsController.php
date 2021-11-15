@@ -117,7 +117,7 @@ class SubmissionsController extends AppController
 
                 $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
 
-                $submission->original_io500_score = $json['DATA']['childs'][0]['att']['score'];
+                $submission->io500_score = $json['DATA']['childs'][0]['att']['score'];
                 $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
                 $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
 
