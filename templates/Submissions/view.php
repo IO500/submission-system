@@ -138,10 +138,6 @@
                             <td><?php echo $this->Number->format($submission->io500_score, ['places' => 2, 'precision' => 2]) ?></td>
                         </tr>
                         <tr>
-                            <th><?php echo _('IO500 IOPS') ?></th>
-                            <td><?php echo $this->Number->format($submission->io500_tot_iops, ['places' => 2, 'precision' => 2]) ?> kIOP/s</td>
-                        </tr>
-                        <tr>
                             <th><?php echo _('IO500 BW') ?></th>
                             <td><?php echo $this->Number->format($submission->io500_bw, ['places' => 2, 'precision' => 2]) ?> GiB/s</td>
                         </tr>

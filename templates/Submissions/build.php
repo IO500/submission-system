@@ -53,7 +53,7 @@
                     <th rowspan="2" class="tb-id"></th>
                     <th rowspan="2" class="tb-id">#</th>
                     <th rowspan="2"></th>
-                    <th colspan="3" class="tb-center">Information</th>
+                    <th colspan="4" class="tb-center">Information</th>
                     <th colspan="3" class="tb-center">IO500</th>
                     <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'IO500') ?></th>
                     <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', '10-NODE') ?></th>
@@ -61,7 +61,8 @@
                 <tr>
                     <th>System</th>
                     <th>Institution</th>
-                    <th>Filesystem<br/></th>
+                    <th>Filesystem</th>
+                    <th>Nodes</th>
                     <th rowspan="2" class="tb-number">SCORE</th>
                     <th rowspan="2" class="tb-number">BW<br/>(GIB/S)</th>
                     <th rowspan="2" class="tb-number">MD<br/>(KIOP/S)</th>
@@ -91,6 +92,7 @@
                     <td><?php echo h($submission->information_system) ?></td>
                     <td><?php echo h($submission->information_institution) ?></td>
                     <td><?php echo h($submission->information_filesystem_type) ?></td>
+                    <td><?php echo h($submission->information_client_nodes) ?></td>
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_score, ['places' => 2, 'precision' => 2]) ?></td>
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_bw, ['places' => 2, 'precision' => 2]) ?></td>
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_md, ['places' => 2, 'precision' => 2]) ?></td>

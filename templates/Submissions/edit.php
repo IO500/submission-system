@@ -146,14 +146,6 @@
                 <div class="row">
                     <div class="column">
                         <?php
-                        echo $this->Form->control('io500_tot_iops', [
-                            'label' => 'Total Operations',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
                         echo $this->Form->control('io500_score', [
                             'label' => 'Score',
                             'readonly'
