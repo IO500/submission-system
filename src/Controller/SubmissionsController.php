@@ -314,7 +314,7 @@ class SubmissionsController extends AppController
             ])
             ->where([
                 'Listings.type_id' => $type->id,
-                'Releases.release_date <' => $last_release->release_date->i18nFormat('yyyy-MM-dd') //date('Y-m-d'),
+                'Releases.release_date' => $last_release->release_date->i18nFormat('yyyy-MM-dd') //date('Y-m-d'),
             ])
             ->order([
                 'Releases.release_date' => 'DESC',
@@ -370,8 +370,6 @@ class SubmissionsController extends AppController
 
         foreach ($new_submissions as $submission) {
             // We will use the latest valid score to display
-            $submission->io500_score = $submission->score;
-
             $submission->is_new = true;
 
             $key = $submission->information_system . '-' . $submission->information_institution . '-' . $submission->information_filesystem_type;
@@ -385,8 +383,23 @@ class SubmissionsController extends AppController
             $records[] = $submission;
         }
 
+        // Sort based on the scoree
+        uasort($records, [$this, 'sort']);
+
         $this->set('types', $types);
         $this->set('releases', $releases);
         $this->set('submissions', $records);
+    }
+
+    /**
+     * sort method
+     *
+     * @param  object|null $a.
+     * @param  object|null $b.
+     * @return bool
+     */
+    private function sort($a, $b)
+    {
+        return $a->io500_score < $b->io500_score;
     }
 }
