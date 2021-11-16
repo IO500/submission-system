@@ -30,6 +30,9 @@ class SubmissionsController extends AppController
             'contain' => [
                 'Releases'
             ],
+            'order' => [
+                'Submissions.id' => 'DESC'
+            ]
         ];
 
         $submissions = $this->paginate($this->Submissions);
