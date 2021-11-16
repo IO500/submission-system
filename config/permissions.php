@@ -155,7 +155,7 @@ return [
         [
             'role' => 'committee',
             'controller' => 'Submissions',
-            'action' => ['index', 'view', 'build', 'add', 'edit']
+            'action' => ['index', 'view', 'build']
         ],
         [
             'role' => 'user',
