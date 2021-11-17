@@ -78,7 +78,7 @@ class ListingsController extends AppController
                 ])
                 ->first();
 
-            $table = 'list_' . strtolower($release->acronym) . '_' . strtolower($type->url);
+            $table = 'list_' . strtolower($release->acronym) . '_' . str_replace('ten', '10node', strtolower($type->url));
 
             // Create the table for this new release
             $this->create_table($table);
