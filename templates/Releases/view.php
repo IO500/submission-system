@@ -81,6 +81,7 @@
                             <th><?php echo __('Institution') ?></th>
                             <th><?php echo __('Filesystem Type') ?></th>
                             <th><?php echo __('Nodes') ?></th>
+                            <th class="tb-number"><?php echo __('Score') ?></th>
                             <th class="tb-actions"><?php echo __('Actions') ?></th>
                         </tr>
                         <?php foreach ($release->submissions as $submissions) { ?>
@@ -90,6 +91,7 @@
                             <td><?php echo h($submissions->information_institution) ?></td>
                             <td><?php echo h($submissions->information_filesystem_type) ?></td>
                             <td><?php echo h($submissions->information_client_nodes) ?></td>
+                            <td class="tb-number"><?php echo $this->Number->format($submissions->score, ['places' => 2, 'precision' => 2]) ?></td>
                             <td class="tb-actions">
                                 <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submissions->id], ['escape' => false]) ?>
                             </td>
