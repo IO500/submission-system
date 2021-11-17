@@ -91,7 +91,7 @@
                             <td><?php echo h($submissions->information_institution) ?></td>
                             <td><?php echo h($submissions->information_filesystem_type) ?></td>
                             <td><?php echo h($submissions->information_client_nodes) ?></td>
-                            <td class="tb-number"><?php echo $this->Number->format($submissions->score, ['places' => 2, 'precision' => 2]) ?></td>
+                            <td class="tb-number"><?php echo $this->Number->format($submissions->io500_score, ['places' => 2, 'precision' => 2]) ?></td>
                             <td class="tb-actions">
                                 <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submissions->id], ['escape' => false]) ?>
                             </td>
