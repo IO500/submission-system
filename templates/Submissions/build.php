@@ -41,7 +41,7 @@
         <?php
         echo $this->Form->control('release_id');
         echo $this->Form->control('type_id', ['readonly']);
-        echo $this->Form->control('description', ['label' => 'Description*', 'type' => 'textarea', 'placeholder' => 'Please, provide a shot description about this list release.']);
+        echo $this->Form->control('description', ['label' => 'Description*', 'type' => 'textarea', 'required' => 'required', 'placeholder' => 'Please, provide a shot description about this list release.']);
         ?>
     </fieldset>
 
