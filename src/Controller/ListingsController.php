@@ -38,17 +38,20 @@ class ListingsController extends AppController
             'table' => $table
         ]);
 
-        $listing = $this->Listings->get($id, [
-            'contain' => [
-                'Types',
-                'Releases',
+        $submissions = $this->Listings->ListingsSubmissions->find('all')
+            ->contain([
                 'Submissions' => [
-                    'Releases'
-                ]
-            ],
-        ]);
+                    'Releases',
+                ],
+            ])
+            ->where([
+                'ListingsSubmissions.listing_id' => $listing->id,
+            ])
+            ->order([
+                'ListingsSubmissions.score' => 'DESC'
+            ]);
 
-        $this->set(compact('listing'));
+        $this->set(compact('listing', 'submissions'));
     }
 
     /**

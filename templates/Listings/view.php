@@ -27,7 +27,7 @@
             <div class="related">
                 <h2><?php echo __('Rank') ?></h2>
 
-                <?php if (!empty($listing->submissions)) { ?>
+                <?php if (!empty($submissions)) { ?>
                 <div class="table-responsive">
                     <table class="tb">
                         <tr>
@@ -36,19 +36,19 @@
                             <th><?php echo __('System') ?></th>
                             <th><?php echo __('Institution') ?></th>
                             <th><?php echo __('Filesystem Type') ?></th>
-                            <th><?php echo __('Score') ?></th>
+                            <th class="tb-number"><?php echo __('Score') ?></th>
                             <th class="tb-actions"><?php echo __('Actions') ?></th>
                         </tr>
-                        <?php foreach ($listing->submissions as $submissions) { ?>
+                        <?php foreach ($submissions as $submission) { ?>
                         <tr>
-                            <td class="tb-id"><?php echo h($submissions->id) ?></td>
-                            <td><?php echo h($submissions->release->acronym) ?></td>
-                            <td><?php echo h($submissions->information_system) ?></td>
-                            <td><?php echo h($submissions->information_institution) ?></td>
-                            <td><?php echo h($submissions->information_filesystem_type) ?></td>
-                            <td><?php echo h($submissions->_joinData->score) ?></td>
+                            <td class="tb-id"><?php echo h($submission->id) ?></td>
+                            <td><?php echo h($submission->submission->release->acronym) ?></td>
+                            <td><?php echo h($submission->submission->information_system) ?></td>
+                            <td><?php echo h($submission->submission->information_institution) ?></td>
+                            <td><?php echo h($submission->submission->information_filesystem_type) ?></td>
+                            <td class="tb-number"><?php echo $this->Number->format($submission->score, ['places' => 2, 'precision' => 2]) ?></td>
                             <td class="tb-actions">
-                                <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submissions->id], ['escape' => false]); ?>
+                                <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submission->id], ['escape' => false]); ?>
                             </td>
                         </tr>
                         <?php } ?>
