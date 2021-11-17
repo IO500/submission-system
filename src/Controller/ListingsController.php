@@ -31,7 +31,7 @@ class ListingsController extends AppController
         ]);
 
         // Prepare the real table name for this release
-        $table = strtolower('list_' . $listing->release->acronym . '_' . $listing->type->url);
+        $table = 'list_' . strtolower($release->acronym) . '_' . str_replace('ten', '10node', strtolower($type->url));
 
         // We need to dinamically link the model to the correct table
         $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
@@ -114,7 +114,7 @@ class ListingsController extends AppController
                     ->first();
 //dd($previous_release->toArray());
                 // We need to update the link to the previous table
-                $previous_table = 'list_' . strtolower($previous_release->acronym) . '_' . strtolower($type->url);
+                $previous_release = 'list_' . strtolower($previous_release->acronym) . '_' . str_replace('ten', '10node', strtolower($previous_release->url));
                 
                 // Unlink previous table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
