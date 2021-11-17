@@ -314,7 +314,7 @@ class ListingsController extends AppController
         ]);
 
         // Prepare the real table name for this release
-        $table = strtolower('list_' . $listing->release->acronym . '_' . str_replace('ten', '10node', strtolower($listing->type->url));
+        $table = strtolower('list_' . $listing->release->acronym . '_' . str_replace('ten', '10node', $listing->type->url));
 
         if (date('Y-m-d') > $listing->release->release_date->i18nFormat('yyyy-MM-dd')) {
             $this->Flash->error(__('You are not allowed to delete an already released list!'));
