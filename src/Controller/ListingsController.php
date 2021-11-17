@@ -31,7 +31,7 @@ class ListingsController extends AppController
         ]);
 
         // Prepare the real table name for this release
-        $table = 'list_' . strtolower($listing->acronym) . '_' . str_replace('ten', '10node', strtolower($listing->type->url));
+        $table = 'list_' . strtolower($listing->release->acronym) . '_' . str_replace('ten', '10node', strtolower($listing->type->url));
 
         // We need to dinamically link the model to the correct table
         $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
