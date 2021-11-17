@@ -114,7 +114,7 @@ class ListingsController extends AppController
                     ->first();
 //dd($previous_release->toArray());
                 // We need to update the link to the previous table
-                $previous_release = 'list_' . strtolower($previous_release->acronym) . '_' . str_replace('ten', '10node', strtolower($previous_release->url));
+                $previous_release = 'list_' . strtolower($previous_release->acronym) . '_' . str_replace('ten', '10node', strtolower($previous_release->type->url));
                 
                 // Unlink previous table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
