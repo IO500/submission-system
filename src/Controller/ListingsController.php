@@ -152,12 +152,12 @@ class ListingsController extends AppController
                     ->limit($limit);
 
                 $scores = [];
-//dd($submissions->toArray());
+
                 foreach ($submissions as $submission) {
                     // We will use the latest valid score to display
-                    $scores[$submission->id] = $submission->score;
+                    $scores[$submission->submission_id] = $submission->score;
                 }
-//dd($scores);
+
                 // For new submissions in this release, we need to get the score from the submission table
                 $new_submissions = $this->Listings->ListingsSubmissions->Submissions->find('all')
                     ->contain([
