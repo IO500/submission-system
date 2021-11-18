@@ -90,7 +90,7 @@ class ReleasesController extends AppController
             'contain' => [],
         ]);
 
-        if (date('Y-m-d') >= $release->release_date->i18nFormat('yyyy-MM-dd')) {
+        if (date('Y-m-d') >= date('Y-m-d', strtotime($release->release_date->i18nFormat('yyyy-MM-dd') . ' +1 day'))) {
             $this->Flash->error(__('You are not allowed to modify a released list! Please, submit a public PR in GitHub!'));
 
             return $this->redirect(['action' => 'index']);
