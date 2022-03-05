@@ -10,6 +10,7 @@
                     <th><?php echo $this->Paginator->sort('information_system', 'System') ?></th>
                     <th><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
                     <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem Type') ?></th>
+                    <th><?php echo $this->Paginator->sort('information_submission_date', 'Date') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'IO500') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', '10-NODE') ?></th>
                     <th class="tb-actions"><?php echo __('Actions') ?></th>
@@ -23,6 +24,7 @@
                     <td><?php echo h($submission->information_system) ?></td>
                     <td><?php echo h($submission->information_institution) ?></td>
                     <td><?php echo h($submission->information_filesystem_type) ?></td>
+                    <td><?php echo h($submission->information_submission_date) ?></td>
                     <td class="tb-center">
                         <?php if ($submission->information_10_node_challenge) { ?>
                             <i class="fas fa-check"></i>
@@ -40,6 +42,11 @@
                     <td class="tb-actions">
                         <?php echo $this->AuthLink->link('<i class="fas fa-highlighter"></i>', ['action' => 'edit', $submission->id], ['escape' => false]) ?>
                     </td>
+                </tr>
+                <?php } ?>
+                <?php if (!$submissions->count()) { ?>
+                <tr>
+                    <td colspan="8" class="center">No previous submissions found for your user.</td>
                 </tr>
                 <?php } ?>
             </tbody>

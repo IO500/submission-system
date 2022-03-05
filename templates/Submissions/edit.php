@@ -12,30 +12,44 @@
                     'label' => 'Results File (.tar.gz)',
                     'required' => false
                 ]);
-                echo $submission->result_tar;
+                ?>
 
+                <span><?php echo $submission->result_tar; ?> (<?php echo $submission->result_tar_size; ?> bytes)</span>
+
+                <?php
                 echo $this->Form->control('job_script', [
                     'type' => 'file',
                     'required' => false
                 ]);
-                echo $submission->job_script;
+                ?>
 
+                <span><?php echo $submission->job_script; ?> (<?php echo $submission->job_script_size; ?> bytes)</span>
+
+                <?php
                 echo $this->Form->control('job_output', [
                     'type' => 'file',
                     'required' => false
                 ]);
-                echo $submission->job_output;
-                
+                ?>
+
+                <span><?php echo $submission->job_output; ?> (<?php echo $submission->job_output_size; ?> bytes)</span>
+
+                <?php
                 echo $this->Form->control('system_information', [
                     'type' => 'file',
                     'label' => 'System Information File (.json)',
                     'required' => false
                 ]);
-                echo $submission->system_information;
                 ?>
+
+                <span><?php echo $submission->system_information; ?> (<?php echo $submission->system_information_size; ?> bytes)</span>
             </fieldset>
         </div>
     </div>
+</div>
+
+<div class="submission-notice">
+    &xrarr; Please, ensure you provide all the requested information for a complete submission &xlarr;
 </div>
 
 <div class="row">
@@ -592,7 +606,8 @@
                 ]);
 
                 echo $this->Form->control('information_10_node_challenge', [
-                    'label' => 'Yes, include this submission in the 10-node list!'
+                    'label' => 'Yes, include this submission in the 10-node list!',
+                    intval($submission->information_client_nodes) == 10 ? '' : 'disabled'
                 ]);
                 ?>
 

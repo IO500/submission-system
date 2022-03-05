@@ -101,8 +101,8 @@ $config = [
     ],
     'OneTimePasswordAuthenticator' => [
         'checker' => \CakeDC\Auth\Authentication\DefaultOneTimePasswordAuthenticationChecker::class,
-        'login' => false,
-        'issuer' => null,
+        'login' => true,
+        'issuer' => 'IO500 Hub',
         // The number of digits the resulting codes will be
         'digits' => 6,
         // The number of seconds a code will be valid
@@ -197,7 +197,7 @@ $config = [
             'unauthorizedHandler' => [
                 'className' => 'CakeDC/Users.DefaultRedirect',
                 'url' =>  function($request, $options) {
-                    $url = '/io-500-hub/login';
+                    $url = '/';
 
                     return $url;
                 },

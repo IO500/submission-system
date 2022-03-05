@@ -43,8 +43,11 @@ class SubmissionsController extends AppController
     public function mine()
     {
         $userID = $this->getRequest()->getAttribute('identity')['id'] ?? null;
-        
-        $query = $this->Submissions->findAllByUserId($userID);
+
+        $query = $this->Submissions->find('all')
+            ->where([
+                'Submissions.user_id' => $userID
+            ]);
 
         $this->paginate = [
             'contain' => [
@@ -115,35 +118,69 @@ class SubmissionsController extends AppController
                 $string = file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information);
                 $json = json_decode($string, true);
 
-                $submission->information_institution = $json['DATA']['att']['institution'];
-                $submission->information_storage_vendor = $json['DATA']['childs'][2]['att']['vendor'];
+                // Institution
 
-                $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
+                $json_site = $this->find_information($json, 'type', 'Site');
 
-                $submission->io500_score = $json['DATA']['childs'][0]['att']['score'];
-                $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
-                $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
+                $submission->information_institution = $json_site['att']['institution'];
 
-                $submission->information_client_nodes = $json['DATA']['childs'][0]['childs'][0]['att']['clientNodes'];
-                $submission->information_client_procs_per_node = $json['DATA']['childs'][0]['childs'][0]['att']['procsPerNode']; 
+                // Information
 
-                $submission->ior_easy_write = $json['DATA']['childs'][0]['childs'][1]['att']['easy write'][0];
-                $submission->ior_easy_read = $json['DATA']['childs'][0]['childs'][1]['att']['easy read'][0];
-                $submission->ior_hard_write = $json['DATA']['childs'][0]['childs'][1]['att']['hard write'][0];
-                $submission->ior_hard_read = $json['DATA']['childs'][0]['childs'][1]['att']['hard read'][0];
+                $json_information = $this->find_information($json, 'type', 'information')['att'];
 
-                $submission->mdtest_easy_write = $json['DATA']['childs'][0]['childs'][2]['att']['easy write'][0];
-                $submission->mdtest_easy_stat = $json['DATA']['childs'][0]['childs'][2]['att']['easy stat'][0];
-                $submission->mdtest_easy_delete = $json['DATA']['childs'][0]['childs'][2]['att']['easy delete'][0];
-                $submission->mdtest_hard_write = $json['DATA']['childs'][0]['childs'][2]['att']['hard write'][0];
-                $submission->mdtest_hard_stat = $json['DATA']['childs'][0]['childs'][2]['att']['hard stat'][0];
-                $submission->mdtest_hard_read = $json['DATA']['childs'][0]['childs'][2]['att']['hard read'][0];
-                $submission->mdtest_hard_delete = $json['DATA']['childs'][0]['childs'][2]['att']['hard delete'][0];
+                $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : null;
+                $submission->information_client_procs_per_node = isset($json_information['procsPerNode']) ?  : null;
+                $submission->information_client_total_procs = intval($submission->information_client_nodes) * intval($submission->information_client_procs_per_node);
 
-                $submission->find_mixed = $json['DATA']['childs'][0]['childs'][3]['att']['mixed'][0];
+                // Supercomputer
 
-                $submission->information_client_operating_system = $json['DATA']['childs'][1]['childs'][0]['att']['distribution'];
-                $submission->information_client_operating_system_version = $json['DATA']['childs'][1]['childs'][0]['att']['distribution version'];
+                $json_site = $this->find_information($json, 'type', 'Supercomputer');
+
+                $submission->information_system = isset($json_site['att']['name']) ? $json_site['att']['name'] : null;
+
+                // File System
+
+                $json_file_system = $this->find_information($json, 'type', 'file system');
+
+                $submission->information_filesystem_vendor = isset($json_file_system['vendor']) ? $json_file_system['vendor'] : null;
+                $submission->information_filesystem_name = isset($json_file_system['name']) ? $json_file_system['name'] : null;
+                $submission->information_filesystem_type = isset($json_file_system['software']) ? $json_file_system['software'] : null;
+                $submission->information_filesystem_version = isset($json_file_system['version']) ? $json_file_system['version'] : null;
+
+                // IO500 metrics
+
+                $json_io500 = $this->find_information($json, 'type', 'IO500');
+
+                $submission->original_io500_score = isset($json_io500['att']['score']) ?  : null;
+                $submission->io500_bw = isset($json_io500['att']['scoreBW'][0]) ? $json_io500['att']['scoreBW'][0] : null;
+                $submission->io500_md = isset($json_io500['att']['scoreMD'][0]) ? $json_io500['att']['scoreMD'][0] : null;
+
+                // IOR metrics
+
+                $json_ior = $this->find_information($json, 'type', 'IOR')['att'];
+
+                $submission->ior_easy_write = isset($json_ior['easy write'][0]) ? $json_ior['easy write'][0] : null;
+                $submission->ior_easy_read = isset($json_ior['easy read'][0]) ? $json_ior['easy read'][0] : null;
+                $submission->ior_hard_write = isset($json_ior['hard write'][0]) ? $json_ior['hard write'][0] : null;
+                $submission->ior_hard_read = isset($json_ior['hard read'][0]) ? $json_ior['hard read'][0] : null;
+
+                // MDTest metrics
+
+                $json_mdtest = $this->find_information($json, 'type', 'MDTest')['att'];
+                
+                $submission->mdtest_easy_write = isset($json_mdtest['easy write'][0]) ? $json_mdtest['easy write'][0] : null;
+                $submission->mdtest_easy_stat = isset($json_mdtest['easy stat'][0]) ? $json_mdtest['easy stat'][0] : null;
+                $submission->mdtest_easy_delete = isset($json_mdtest['easy delete'][0]) ? $json_mdtest['easy delete'][0] : null;
+                $submission->mdtest_hard_write = isset($json_mdtest['hard write'][0]) ? $json_mdtest['hard write'][0] : null;
+                $submission->mdtest_hard_stat = isset($json_mdtest['hard stat'][0]) ? $json_mdtest['hard stat'][0] : null;
+                $submission->mdtest_hard_read = isset($json_mdtest['hard read'][0]) ? $json_mdtest['hard read'][0] : null;
+                $submission->mdtest_hard_delete = isset($json_mdtest['hard delete'][0]) ? $json_mdtest['hard delete'][0] : null;
+
+                // find metrics
+
+                $json_find = $this->find_information($json, 'type', 'find')['att'];
+
+                $submission->find_mixed = isset($json_find['mixed'][0]) ? $json_find['mixed'][0] : null;
 
                 $this->Submissions->save($submission);
 
@@ -181,85 +218,98 @@ class SubmissionsController extends AppController
             return $this->redirect(['action' => 'mine']);
         }
 
-        $this->Flash->warning(__('Notice that if you re-upload your system information JSON file, all changes will reflect the current file state.'));
-
         if ($this->request->is(['patch', 'post', 'put'])) {
             $previous_hash = sha1(file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information));
 
             $submission = $this->Submissions->patchEntity($submission, $this->request->getData());
+            $submission->upload_hash = sha1($submission->user_id . $submission->information_submission_date);
 
             if ($this->Submissions->save($submission)) {
 
                 $new_hash = sha1(file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information));
                 
-                if ($previous_hash != $new_hash) {
+                if (true) { // $previous_hash != $new_hash) {
                     $string = file_get_contents(ROOT . DS . $submission->system_information_dir . $submission->system_information);
                     $json = json_decode($string, true);
 
-                    $submission->information_institution = $json['DATA']['att']['institution'];
-                    $submission->information_storage_vendor = $json['DATA']['childs'][2]['att']['vendor'];
+                    // Institution
 
-                    $submission->information_system = $json['DATA']['childs'][1]['att']['name'];
+                    $json_site = $this->find_information($json, 'type', 'Site');
 
-                    $submission->original_io500_score = $json['DATA']['childs'][0]['att']['score'];
-                    $submission->io500_bw = $json['DATA']['childs'][0]['att']['scoreBW'][0];
-                    $submission->io500_md = $json['DATA']['childs'][0]['att']['scoreMD'][0];
+                    $submission->information_institution = $json_site['att']['institution'];
 
-                    $submission->information_client_nodes = $json['DATA']['childs'][0]['childs'][0]['att']['clientNodes'];
-                    $submission->information_client_procs_per_node = $json['DATA']['childs'][0]['childs'][0]['att']['procsPerNode']; 
+                    // Information
 
-                    $submission->ior_easy_write = $json['DATA']['childs'][0]['childs'][1]['att']['easy write'][0];
-                    $submission->ior_easy_read = $json['DATA']['childs'][0]['childs'][1]['att']['easy read'][0];
-                    $submission->ior_hard_write = $json['DATA']['childs'][0]['childs'][1]['att']['hard write'][0];
-                    $submission->ior_hard_read = $json['DATA']['childs'][0]['childs'][1]['att']['hard read'][0];
+                    $json_information = $this->find_information($json, 'type', 'information')['att'];
 
-                    $submission->mdtest_easy_write = $json['DATA']['childs'][0]['childs'][2]['att']['easy write'][0];
-                    $submission->mdtest_easy_stat = $json['DATA']['childs'][0]['childs'][2]['att']['easy stat'][0];
-                    $submission->mdtest_easy_delete = $json['DATA']['childs'][0]['childs'][2]['att']['easy delete'][0];
-                    $submission->mdtest_hard_write = $json['DATA']['childs'][0]['childs'][2]['att']['hard write'][0];
-                    $submission->mdtest_hard_stat = $json['DATA']['childs'][0]['childs'][2]['att']['hard stat'][0];
-                    $submission->mdtest_hard_read = $json['DATA']['childs'][0]['childs'][2]['att']['hard read'][0];
-                    $submission->mdtest_hard_delete = $json['DATA']['childs'][0]['childs'][2]['att']['hard delete'][0];
+                    $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : null;
+                    $submission->information_client_procs_per_node = isset($json_information['procsPerNode']) ?  : null;
+                    $submission->information_client_total_procs = intval($submission->information_client_nodes) * intval($submission->information_client_procs_per_node);
 
-                    $submission->find_mixed = $json['DATA']['childs'][0]['childs'][3]['att']['mixed'][0];
+                    // Supercomputer
 
-                    $submission->information_client_operating_system = $json['DATA']['childs'][1]['childs'][0]['att']['distribution'];
-                    $submission->information_client_operating_system_version = $json['DATA']['childs'][1]['childs'][0]['att']['distribution version'];
+                    $json_site = $this->find_information($json, 'type', 'Supercomputer');
+
+                    $submission->information_system = isset($json_site['att']['name']) ? $json_site['att']['name'] : null;
+
+                    // File System
+
+                    $json_file_system = $this->find_information($json, 'type', 'file system');
+
+                    $submission->information_filesystem_vendor = isset($json_file_system['vendor']) ? $json_file_system['vendor'] : null;
+                    $submission->information_filesystem_name = isset($json_file_system['name']) ? $json_file_system['name'] : null;
+                    $submission->information_filesystem_type = isset($json_file_system['software']) ? $json_file_system['software'] : null;
+                    $submission->information_filesystem_version = isset($json_file_system['version']) ? $json_file_system['version'] : null;
+
+                    // IO500 metrics
+
+                    $json_io500 = $this->find_information($json, 'type', 'IO500');
+
+                    $submission->original_io500_score = isset($json_io500['att']['score']) ?  : null;
+                    $submission->io500_bw = isset($json_io500['att']['scoreBW'][0]) ? $json_io500['att']['scoreBW'][0] : null;
+                    $submission->io500_md = isset($json_io500['att']['scoreMD'][0]) ? $json_io500['att']['scoreMD'][0] : null;
+
+                    // IOR metrics
+
+                    $json_ior = $this->find_information($json, 'type', 'IOR')['att'];
+
+                    $submission->ior_easy_write = isset($json_ior['easy write'][0]) ? $json_ior['easy write'][0] : null;
+                    $submission->ior_easy_read = isset($json_ior['easy read'][0]) ? $json_ior['easy read'][0] : null;
+                    $submission->ior_hard_write = isset($json_ior['hard write'][0]) ? $json_ior['hard write'][0] : null;
+                    $submission->ior_hard_read = isset($json_ior['hard read'][0]) ? $json_ior['hard read'][0] : null;
+
+                    // MDTest metrics
+
+                    $json_mdtest = $this->find_information($json, 'type', 'MDTest')['att'];
+                    
+                    $submission->mdtest_easy_write = isset($json_mdtest['easy write'][0]) ? $json_mdtest['easy write'][0] : null;
+                    $submission->mdtest_easy_stat = isset($json_mdtest['easy stat'][0]) ? $json_mdtest['easy stat'][0] : null;
+                    $submission->mdtest_easy_delete = isset($json_mdtest['easy delete'][0]) ? $json_mdtest['easy delete'][0] : null;
+                    $submission->mdtest_hard_write = isset($json_mdtest['hard write'][0]) ? $json_mdtest['hard write'][0] : null;
+                    $submission->mdtest_hard_stat = isset($json_mdtest['hard stat'][0]) ? $json_mdtest['hard stat'][0] : null;
+                    $submission->mdtest_hard_read = isset($json_mdtest['hard read'][0]) ? $json_mdtest['hard read'][0] : null;
+                    $submission->mdtest_hard_delete = isset($json_mdtest['hard delete'][0]) ? $json_mdtest['hard delete'][0] : null;
+
+                    // find metrics
+
+                    $json_find = $this->find_information($json, 'type', 'find')['att'];
+
+                    $submission->find_mixed = isset($json_find['mixed'][0]) ? $json_find['mixed'][0] : null;
 
                     $this->Submissions->save($submission);
                 }
 
                 $this->Flash->success(__('The submission has been saved.'));
-
-                return $this->redirect(['action' => 'mine']);
+            } else {
+                $this->Flash->error(__('The submission could not be saved. Please, try again.'));
             }
-
-            $this->Flash->error(__('The submission could not be saved. Please, try again.'));
         }
+
+        $this->Flash->warning(__('Notice that if you re-upload your system information JSON file, all changes will reflect the current file state.'));
 
         $releases = $this->Submissions->Releases->find('list', ['limit' => 200]);
 
         $this->set(compact('submission', 'releases'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Submission id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $submission = $this->Submissions->get($id);
-        if ($this->Submissions->delete($submission)) {
-            $this->Flash->success(__('The submission has been deleted.'));
-        } else {
-            $this->Flash->error(__('The submission could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -402,4 +452,23 @@ class SubmissionsController extends AppController
     {
         return $a->io500_score < $b->io500_score;
     }
+
+    private function find_information($array, $key, $value)
+    {
+        $iterator = new \RecursiveArrayIterator($array);
+        $recursive = new \RecursiveIteratorIterator(
+            $iterator,
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($recursive as $k => $v) {
+            if ($k === $key && $v == $value) {
+                
+                return $recursive->getSubIterator($recursive->getDepth() - 1)->current();
+            }
+        }
+
+        return null;
+    }
+
 }
