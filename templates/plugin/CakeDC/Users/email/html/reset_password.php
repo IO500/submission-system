@@ -12,7 +12,7 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td style="color: #222222; font-family: 'Open Sans', sans-serif; font-size: 14px;">
-                                    <?php echo __d('Hi <b>{0}</b>', isset($first_name) ? $first_name : $username); ?>,
+                                    <?php echo __d('Hi {0}', isset($first_name) ? $first_name : $username); ?>,
                                 </td>
                             </tr>
                             <tr>

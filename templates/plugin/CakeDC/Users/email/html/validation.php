@@ -12,13 +12,13 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td style="color: #222222; font-family: 'Open Sans', sans-serif; font-size: 12px;">
-                                    <?php echo __d('Hi <b>{0}</b>', isset($first_name) ? $first_name : $username); ?>,
+                                    <?php echo __d('Hi {0}', isset($first_name) ? $first_name : $username); ?>,
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 20px 0 0 0; color: #222222; font-family: 'Open Sans', sans-serif; font-size: 12px; line-height: 20px;">
                                     <p>
-                                        <?php echo __('Thank you for signing up at <b>IO500 Hub</b>! We need to verify your account before granting you access. Please, click on the button to complete the registration process.'); ?>
+                                        <?php echo __('Thank you for signing up at IO500 Hub! We need to verify your account before granting you access. Please, click on the button to complete the registration process.'); ?>
                                     </p>
                                     <p style="text-align: center; margin: 40px 0 40px 0;">
                                         <a href="<?php echo $this->Url->build($activationUrl); ?>" style="background: #cc1717; color: #ffffff; display: inline-block; padding: 10px 30px 10px 30px; text-decoration: none; border-radius: 3px; width: 25%; font-weight: bold;"><?php echo __('ACTIVATE!'); ?></a>
