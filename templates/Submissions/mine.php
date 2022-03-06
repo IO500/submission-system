@@ -46,7 +46,7 @@
                 <?php } ?>
                 <?php if (!$submissions->count()) { ?>
                 <tr>
-                    <td colspan="8" class="center">No previous submissions found for your user.</td>
+                    <td colspan="9" class="center">No previous submissions found for your user.</td>
                 </tr>
                 <?php } ?>
             </tbody>
