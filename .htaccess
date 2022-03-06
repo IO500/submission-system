@@ -4,6 +4,11 @@
 #    RequestHeader unset Proxy
 #</IfModule>
 
+#AuthType Basic
+#AuthName "Restricted Content"
+#AuthUserFile /home/jeanbez/.htpasswd
+#Require valid-user
+
 <IfModule mod_rewrite.c>
     RewriteEngine on
     RewriteRule    ^(\.well-known/.*)$ $1 [L]

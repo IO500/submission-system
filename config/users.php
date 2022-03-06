@@ -197,7 +197,7 @@ $config = [
             'unauthorizedHandler' => [
                 'className' => 'CakeDC/Users.DefaultRedirect',
                 'url' =>  function($request, $options) {
-                    $url = '/';
+                    $url = '/login';
 
                     return $url;
                 },
