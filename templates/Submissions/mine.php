@@ -26,14 +26,14 @@
                     <td><?php echo h($submission->information_filesystem_type) ?></td>
                     <td><?php echo h($submission->information_submission_date) ?></td>
                     <td class="tb-center">
-                        <?php if ($submission->information_10_node_challenge) { ?>
+                        <?php if ($submission->information_10_node_challenge === true) { ?>
                             <i class="fas fa-check"></i>
                         <?php } else { ?>
                             <i class="fas fa-ban"></i>
                         <?php } ?>
                     </td>
                     <td class="tb-center">
-                        <?php if ($submission->include_in_io500) { ?>
+                        <?php if ($submission->include_in_io500 === true) { ?>
                             <i class="fas fa-check"></i>
                         <?php } else { ?>
                             <i class="fas fa-ban"></i>
