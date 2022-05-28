@@ -105,7 +105,7 @@ class SubmissionsController extends AppController
             $submission->information_client_operating_system_version = isset($json_nodes['distribution version']) ? $json_nodes['distribution version'] : null;
             $submission->information_client_kernel_version = isset($json_nodes['kernel version']) ? $json_nodes['kernel version'] : null;
         } else {
-            $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : $submission->information_client_nodes;
+            $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : null;
             $submission->information_client_procs_per_node = isset($json_information['procsPerNode']) ?  : null;
             $submission->information_client_total_procs = intval($submission->information_client_nodes) * intval($submission->information_client_procs_per_node);
         }
@@ -138,8 +138,8 @@ class SubmissionsController extends AppController
             $new_format = False;
         }
 
-        $submission->io500_score = isset($json_io500['att']['score']) ?  : null;
-        $submission->original_io500_score = isset($json_io500['att']['score']) ?  : null;
+        $submission->io500_score = isset($json_io500['att']['score']) ? $json_io500['att']['score'] : null;
+        $submission->original_io500_score = isset($json_io500['att']['score']) ? $json_io500['att']['score'] : null;
 
         if ($new_format) {
             $json_io500['att']['scoreBW'] = explode(' ', $json_io500['att']['scoreBW']);
@@ -193,7 +193,7 @@ class SubmissionsController extends AppController
             $json_find['mixed'] = explode(' ', $json_find['mixed']);
         }
         $submission->find_mixed = isset($json_find['mixed'][0]) ? $json_find['mixed'][0] : null;
-
+dd($submission);
         return $submission;
     }
 
