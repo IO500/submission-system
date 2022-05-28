@@ -1050,3 +1050,15 @@ footer > .container{
     font-weight: bold;
     padding: 5px;
 }
+
+.new-submission {
+    border-radius: 50px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    height: auto;
+    line-height: 22px;
+    transition: 0.2s;
+    background: gold;
+    padding: 0 7px;
+}

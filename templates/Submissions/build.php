@@ -55,6 +55,7 @@
             <thead>
                 <tr>
                     <th rowspan="2" class="tb-id"></th>
+                    <th rowspan="2" class="tb-id"></th>
                     <th rowspan="2" class="tb-id">#</th>
                     <th rowspan="2"></th>
                     <th colspan="4" class="tb-center">Information</th>
@@ -80,6 +81,11 @@
                         echo $this->Form->checkbox('selected[]', ['value' => $submission->id, 'checked' => !$submission->is_new]);
                         echo $this->Form->control('score[]', ['value' => $submission->io500_score, 'type' => 'hidden']);
                         ?>
+                    </td>
+                    <td class="tb-id">
+                        <?php if ($submission->release->acronym == strtoupper($release_acronym)) { ?>
+                            <strong class="new-submission">NEW</strong>
+                        <?php } ?>
                     </td>
                     <td class="tb-id">
                         <?php
