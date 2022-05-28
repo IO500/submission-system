@@ -95,13 +95,20 @@ class SubmissionsController extends AppController
 
         $submission->information_client_nodes = isset($json_nodes['count']) ? $json_nodes['count'] : null;
 
-        // Information
-
+        // Supercomputer Nodes
+        $json_nodes = $this->find_information($json, 'type', 'Nodes')['att'];
         $json_information = $this->find_information($json, 'type', 'information')['att'];
 
-        $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : $submission->information_client_nodes;
-        $submission->information_client_procs_per_node = isset($json_information['procsPerNode']) ?  : null;
-        $submission->information_client_total_procs = intval($submission->information_client_nodes) * intval($submission->information_client_procs_per_node);
+        if ($json_nodes) {
+            $submission->information_client_nodes = isset($json_nodes['count']) ? $json_nodes['count'] : null;
+            $submission->information_client_operating_system = isset($json_nodes['distribution']) ? $json_nodes['distribution'] : null;
+            $submission->information_client_operating_system_version = isset($json_nodes['distribution version']) ? $json_nodes['distribution version'] : null;
+            $submission->information_client_kernel_version = isset($json_nodes['kernel version']) ? $json_nodes['kernel version'] : null;
+        } else {
+            $submission->information_client_nodes = isset($json_information['clientNodes']) ? $json_information['clientNodes'] : $submission->information_client_nodes;
+            $submission->information_client_procs_per_node = isset($json_information['procsPerNode']) ?  : null;
+            $submission->information_client_total_procs = intval($submission->information_client_nodes) * intval($submission->information_client_procs_per_node);
+        }
 
         $submission->information_submission_date = isset($json_information['submission_date']) ? $json_information['submission_date'] : $submission->information_submission_date;
 
@@ -119,14 +126,6 @@ class SubmissionsController extends AppController
         $submission->information_filesystem_name = isset($json_file_system['name']) ? $json_file_system['name'] : null;
         $submission->information_filesystem_type = isset($json_file_system['software']) ? $json_file_system['software'] : null;
         $submission->information_filesystem_version = isset($json_file_system['version']) ? $json_file_system['version'] : null;
-
-        // Supercomputer Nodes
-        $json_nodes = $this->find_information($json, 'type', 'Nodes')['att'];
-
-        $submission->information_client_nodes = isset($json_nodes['count']) ? $json_nodes['count'] : null;
-        $submission->information_client_operating_system = isset($json_nodes['distribution']) ? $json_nodes['distribution'] : null;
-        $submission->information_client_operating_system_version = isset($json_nodes['distribution version']) ? $json_nodes['distribution version'] : null;
-        $submission->information_client_kernel_version = isset($json_nodes['kernel version']) ? $json_nodes['kernel version'] : null;
 
         // IO500 metrics
 
