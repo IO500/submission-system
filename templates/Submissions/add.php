@@ -20,7 +20,7 @@
 
                 echo $this->Form->control('job_output', [
                     'type' => 'file',
-                    'required' => true
+                    'required' => false
                 ]);
 
                 echo $this->Form->control('system_information', [
