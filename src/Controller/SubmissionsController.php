@@ -431,6 +431,9 @@ class SubmissionsController extends AppController
         // Sort based on the scoree
         uasort($records, [$this, 'sort']);
 
+        $this->set('release_acronym', $release_acronym);
+        $this->set('type_url', $type_url);
+
         $this->set('types', $types);
         $this->set('releases', $releases);
         $this->set('submissions', $records);

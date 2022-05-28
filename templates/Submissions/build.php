@@ -18,11 +18,15 @@
         <legend>README</legend>
 
         <p>
-            You are building a new list based on the <strong></strong> <strong></strong> list with the new submissions. You cannot use this interface to build lists for previous releases. Based on the provided records, just select the ones that should be included in this new list.
+            You are building a new list based on the <strong><?php echo strtoupper($release_acronym); ?></strong> - <strong><?php echo strtoupper($type_url); ?></strong> list with the new submissions. You cannot use this interface to build lists for previous releases. Based on the provided records, just <strong>select the ones that should be included in this new list</strong>.
         </p>
 
         <p>
-            The system will <span class="highlight">highlight</span> all those submissions that are possilibly duplicated considering the (system, institution, filesystem) combination. You need to review and pick only the one that should be used in the next release.
+            The system will <strong class="highlight">highlight</strong> all those submissions that are possilibly duplicated considering the (<strong>system</strong>, <strong>institution</strong>, <strong>filesystem</strong>) combination. You need to review and pick only the one that should be used in the next release.
+        </p>
+
+        <p>
+            Make sure you <strong>check</strong> if the <strong>submission wants to be included in the list you are creating</strong>.
         </p>
     </fieldset>
 
