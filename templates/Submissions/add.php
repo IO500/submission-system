@@ -15,7 +15,7 @@
 
                 echo $this->Form->control('job_script', [
                     'type' => 'file',
-                    'required' => true
+                    'required' => false
                 ]);
 
                 echo $this->Form->control('job_output', [
