@@ -3,7 +3,7 @@
 
     <div class="submissions-action">
         <?php
-        echo $this->AuthLink->link(__('SYNCHRONIZE'), ['action' => 'synchronize'], ['class' => 'button synchronize float-right']);
+        echo $this->AuthLink->postLink(__('SYNCHRONIZE'), ['action' => 'synchronize'], ['confirm' => __('You are about to release the latest IO500 list to the PRODUCTION website. This will make the results public! Are you absolutely sure ou want to proceed?'), 'class' => 'button synchronize float-right']);
         echo $this->AuthLink->link(__('NEW'), ['action' => 'add'], ['class' => 'button float-right']);
         ?>
     </div>
