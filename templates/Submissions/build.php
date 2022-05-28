@@ -107,18 +107,34 @@
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_bw, ['places' => 2, 'precision' => 2]) ?></td>
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_md, ['places' => 2, 'precision' => 2]) ?></td>
                     <td class="tb-center">
-                        <?php if ($submission->information_10_node_challenge) { ?>
+                        <?php
+                        if ($submission->release->acronym == strtoupper($release_acronym)) {
+                            if ($submission->information_10_node_challenge) {
+                        ?>
                             <i class="fas fa-check"></i>
-                        <?php } else { ?>
+                        <?php
+                            } else {
+                        ?>
                             <i class="fas fa-ban"></i>
-                        <?php } ?>
+                        <?php
+                            }
+                        }
+                        ?>
                     </td>
                     <td class="tb-center">
-                        <?php if ($submission->include_in_io500) { ?>
+                        <?php 
+                        if ($submission->release->acronym == strtoupper($release_acronym)) {
+                            if ($submission->include_in_io500) {
+                        ?>
                             <i class="fas fa-check"></i>
-                        <?php } else { ?>
+                        <?php 
+                            } else {
+                        ?>
                             <i class="fas fa-ban"></i>
-                        <?php } ?>
+                        <?php
+                            }
+                        }
+                        ?>
                     </td>
                 </tr>
                 <?php } ?>
