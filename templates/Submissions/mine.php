@@ -11,8 +11,8 @@
                     <th><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
                     <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem Type') ?></th>
                     <th><?php echo $this->Paginator->sort('information_submission_date', 'Date') ?></th>
-                    <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'IO500') ?></th>
-                    <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', '10-NODE') ?></th>
+                    <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', '10-NODE') ?></th>
+                    <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', 'IO500') ?></th>
                     <th class="tb-actions"><?php echo __('Actions') ?></th>
                 </tr>
             </thead>
