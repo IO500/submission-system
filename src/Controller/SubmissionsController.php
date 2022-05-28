@@ -113,7 +113,7 @@ class SubmissionsController extends AppController
 
         // File System
 
-        $json_file_system = $this->find_information($json, 'type', 'file system');
+        $json_file_system = $this->find_information($json, 'type', 'StorageSystem');
 
         $submission->information_storage_vendor = isset($json_file_system['vendor']) ? $json_file_system['vendor'] : null;
         $submission->information_filesystem_name = isset($json_file_system['name']) ? $json_file_system['name'] : null;
