@@ -193,7 +193,7 @@ class SubmissionsController extends AppController
             $json_find['mixed'] = explode(' ', $json_find['mixed']);
         }
         $submission->find_mixed = isset($json_find['mixed'][0]) ? $json_find['mixed'][0] : null;
-dd($submission);
+
         return $submission;
     }
 
