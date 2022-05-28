@@ -142,7 +142,7 @@ class SubmissionsController extends AppController
         $submission->original_io500_score = isset($json_io500['att']['score']) ? $json_io500['att']['score'] : null;
 
         $submission->information_10_node_challenge = $json_io500['att']['include_in_10node_ranked_list'] == 'yes';
-        $submission->include_in_io500 = $json_io500['att']['include_in_io500_ranked_list']) == 'yes';
+        $submission->include_in_io500 = $json_io500['att']['include_in_io500_ranked_list'] == 'yes';
 
         if ($new_format) {
             $json_io500['att']['scoreBW'] = explode(' ', $json_io500['att']['scoreBW']);
