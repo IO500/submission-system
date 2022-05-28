@@ -113,12 +113,20 @@ class SubmissionsController extends AppController
 
         // File System
 
-        $json_file_system = $this->find_information($json, 'type', 'StorageSystem');
+        $json_file_system = $this->find_information($json, 'type', 'StorageSystem')['att'];
 
         $submission->information_storage_vendor = isset($json_file_system['vendor']) ? $json_file_system['vendor'] : null;
         $submission->information_filesystem_name = isset($json_file_system['name']) ? $json_file_system['name'] : null;
         $submission->information_filesystem_type = isset($json_file_system['software']) ? $json_file_system['software'] : null;
         $submission->information_filesystem_version = isset($json_file_system['version']) ? $json_file_system['version'] : null;
+
+        // Supercomputer Nodes
+        $json_nodes = $this->find_information($json, 'type', 'Nodes')['att'];
+
+        $submission->information_client_nodes = isset($json_nodes['count']) ? $json_nodes['count'] : null;
+        $submission->information_client_operating_system = isset($json_nodes['distribution']) ? $json_nodes['distribution'] : null;
+        $submission->information_client_operating_system_version = isset($json_nodes['distribution version']) ? $json_nodes['distribution version'] : null;
+        $submission->information_client_kernel_version = isset($json_nodes['kernel version']) ? $json_nodes['kernel version'] : null;
 
         // IO500 metrics
 
@@ -131,6 +139,7 @@ class SubmissionsController extends AppController
             $new_format = False;
         }
 
+        $submission->io500_score = isset($json_io500['att']['score']) ?  : null;
         $submission->original_io500_score = isset($json_io500['att']['score']) ?  : null;
 
         if ($new_format) {
@@ -185,7 +194,7 @@ class SubmissionsController extends AppController
             $json_find['mixed'] = explode(' ', $json_find['mixed']);
         }
         $submission->find_mixed = isset($json_find['mixed'][0]) ? $json_find['mixed'][0] : null;
-
+dd($submission);
         return $submission;
     }
 
