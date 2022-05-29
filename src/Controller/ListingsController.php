@@ -38,6 +38,16 @@ class ListingsController extends AppController
             'table' => $table
         ]);
 
+        $settings = [
+            'order' => [
+                'score' => 'DESC',
+            ]
+        ];
+
+        if (isset($this->request->getParam('?')['sort'])) {
+            $settings['sortWhitelist'][] = $this->request->getParam('?')['sort'];
+        }
+
         $submissions = $this->Listings->ListingsSubmissions->find('all')
             ->contain([
                 'Submissions' => [
@@ -46,12 +56,10 @@ class ListingsController extends AppController
             ])
             ->where([
                 'ListingsSubmissions.listing_id' => $listing->id,
-            ])
-            ->order([
-                'ListingsSubmissions.score' => 'DESC'
             ]);
 
-        $this->set(compact('listing', 'submissions'));
+        $this->set('listing', $listing);
+        $this->set('submissions', $this->paginate($submissions, $settings));
     }
 
     /**

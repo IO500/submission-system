@@ -30,28 +30,54 @@
                 <?php if (!empty($submissions)) { ?>
                 <div class="table-responsive">
                     <table class="tb">
-                        <tr>
-                            <th class="tb-id"><?php echo __('ID') ?></th>
-                            <th><?php echo __('Release') ?></th>
-                            <th><?php echo __('System') ?></th>
-                            <th><?php echo __('Institution') ?></th>
-                            <th><?php echo __('Filesystem Type') ?></th>
-                            <th class="tb-number"><?php echo __('Score') ?></th>
-                            <th class="tb-actions"><?php echo __('Actions') ?></th>
-                        </tr>
-                        <?php foreach ($submissions as $submission) { ?>
-                        <tr>
-                            <td class="tb-id"><?php echo h($submission->id) ?></td>
-                            <td><?php echo h($submission->submission->release->acronym) ?></td>
-                            <td><?php echo h($submission->submission->information_system) ?></td>
-                            <td><?php echo h($submission->submission->information_institution) ?></td>
-                            <td><?php echo h($submission->submission->information_filesystem_type) ?></td>
-                            <td class="tb-number"><?php echo $this->Number->format($submission->score, ['places' => 2, 'precision' => 2]) ?></td>
-                            <td class="tb-actions">
-                                <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submission->id], ['escape' => false]); ?>
-                            </td>
-                        </tr>
-                        <?php } ?>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="tb-id"><?php echo $this->Paginator->sort('score', '#') ?></th>
+                                <th rowspan="2"><?php echo __('Release') ?></th>
+                                <th rowspan="2"><?php echo __('System') ?></th>
+                                <th rowspan="2"><?php echo __('Institution') ?></th>
+                                <th rowspan="2"><?php echo __('Filesystem Type') ?></th>
+                                <th rowspan="2" class="tb-number"><?php echo $this->Paginator->sort('score', _('Score')) ?></th>
+                                <th class="tb-center"><?php echo $this->Paginator->sort('io500_bw', _('BW')) ?></th>
+                                <th class="tb-center"><?php echo $this->Paginator->sort('io500_md', _('MD')) ?></th>
+                            </tr>
+                            <tr>
+                                <th class="tb-center">(GiB/s)</th>
+                                <th class="tb-center">(kIOP/s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($submissions as $i => $submission) {
+                                $url = $this->Url->build([
+                                        'controller' => 'submissions',
+                                        'action' => 'view',
+                                        $submission->submission->id
+                                    ]
+                                );
+                            ?>
+                            <tr>
+                                <td class="tb-id">
+                                    <?php
+                                    echo $this->Html->link(($i + 1), [
+                                        'controller' => 'submissions',
+                                        'action' => 'view',
+                                        $submission->submission->id
+                                    ], [
+                                        'class' => 'rank'
+                                    ]);
+                                    ?>
+                                </td>
+                                <td><?php echo h($submission->submission->release->acronym) ?></td>
+                                <td><?php echo h($submission->submission->information_system) ?></td>
+                                <td><?php echo h($submission->submission->information_institution) ?></td>
+                                <td><?php echo h($submission->submission->information_filesystem_type) ?></td>
+                                <td class="tb-number"><?php echo $this->Number->format($submission->score, ['places' => 2, 'precision' => 2]) ?></td>
+                                <td class="tb-number"><?php echo $this->Number->format($submission->submission->io500_bw, ['places' => 2, 'precision' => 2]) ?></td>
+                                <td class="tb-number"><?php echo $this->Number->format($submission->submission->io500_md, ['places' => 2, 'precision' => 2]) ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
                     </table>
                 </div>
                 <?php } ?>
