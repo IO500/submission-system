@@ -9,7 +9,7 @@
     </title>
     <?php echo $this->Html->meta('icon') ?>
 
-    <script src="https://kit.fontawesome.com/fff670d0ee.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/047bab46e1.js" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

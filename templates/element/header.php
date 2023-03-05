@@ -29,6 +29,28 @@
             </li>
             <li>
                 <?php
+                echo $this->AuthLink->link(__('Status'),
+                    [
+                        'controller' => 'status',
+                        'action' => 'index',
+                        'plugin' => null
+                    ]
+                );
+                ?>
+            </li>
+            <li>
+                <?php
+                echo $this->AuthLink->link(__('Scores'),
+                    [
+                        'controller' => 'reproducibilityScores',
+                        'action' => 'index',
+                        'plugin' => null
+                    ]
+                );
+                ?>
+            </li>
+            <li>
+                <?php
                 echo $this->AuthLink->link(__('My Submissions'),
                     [
                         'controller' => 'submissions',

@@ -126,6 +126,7 @@ $config = [
         'AuthenticationComponent' => [
             'load' => true,
             'loginRedirect' => '/',
+            'logoutRedirect' => '/',
             'requireIdentity' => false
         ],
         'Authenticators' => [
@@ -136,6 +137,7 @@ $config = [
             ],
             'Form' => [
                 'className' => 'CakeDC/Auth.Form',
+                'skipTwoFactorVerify' => true,
                 'urlChecker' => 'Authentication.CakeRouter',
             ],
             'Token' => [

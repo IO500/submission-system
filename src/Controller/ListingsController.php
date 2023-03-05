@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Datasource\ConnectionManager;
 use Cake\Database\Schema\TableSchema;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Listings Controller
@@ -26,7 +26,7 @@ class ListingsController extends AppController
         $listing = $this->Listings->get($id, [
             'contain' => [
                 'Types',
-                'Releases'
+                'Releases',
             ],
         ]);
 
@@ -35,13 +35,13 @@ class ListingsController extends AppController
 
         // We need to dinamically link the model to the correct table
         $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
-            'table' => $table
+            'table' => $table,
         ]);
 
         $settings = [
             'order' => [
                 'score' => 'DESC',
-            ]
+            ],
         ];
 
         if (isset($this->request->getParam('?')['sort'])) {
@@ -74,18 +74,18 @@ class ListingsController extends AppController
         $listing = $this->Listings->newEmptyEntity();
 
         if ($this->request->is('post')) {
-            $request = $this->request->getData();            
+            $request = $this->request->getData();
 
             // Find the release for this listing
             $release = $this->Listings->Releases->find('all')
                 ->where([
-                    'Releases.id' => $request['release_id']
+                    'Releases.id' => $request['release_id'],
                 ])
                 ->first();
 
             $type = $this->Listings->Types->find('all')
                 ->where([
-                    'Types.id' => $request['type_id']
+                    'Types.id' => $request['type_id'],
                 ])
                 ->first();
 
@@ -96,7 +96,7 @@ class ListingsController extends AppController
 
             // We need to dinamically link the model to the new table
             $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
-                'table' => $table
+                'table' => $table,
             ]);
 
             $selected_submissions = [];
@@ -109,28 +109,28 @@ class ListingsController extends AppController
 
             $listing = $this->Listings->patchEntity($listing, $request, [
                 'associated' => [
-                    'Submissions'
-                ]
+                    'Submissions',
+                ],
             ]);
 //dd($selected_submissions);
             if ($this->Listings->save($listing)) {
                 // We need to update the scores in the join table
                 $previous_release = $this->Listings->Submissions->Releases->find('all')
                     ->where([
-                        'Releases.release_date <' => date('Y-m-d')
+                        'Releases.release_date <' => date('Y-m-d'),
                     ])
                     ->order([
-                        'Releases.release_date' => 'DESC'  
+                        'Releases.release_date' => 'DESC',
                     ])
                     ->first();
 //dd($previous_release->toArray());
                 // We need to update the link to the previous table
                 $previous_table = 'list_' . strtolower($previous_release->acronym) . '_' . str_replace('ten', '10node', strtolower($type->url));
-                
+
                 // Unlink previous table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
                 $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
-                    'table' => $previous_table
+                    'table' => $previous_table,
                 ]);
 //die($previous_table);
                 // We need the id of the previous released list of the given type to build on it
@@ -140,7 +140,7 @@ class ListingsController extends AppController
                     ])
                     ->where([
                         'Listings.type_id' => $type->id,
-                        'Releases.release_date <' => $release->release_date->i18nFormat('yyyy-MM-dd')
+                        'Releases.release_date <' => $release->release_date->i18nFormat('yyyy-MM-dd'),
                     ])
                     ->order([
                         'Releases.release_date' => 'DESC',
@@ -151,11 +151,11 @@ class ListingsController extends AppController
                 $submissions = $this->Listings->ListingsSubmissions->find('all')
                     ->contain([
                         'Submissions' => [
-                            'Releases'
-                        ]
+                            'Releases',
+                        ],
                     ])
                     ->where([
-                        'ListingsSubmissions.listing_id' => $previous_listing->id
+                        'ListingsSubmissions.listing_id' => $previous_listing->id,
                     ])
                     ->order([
                         'ListingsSubmissions.score' => 'DESC',
@@ -172,10 +172,10 @@ class ListingsController extends AppController
                 // For new submissions in this release, we need to get the score from the submission table
                 $new_submissions = $this->Listings->ListingsSubmissions->Submissions->find('all')
                     ->contain([
-                        'Releases'
+                        'Releases',
                     ])
                     ->where([
-                        'Submissions.information_submission_date >=' => $previous_release->release_date->i18nFormat('yyyy-MM-dd')
+                        'Submissions.information_submission_date >=' => $previous_release->release_date->i18nFormat('yyyy-MM-dd'),
                     ])
                     ->limit($limit);
 //dd($new_submissions);
@@ -188,15 +188,15 @@ class ListingsController extends AppController
                 // We need to dinamically link the model to the new table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
                 $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
-                    'table' => $table
+                    'table' => $table,
                 ]);
 //dd($table);
                 $records = $this->Listings->ListingsSubmissions->find('all')
                     ->contain([
-                        'Submissions'
+                        'Submissions',
                     ])
                     ->where([
-                        'ListingsSubmissions.listing_id' => $listing->id
+                        'ListingsSubmissions.listing_id' => $listing->id,
                     ]);
 //dd($records->toArray());
 //die();
@@ -217,6 +217,12 @@ class ListingsController extends AppController
         return $this->redirect(['controller' => 'releases', 'action' => 'index']);
     }
 
+    /**
+     * create_table method
+     *
+     * @param  string $table Table name.
+     * @return void
+     */
     private function create_table($table)
     {
         $db = ConnectionManager::get('default');
@@ -224,24 +230,24 @@ class ListingsController extends AppController
 
         $schema
             ->addColumn('id', [
-                'type' => 'integer'
+                'type' => 'integer',
             ])
             ->addColumn('listing_id', [
                 'type' => 'integer',
-                'length' => 11
+                'length' => 11,
             ])
             ->addColumn('submission_id', [
                 'type' => 'integer',
-                'length' => 11
+                'length' => 11,
             ])
             ->addColumn('score', [
-                'type' => 'float'
+                'type' => 'float',
             ])
             ->addConstraint('primary', [
                 'type' => 'primary',
                 'columns' => [
-                    'id'
-                ]
+                    'id',
+                ],
             ]);
 
         // Create the table using our configuration
@@ -252,6 +258,12 @@ class ListingsController extends AppController
         }
     }
 
+    /**
+     * delete_table method
+     *
+     * @param  string $table Table name.
+     * @return bool
+     */
     private function delete_table($table)
     {
         $db = ConnectionManager::get('default');
@@ -287,10 +299,10 @@ class ListingsController extends AppController
 
             return $this->redirect(['action' => 'index']);
         }
-        
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $listing = $this->Listings->patchEntity($listing, $this->request->getData());
-        
+
             if ($this->Listings->save($listing)) {
                 $this->Flash->success(__('The listing has been saved.'));
 
@@ -298,11 +310,11 @@ class ListingsController extends AppController
             }
             $this->Flash->error(__('The listing could not be saved. Please, try again.'));
         }
-        
+
         $types = $this->Listings->Types->find('list', ['limit' => 200]);
         $releases = $this->Listings->Releases->find('list', ['limit' => 200]);
         $submissions = $this->Listings->Submissions->find('list', ['limit' => 200]);
-        
+
         $this->set(compact('listing', 'types', 'releases', 'submissions'));
     }*/
 
@@ -316,11 +328,11 @@ class ListingsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        
+
         $listing = $this->Listings->get($id, [
             'contain' => [
                 'Types',
-                'Releases'
+                'Releases',
             ],
         ]);
 
@@ -334,7 +346,7 @@ class ListingsController extends AppController
         }
 
         $listing = $this->Listings->get($id);
-        
+
         if ($this->Listings->delete($listing)) {
             $this->delete_table($table);
 

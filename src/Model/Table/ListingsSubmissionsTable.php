@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -13,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ListingsTable&\Cake\ORM\Association\BelongsTo $Listings
  * @property \App\Model\Table\SubmissionsTable&\Cake\ORM\Association\BelongsTo $Submissions
- *
  * @method \App\Model\Entity\ListingsSubmission newEmptyEntity()
  * @method \App\Model\Entity\ListingsSubmission newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\ListingsSubmission[] newEntities(array $data, array $options = [])

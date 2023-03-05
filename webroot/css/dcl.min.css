@@ -1,0 +1,373 @@
+div#status {
+    text-transform: uppercase;
+    color: #d63b1e;
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+div#dcl_wrap{
+    margin-bottom:10px;
+}
+
+div.dcl_pie{
+}
+
+.autocomplete{
+    position: relative;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+}
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+
+div#dcl_list td{
+    text-align: right;
+}
+
+div#dcl_list td.str{
+    text-align: left;
+}
+
+div.entity {
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+div.entity div.entity {
+    margin: 10px 0;
+    background-color: #f7f7f7;
+}
+
+div.entity div.schema{
+    margin-top: 20px;
+}
+
+div.schema {
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #ffffffff;
+}
+
+div.entity div.nodes{ /* type nodes */
+    background-color: #ddeedd;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+tr.dcl_units {
+    font-style: italic;
+}
+
+div.schema_list a, div.component_list a {
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 10px;
+    font-size: 12px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: 0.5s;
+    flex-grow: 1;
+    gap: 10px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 10px 10px 10px 0;
+}
+
+div.schema_list a {
+    background: #d63b1e;
+    border: #d63b1e solid 1px;
+    min-width: 75px;
+}
+
+div.component_list a {
+    background: #454545;
+    border: #454545 solid 1px;
+    width: 150px;
+}
+
+div#dcl_toolbar {
+    margin:1em;
+    padding:2px;
+    border: 1px solid black;
+    width:80%;
+}
+
+table#dcl_tbl{
+    overflow: auto;
+    display: block;
+    overflow-x: auto;
+    border:none;
+}
+
+input#dcl_siteequation{
+    width: 70%;
+}
+
+div.entity div.storagesystem{
+    background-color: #FFBBBB;
+}
+
+div.entity div.localstorage{
+    background-color: #FF8888;
+}
+
+div.schema div.localstorage div.head{
+    color: black;
+}
+
+table#dcl_aggregated_tbl{
+    overflow: auto;
+    display: block;
+    overflow-x: auto;
+    border:none;
+}
+
+div#dcl_toolbar label{
+    margin-right:2em;
+}
+
+div#dcl_toolbar_graph {
+    margin:1em;
+    padding:2px;
+    border: 1px solid black;
+    width:80%;
+}
+
+div#dcl_toolbar_graph label{
+    margin-right:2em;
+}
+
+div.head {
+    color: #d63b1e;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0 0 0 5px;
+}
+
+div.head span.name{
+    font-style: normal;
+}
+
+div.entity hr {
+    border-top: #bbb solid 1px;
+    border-width: 0px;
+}
+
+div.schema hr{
+    border-top: #bbb solid 1px;
+    border-width: 0px;
+}
+
+div.schema input {
+    background-color: white;
+    transition: 1s;
+}
+
+div.error {
+    color: darkred;
+    font-weight: bolder;
+    overflow:scroll;
+}
+
+div.entity label {
+    display: block;
+}
+
+div.value td input{
+    width:initial;
+}
+
+div.value td{
+    border:0px;
+    margin:0px;
+}
+
+div.value table {
+    border: 0px;
+    margin: 0px;
+    width: auto;
+}
+
+div.value input[type='checkbox'], div.value input[type='radio'] {
+    margin: 0 0 0 5px;
+}
+
+div.entity span.label {
+    display: block;
+    font-size: 10px;
+    margin: 10px 5px 5px;
+    text-transform: uppercase;
+}
+
+div.entity span.value {
+    /*padding: 10px 5px;
+    display: inline-block;
+    border: #bbb solid 1px;*/
+    padding: 10px 10px;
+    border: #bbb solid 1px;
+    display: block;
+    border-radius: 3px;
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+}
+
+div.entity span.head{
+    font-size: larger;
+    color: #555555;
+}
+
+div.entity span.name{
+    margin-left: 5px;
+}
+
+
+div.entity span.navigation{
+    margin-right: 5px;
+    position: relative;
+    color: black;
+    float:right;
+}
+
+div.entity span.navigation a{
+    text-decoration:none;
+    font-size: small;
+    color: #a00;
+}
+
+
+div.entity div.body{
+    clear:both;
+}
+
+
+div.schema span.head { font-size: larger; }
+div div.char {width: 200px; display:block; float:left}
+/*div div.input { margin-left: 50px}*/
+div div.help { font-size: small; font-style:italic;}
+
+form.connections a {
+    background-color: lightgray;
+    color: brown;
+    border: 1px solid black;
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+    display:block;
+    min-width: 5em;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    overflow: hidden;
+}
+
+form.connections .network{
+    background-color: white;
+    border: 5px solid white;
+    color: black;
+    font-weight: bolder;
+}
+
+form.connections span {
+    background-color: lightgray;
+    border: 1px solid black;
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+    display:block;
+    min-width: 5em;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    overflow: hidden;
+}
+
+div#dcl_graph_fields h2{
+    margin-bottom: 5px;
+    margin-top:15px;
+}
+
+form#Network_connections span.grapa_storage{
+    color: black;
+    background-color: #FFBBBB;
+}
+
+form#Network_connections span.grapa_supercomputer{
+    color: black;
+    background-color: lightgray;
+}
+
+
+canvas{
+    background-color: lightblue;
+}
+
+canvas#Building_draw{
+    background-color: lightgray;
+}
+
+input.cdcl-has-unit {
+    width: 80%;
+}
+
+select.cdcl-unit {
+    float: right;
+    height: 33px;
+    width: 18%;
+}
+
+.value > .dcl_recalc, .value > .dcl_store {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px;
+}
+
+#dcl_edtbuttons {
+    text-align: right;
+}
+
+#dcl_edtbuttons button {
+    margin: 0 0 0 10px;
+}
+
+.value-side > input {
+    width: 50%;
+}
+
+.value-side > select {
+    width: 48%;
+    float: right;
+}
+
