@@ -147,6 +147,7 @@ function dcl_startup() {
             loadData(dcl_reset_data);
 
         tippy('input', {
+            trigger: 'mouseenter focus click',
             content(reference) {
                 const title = reference.getAttribute('title')
                 reference.removeAttribute('title')

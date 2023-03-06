@@ -715,7 +715,7 @@ class SubmissionsController extends AppController
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
 
-            if (strpos($filename, 'result_summary.txt') !== false) {
+            if (basename($filename) == 'result_summary.txt') {
                 $result_file = $filename;
             }
         }

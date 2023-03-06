@@ -551,6 +551,15 @@ function component_added() {
         add_store_button(name, load)
         //add_autocomplete(name, load)
     }
+
+    tippy('input', {
+        trigger: 'mouseenter focus click',
+        content(reference) {
+            const title = reference.getAttribute('title')
+            reference.removeAttribute('title')
+            return title
+        }
+    });
 }
 
 function add_autocomplete(name, load) {
