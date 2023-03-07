@@ -43,7 +43,7 @@
                 ]);
                 ?>
 
-                <?php if ($submission->result_tar) { ?>
+                <?php if ($submission->result_tar && is_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar)) { ?>
                 <span><?php echo $submission->result_tar; ?> (<?php echo $submission->result_tar_size; ?> bytes) <i class="md5">MD5 [<?php echo md5_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar); ?>]</i></span>
                 <?php } ?>
 
@@ -54,8 +54,8 @@
                 ]);
                 ?>
 
-                <?php if ($submission->result_tar) { ?>
-                <span><?php echo $submission->job_script; ?> (<?php echo $submission->job_script_size; ?> bytes) <i class="md5">MD5 [<?php echo md5_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar); ?>]</i></span>
+                <?php if ($submission->job_script && is_file(ROOT . DS . $submission->job_script_dir . $submission->job_script)) { ?>
+                <span><?php echo $submission->job_script; ?> (<?php echo $submission->job_script_size; ?> bytes) <i class="md5">MD5 [<?php echo md5_file(ROOT . DS . $submission->job_script_dir . $submission->job_script); ?>]</i></span>
                 <?php } ?>
 
                 <?php
@@ -65,8 +65,8 @@
                 ]);
                 ?>
 
-                <?php if ($submission->result_tar) { ?>
-                <span><?php echo $submission->job_output; ?> (<?php echo $submission->job_output_size; ?> bytes) <i class="md5">MD5 [<?php echo md5_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar); ?>]</i></span>
+                <?php if ($submission->job_output && is_file(ROOT . DS . $submission->job_output_dir . $submission->job_output)) { ?>
+                <span><?php echo $submission->job_output; ?> (<?php echo $submission->job_output_size; ?> bytes) <i class="md5">MD5 [<?php echo md5_file(ROOT . DS . $submission->job_output_dir . $submission->job_output); ?>]</i></span>
                 <?php } ?>
             </fieldset>
         </div>
