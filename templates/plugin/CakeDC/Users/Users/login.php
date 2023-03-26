@@ -34,6 +34,10 @@ use Cake\Core\Configure;
             }
 
             if (Configure::read('Users.Email.required')) {
+                echo $this->Html->link(__d('cake_d_c/users', 'RESEND TOKEN'), ['action' => 'resendTokenValidation'], ['class' => 'button']);
+            }
+
+            if (Configure::read('Users.Email.required')) {
                 echo $this->Html->link(__d('cake_d_c/users', 'RESET PASSWORD'), ['action' => 'requestResetPassword'], ['class' => 'button']);
             }
 
