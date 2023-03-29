@@ -32,6 +32,10 @@
     <p>
         The goal of these questions are to demonstrate that your IO500 benchmark execution is valid, can be reproduced, and provide additional details of your submitted storage system. Along with the other submitted items, the answers to these questions are used to calculate your reproducibility score and whether the submission is eligible for the Production or Research list.
     </p>
+
+    <p>
+        <i class="fa-solid fa-circle-exclamation red-stripe"></i> All questions are <strong>mandatory</strong> and replies require a minimum of 10 words.
+    </p>
 </div>
 
 <?php echo $this->Form->create($questionnaire); ?>
@@ -342,14 +346,18 @@
         t_editors = editors;
     });
 
+    function wordCount(str) {
+        return str.trim().split(/\s+/).length;
+    }
+
     function validate() {
         var valid = true;
         var first = false;
 
         t_editors.forEach(function(editor) {
-            var length = editor.contentDocument.body.innerHTML.length;
+            var words = editor.contentDocument.body.innerHTML;
 
-            if (length < 50) {
+            if (wordCount(words) < 10) {
                 document.getElementById(editor.id).closest('fieldset').style.border = '#d63b1e solid 1px';
                 document.getElementById(editor.id).closest('fieldset').style.color = '#d63b1e';
 
@@ -359,6 +367,8 @@
                     document.getElementById(editor.id).closest('fieldset').scrollIntoView({
                         behavior: 'smooth'
                     });
+
+                    alert('All fields are mandatory and require a minimum of 10 words. Please, provide a complete response for all fields in red.')
 
                     first = true;
                 }

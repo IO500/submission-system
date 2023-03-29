@@ -116,6 +116,12 @@ return [
             'action' => ['profile', 'logout', 'linkSocial', 'callbackLinkSocial'],
         ],
         [
+            'role' => 'committee',
+            'plugin' => 'CakeDC/Users',
+            'controller' => 'Users',
+            'action' => ['index', 'view', 'edit'],
+        ],
+        [
             'role' => '*',
             'plugin' => 'CakeDC/Users',
             'controller' => 'Users',

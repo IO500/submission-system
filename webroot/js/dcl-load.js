@@ -94,8 +94,8 @@ function provide_hooks() {
             '<form id="dcl_data">' +
             '<div id="data_fields_wrap"></div>' +
             //'<p id=dcl_edtbuttons>' +
-              '<button class="submitButton" type="button" onclick="loadData()">Load JSON</button>' +
-              '<button class="submitButton" type="button" onclick="submitDCLChanges()">Save JSON</button>' +
+            //  '<button class="submitButton" type="button" onclick="loadData()">Load JSON</button>' +
+            //  '<button class="submitButton" type="button" onclick="submitDCLChanges()">Save JSON</button>' +
             //  '<button class="submitButton" type="button" onclick="loadData(dcl_reset_data)">Reset</button>' +
             //'</p>' +
             '</form>' +

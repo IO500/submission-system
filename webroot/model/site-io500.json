@@ -76,10 +76,7 @@
                                 "type":"StorageMedia",
                                 "att":{
                                     "name":""
-                                },
-                                "childs":[
-                                    
-                                ]
+                                }
                             }
                         ]
                     }

@@ -597,7 +597,6 @@
             "peak throughput":{
                 "dtype":"number",
                 "desc":"The best throughput",
-                "required":true,
                 "unit":"Byte/s",
                 "default-unit":"MiB/s"
             },
@@ -1561,7 +1560,7 @@
                 },
                 "model":{
                     "dtype":"string",
-                    "desc":"Exact model description of the component",
+                    "desc":"Model is applicable for vendor storage hardware to wrap the whole hardware configuration with details (e.g. DDN AI400X vs. AI400X2)",
                     "pattern":"[\\-+a-zA-Z_ 0-9]+",
                     "load":"storagesystem",
                     "required":true

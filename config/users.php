@@ -138,7 +138,7 @@ $config = [
             'Form' => [
                 'className' => 'CakeDC/Auth.Form',
                 'skipTwoFactorVerify' => true,
-                'urlChecker' => 'Authentication.CakeRouter',
+                'urlChecker' => 'Authentication.CakeRouter'
             ],
             'Token' => [
                 'className' => 'Authentication.Token',
@@ -170,7 +170,7 @@ $config = [
             'Password' => [
                 'className' => 'Authentication.Password',
                 'fields' => [
-                    'username' => ['username', 'email'],
+                    'username' => ['email'],
                     'password' => 'password'
                 ],
                 'resolver' => [

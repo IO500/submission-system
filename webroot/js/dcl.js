@@ -188,10 +188,10 @@ function createType(label, map, name, value, unit_selected) {
         str = str + "</select>"
     }
     var aggregate = map["aggregate"]
-    if (aggregate) {
-        str = str + '<a href="#" id="' + name + '_calc" class="dcl_recalc">[recalc]</a>'
-        dcl_calc_button_list.push([name, aggregate])
-    }
+    //if (aggregate) {
+    //    str = str + '<a href="#" id="' + name + '_calc" class="dcl_recalc">[recalc]</a>'
+    //    dcl_calc_button_list.push([name, aggregate])
+    //}
     //if(autocomplete){ // </span>
     //    str = str + '<a href="#" id="' + name + '_store" class="dcl_store">[upload model]</a>'
     //    dcl_load_button_list.push([name, autocomplete])
@@ -291,6 +291,7 @@ function recursive_create(data, name, schema, top_level) {
                         }
                     }
                 }
+
                 if (!used_scheme) {
                     schema_str = schema_str + create_schema_header(schema_caption, n, name, scheme_data, false, s == "SCHEMES_multi", tooltip)
                 }
