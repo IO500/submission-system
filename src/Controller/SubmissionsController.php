@@ -707,69 +707,73 @@ class SubmissionsController extends AppController
     private function metrics($submission)
     {
         // IO500 metrics
-        $zip = new \ZipArchive();
-        $zip->open(ROOT . DS . $submission->result_tar_dir . $submission->result_tar, \ZipArchive::RDONLY);
+        if (strpos($submission->result_tar_type, 'zip') !== false) {
+            $zip = new \ZipArchive();
+            $zip->open(ROOT . DS . $submission->result_tar_dir . $submission->result_tar, \ZipArchive::RDONLY);
 
-        $result_file = null;
+            $result_file = null;
 
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $filename = $zip->getNameIndex($i);
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
 
-            if (basename($filename) == 'result_summary.txt') {
-                $result_file = $filename;
-            }
-        }
-
-        $content = $zip->getFromName($result_file);
-
-        $zip->close();
-
-        $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*time\s*(\S*)\s*seconds/m';
-
-        preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
-
-        $results = [];
-
-        foreach ($matches as $match) {
-            if ($match[1] == 'timestamp') {
-                continue;
+                if (basename($filename) == 'result_summary.txt') {
+                    $result_file = $filename;
+                }
             }
 
-            $results[$match[1]] = $match[2];
+            $content = $zip->getFromName($result_file);
+
+            $zip->close();
+
+            $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*time\s*(\S*)\s*seconds/m';
+
+            preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+            $results = [];
+
+            foreach ($matches as $match) {
+                if ($match[1] == 'timestamp') {
+                    continue;
+                }
+
+                $results[$match[1]] = $match[2];
+            }
+
+            $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)/m';
+
+            preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+            $match = $matches[0];
+
+            $total = [];
+
+            $total[$match[1]] = $match[2];
+            $total[$match[4]] = $match[5];
+            $total[$match[7]] = $match[8];
+
+            $submission->io500_bw = $total['Bandwidth'];
+            $submission->io500_md = $total['IOPS'];
+            $submission->io500_score = $total['TOTAL'];
+
+            $submission->ior_easy_write = $results['ior-easy-write'] ?? null;
+            $submission->ior_easy_read = $results['ior-easy-read'] ?? null;
+            $submission->ior_hard_write = $results['ior-hard-write'] ?? null;
+            $submission->ior_hard_read = $results['ior-hard-read'] ?? null;
+
+            $submission->mdtest_easy_write = $results['mdtest-easy-write'] ?? null;
+            $submission->mdtest_easy_stat = $results['mdtest-easy-stat'] ?? null;
+            $submission->mdtest_easy_delete = $results['mdtest-easy-delete'] ?? null;
+            $submission->mdtest_hard_write = $results['mdtest-hard-write'] ?? null;
+            $submission->mdtest_hard_stat = $results['mdtest-hard-stat'] ?? null;
+            $submission->mdtest_hard_read = $results['mdtest-hard-read'] ?? null;
+            $submission->mdtest_hard_delete = $results['mdtest-hard-delete'] ?? null;
+
+            $submission->find_mixed = $results['find'] ?? null;
+
+            return $submission;
         }
 
-        $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)/m';
-
-        preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
-
-        $match = $matches[0];
-
-        $total = [];
-
-        $total[$match[1]] = $match[2];
-        $total[$match[4]] = $match[5];
-        $total[$match[7]] = $match[8];
-
-        $submission->io500_bw = $total['Bandwidth'];
-        $submission->io500_md = $total['IOPS'];
-        $submission->io500_score = $total['TOTAL'];
-
-        $submission->ior_easy_write = $results['ior-easy-write'] ?? null;
-        $submission->ior_easy_read = $results['ior-easy-read'] ?? null;
-        $submission->ior_hard_write = $results['ior-hard-write'] ?? null;
-        $submission->ior_hard_read = $results['ior-hard-read'] ?? null;
-
-        $submission->mdtest_easy_write = $results['mdtest-easy-write'] ?? null;
-        $submission->mdtest_easy_stat = $results['mdtest-easy-stat'] ?? null;
-        $submission->mdtest_easy_delete = $results['mdtest-easy-delete'] ?? null;
-        $submission->mdtest_hard_write = $results['mdtest-hard-write'] ?? null;
-        $submission->mdtest_hard_stat = $results['mdtest-hard-stat'] ?? null;
-        $submission->mdtest_hard_read = $results['mdtest-hard-read'] ?? null;
-        $submission->mdtest_hard_delete = $results['mdtest-hard-delete'] ?? null;
-
-        $submission->find_mixed = $results['find'] ?? null;
-
-        return $submission;
+        return null;
     }
 
     /**
@@ -865,6 +869,13 @@ class SubmissionsController extends AppController
 
             if ($this->Submissions->save($submission)) {
                 $submission = $this->metrics($submission);
+
+                if (!$submission) {
+                    $this->Flash->error(__('Unable to extract the benchmark results. Please, provide a .zip file.'));    
+
+                    return $this->redirect(['action' => 'results', $id]);
+                }
+
                 $this->Submissions->save($submission);
 
                 $this->Flash->success(__('The submission has been saved.'));
