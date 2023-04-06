@@ -43,7 +43,7 @@
                 echo $this->Form->control('result_tar', [
                     'type' => 'file',
                     'label' => 'Results File (.zip or .tar.gz)',
-                    'required' => $submission->result_tar ? false : true
+                    'required' => ($submission->result_tar ? false : true)
                 ]);
                 ?>
 
@@ -54,7 +54,7 @@
                 <?php
                 echo $this->Form->control('job_script', [
                     'type' => 'file',
-                    'required' => $submission->result_tar ? false : true
+                    'required' => ($submission->job_script ? false : true)
                 ]);
                 ?>
 
@@ -65,7 +65,7 @@
                 <?php
                 echo $this->Form->control('job_output', [
                     'type' => 'file',
-                    'required' => $submission->result_tar ? false : true
+                    'required' => ($submission->job_output ? false : true)
                 ]);
                 ?>
 
