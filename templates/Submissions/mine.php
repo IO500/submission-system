@@ -10,10 +10,10 @@
                     <th><?php echo $this->Paginator->sort('information_system', 'System') ?></th>
                     <th><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
                     <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem Type') ?></th>
-                    <th><?php echo $this->Paginator->sort('information_submission_date', 'Date') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', '10-NODE') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', 'IO500') ?></th>
-                    <th class="tb-actions"><?php echo __('Actions') ?></th>
+                    <th class="tb-center"><?php echo $this->Paginator->sort('status_id', 'Status') ?></th>
+                    <th class="tb-id"><?php echo __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,6 @@
                     <td><?php echo h($submission->information_system) ?></td>
                     <td><?php echo h($submission->information_institution) ?></td>
                     <td><?php echo h($submission->information_filesystem_type) ?></td>
-                    <td><?php echo h($submission->information_submission_date) ?></td>
                     <td class="tb-center">
                         <?php if ($submission->information_10_node_challenge === true) { ?>
                             <i class="fas fa-check"></i>
@@ -40,7 +39,12 @@
                         <?php } ?>
                     </td>
                     <td class="tb-actions">
-                        <?php echo $this->AuthLink->link('<i class="fas fa-highlighter"></i>', ['action' => 'edit', $submission->id], ['escape' => false]) ?>
+                        <strong class="status status-<?php echo h($submission->status->id) ?>"><?php echo h($submission->status->name) ?></strong>
+                    </td>
+                    <td class="tb-id">
+                        <?php
+                        echo $this->AuthLink->link('<i class="fas fa-highlighter"></i>', ['action' => 'edit', $submission->id], ['escape' => false]);
+                        ?>
                     </td>
                 </tr>
                 <?php } ?>

@@ -116,6 +116,12 @@ return [
             'action' => ['profile', 'logout', 'linkSocial', 'callbackLinkSocial'],
         ],
         [
+            'role' => 'committee',
+            'plugin' => 'CakeDC/Users',
+            'controller' => 'Users',
+            'action' => ['index', 'view', 'edit'],
+        ],
+        [
             'role' => '*',
             'plugin' => 'CakeDC/Users',
             'controller' => 'Users',
@@ -149,24 +155,49 @@ return [
         ],
         [
             'role' => 'committee',
+            'controller' => 'ReproducibilityScores',
+            'action' => ['index', 'add', 'edit']
+        ],
+        [
+            'role' => 'committee',
             'controller' => 'Releases',
             'action' => '*'
         ],
         [
             'role' => 'committee',
+            'controller' => 'Status',
+            'action' => '*'
+        ],
+        [
+            'role' => 'committee',
             'controller' => 'Submissions',
-            'action' => ['index', 'view', 'build']
+            'action' => ['index', 'view', 'edit', 'build', 'system', 'status']
+        ],
+        [
+            'role' => 'committee',
+            'controller' => 'Questionnaires',
+            'action' => ['index', 'view', 'edit']
         ],
         [
             'role' => 'user',
             'controller' => 'Submissions',
-            'action' => ['add', 'edit', 'mine']
+            'action' => ['add', 'edit', 'mine', 'prepare', 'model', 'results', 'confirmation']
         ],
         [
             'role' => ['user'],
             'controller' => ['Submissions'],
             'action' => ['edit'],
             'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'ownerForeignKey' => 'user_id',
+            ]),
+        ],
+        [
+            'role' => ['user'],
+            'controller' => ['Questionnaires'],
+            'action' => ['add', 'edit'],
+            'allowed' => new \CakeDC\Auth\Rbac\Rules\Owner([
+                'table' => 'Submissions',
+                'id' => 'id',
                 'ownerForeignKey' => 'user_id',
             ]),
         ],

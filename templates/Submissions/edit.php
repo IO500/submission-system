@@ -1,622 +1,128 @@
-<?php echo $this->Form->create($submission, ['type' => 'file']) ?>
+<ul id="progress-bar">
+    <li class="active">System Information</li>
+    <li class="">Benchmark Results</li>
+    <li class="">Reproducibility Questionnaire</li>
+    <li class="">Confirmation</li>
+</ul>
+
+<div class="submissions index content">
+    <h2><?php echo __('SUBMISSION #{0}', $submission->id) ?></h2>
+
+    <div class="both"></div>
+    
+    <p>
+        Until the next release of the list, the submission committee will handle all submitted data confidentially. That means that we will not disclose any submitted data to individuals/companies, or institutions. By submitting the information you give us the right to publish the uploaded data.
+    </p>
+
+    <p>
+        <i class="fa-solid fa-circle-exclamation red-stripe"></i> All input fields starting with a <strong class="red-stripe">red stripe</strong> are <strong>mandatory</strong>.
+    </p>
+</div>
+
+<?php echo $this->Form->create($submission) ?>
 
 <div class="row">
     <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Upload New Files</legend>
+        <fieldset>
+            <legend>System Information</legend>
+    
+            <div id="dcl_wrap"></div>
+        </fieldset>
 
-                <?php
-                echo $this->Form->control('result_tar', [
-                    'type' => 'file',
-                    'label' => 'Results File (.tar.gz)',
-                    'required' => false
-                ]);
-                ?>
+        <div class="form-buttons">
+            <?php
+            echo $this->Form->control('json',
+                [
+                    'label' => false
+                ]
+            );
 
-                <span><?php echo $submission->result_tar; ?> (<?php echo $submission->result_tar_size; ?> bytes)</span>
-
-                <?php
-                echo $this->Form->control('job_script', [
-                    'type' => 'file',
-                    'required' => false
-                ]);
-                ?>
-
-                <span><?php echo $submission->job_script; ?> (<?php echo $submission->job_script_size; ?> bytes)</span>
-
-                <?php
-                echo $this->Form->control('job_output', [
-                    'type' => 'file',
-                    'required' => false
-                ]);
-                ?>
-
-                <span><?php echo $submission->job_output; ?> (<?php echo $submission->job_output_size; ?> bytes)</span>
-
-                <?php
-                echo $this->Form->control('system_information', [
-                    'type' => 'file',
-                    'label' => 'System Information File (.json)',
-                    'required' => false
-                ]);
-                ?>
-
-                <span><?php echo $submission->system_information; ?> (<?php echo $submission->system_information_size; ?> bytes)</span>
-            </fieldset>
+            echo $this->Form->button(
+                __('Submit'),
+                [
+                    'id' => 'submit-site'
+                ]
+            );
+            ?>
         </div>
     </div>
 </div>
 
-<div class="submission-notice">
-    &xrarr; Please, ensure you provide all the requested information for a complete submission &xlarr;
-</div>
+<?php
+echo $this->Html->css([
+    'dcl.min.css'
+]);
 
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Submission Details</legend>
+echo $this->Html->script(
+    [
+        'js-yaml.min.js',
+        'c3.min.js',
+        'd3.min.js',
+        'jquery.min.js',
+        'math.min.js',
+        'dcl.js',
+        'dcl-load.js',
+        'dcl-move.js',
+        'dcl-vis.js'
+    ],
+    [
+        'block' => 'scriptBottom'
+    ]
+);
 
-                <?php
-                echo $this->Form->control('information_system', [
-                    'label' => 'System'
-                ]);
-                echo $this->Form->control('information_institution', [
-                    'label' => 'Institution'
-                ]);
-                ?>
+$url_site = $this->Url->build([
+    'controller' => 'webroot',
+    'action' => 'files',
+    'submissions',
+    $submission->id . '.json'
+]);
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_submitter', [
-                            'label' => 'Submitter',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_submission_date', [
-                            'label' => 'Submission Date',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_storage_vendor', [
-                            'label' => 'Storage Vendor'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_filesystem_type', [
-                            'label' => 'Filesystem Type'
-                        ]);
-                        ?>
-                    </div>
-                </div>
+$url_schema = $this->Url->build([
+    'controller' => 'webroot',
+    'action' => 'model',
+    'schema-io500.json'
+]);
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_nodes', [
-                            'label' => 'Client Nodes',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_total_procs', [
-                            'label' => 'Client Total Processes',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
+$this->Html->scriptBlock(
+    "
+    $(document).ready(function() {
+        var spinner = $('#loader');
 
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>IO500</legend>
-                
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('io500_bw', [
-                            'label' => 'Bandwidth',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('io500_md', [
-                            'label' => 'Metadata',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
+        dcl_draw_graph = false;
+        dcl_draw_table = false;
+        dcl_draw_toolbar = false;
+        dcl_draw_aggregation = false;
+        dcl_global_readonly = false;
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('io500_score', [
-                            'label' => 'Score',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
+        dcl_schema = '" . $url_schema . "';
+        dcl_site =  '" . $url_site . "';
 
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Storage Information</legend>
-                
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_storage_install_date', [
-                            'label' => 'Installation Date',
-                            'type' => 'date'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_storage_refresh_date', [
-                            'label' => 'Refresh Date',
-                            'type' => 'date'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
+        dcl_startup();
 
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Filesystem Information</legend>
+        $('#submit-site').click(function(event) {
+            event.preventDefault();
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_filesystem_name', [
-                            'label' => 'Name'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_filesystem_version', [
-                            'label' => 'Version'
-                        ]);
-                        ?>
-                    </div>
-                </div>
+            spinner.show();
+            $(this).attr('disabled', true);
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_procs_per_node', [
-                            'label' => 'Processes Per Client Node'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_kernel_version', [
-                            'label' => 'Kernel Version'
-                        ]);
-                        ?>
-                    </div>
-                </div>
+            if (submitDCLChanges()) {
+                $('form').submit();
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_operating_system', [
-                            'label' => 'Operating System'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_client_operating_system_version', [
-                            'label' => 'Operating System Version'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
+                return true;
+            }
 
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Metadata Server</legend>
+            $(this).attr('disabled', false);
+            spinner.hide();
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_nodes', [
-                            'label' => 'Nodes'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_storage_devices', [
-                            'label' => 'Storage Devices'
-                        ]);
-                        ?>
-                    </div>
-                </div>
+            return false;
+        });
+    });
+    ",
+    [
+        'block' => 'scriptBottom'
+    ]
+);
+?>
 
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_storage_type', [
-                            'label' => 'Storage Type'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_storage_interface', [
-                            'label' => 'Storage Interface'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_volatile_memory_capacity', [
-                            'label' => 'Volatile Memory Capacity'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_network', [
-                            'label' => 'Network'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_software_version', [
-                            'label' => 'Software Version'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_md_software_version', [
-                            'label' => 'Operating System Version'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Data Server</legend>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_nodes', [
-                            'label' => 'Nodes'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_storage_devices', [
-                            'label' => 'Storage Devices'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_storage_type', [
-                            'label' => 'Storage Type'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_storage_interface', [
-                            'label' => 'Storage Interface'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_volatile_memory_capacity', [
-                            'label' => 'Volatile Memory Capacity'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_network', [
-                            'label' => 'Network'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_software_version', [
-                            'label' => 'Software Version'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('information_ds_software_version', [
-                            'label' => 'Operating System Version'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Results from IOR</legend>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('ior_easy_write', [
-                            'label' => 'Easy Write',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('ior_easy_read', [
-                            'label' => 'Easy Read',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('ior_hard_write', [
-                            'label' => 'Hard Write',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('ior_hard_read', [
-                            'label' => 'Hard Read',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Results from mdtest</legend>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_easy_write', [
-                            'label' => 'Easy Write',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_easy_stat', [
-                            'label' => 'Easy Stat',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_easy_delete', [
-                            'label' => 'Easy Delete',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_hard_write', [
-                            'label' => 'Hard Write',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_hard_read', [
-                            'label' => 'Hard Read',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_hard_stat', [
-                            'label' => 'Hard Stat',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('mdtest_hard_delete', [
-                            'label' => 'Hard Delete',
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Results from find</legend>
-
-                <div class="row">
-                    <div class="column">
-                        <?php
-                        echo $this->Form->control('find_mixed', [
-                            'readonly'
-                        ]);
-                        ?>
-                    </div>
-                    <div class="column">
-                        
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <aside class="column">
-        
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="submissions form content">
-            <fieldset>
-                <legend>Review</legend>
-
-                <?php
-                echo $this->Form->control('include_in_io500', [
-                    'label' => 'Yes, include this submission in the IO500 list!'
-                ]);
-
-                echo $this->Form->control('information_10_node_challenge', [
-                    'label' => 'Yes, include this submission in the 10-node list!',
-                    intval($submission->information_client_nodes) == 10 ? '' : 'disabled'
-                ]);
-                ?>
-
-                <div class="form-buttons">
-                    <?php echo $this->Form->button(__('Submit')) ?>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<?php echo $this->Form->end() ?>
+<div id="loader"></div>

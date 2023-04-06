@@ -9,9 +9,10 @@
                     <th><?php echo $this->Paginator->sort('release_id', 'Release') ?></th>
                     <th><?php echo $this->Paginator->sort('information_system', 'System') ?></th>
                     <th><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
-                    <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem Type') ?></th>
-                    <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', '10-NODE') ?></th>
+                    <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem') ?></th>
+                    <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'TEN') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', 'IO500') ?></th>
+                    <th class="tb-center"><?php echo $this->Paginator->sort('status_id', 'Status') ?></th>
                     <th class="tb-actions"><?php echo __('Actions') ?></th>
                 </tr>
             </thead>
@@ -38,7 +39,17 @@
                         <?php } ?>
                     </td>
                     <td class="tb-actions">
-                        <?php echo $this->AuthLink->link('<i class="fas fa-eye"></i>', ['action' => 'view', $submission->id], ['escape' => false]) ?>
+                        <strong class="status status-<?php echo h($submission->status->id) ?>"><?php echo h($submission->status->name) ?></strong>
+                    </td>
+                    <td class="tb-actions">
+                        <?php
+                        echo $this->AuthLink->link('<i class="fas fa-eye"></i>', ['action' => 'view', $submission->id], ['escape' => false]);
+                        echo $this->AuthLink->link('<i class="fas fa-highlighter"></i>', ['action' => 'edit', $submission->id], ['escape' => false]);
+
+                        if (!empty($submission->questionnaire)) {
+                            echo $this->AuthLink->link('<i class="fa-solid fa-clipboard"></i>', ['controller' => 'Questionnaires', 'action' => 'view', $submission->id], ['escape' => false]);
+                        }
+                        ?>
                     </td>
                 </tr>
                 <?php } ?>

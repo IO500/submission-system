@@ -1,0 +1,2105 @@
+{
+    "SCHEMES":{
+        "IO500":{
+            "id":{
+                "dtype":"string",
+                "desc":"The global unique id of the list entry",
+                "enabled":false
+            },
+            "exclusive_cluster_usage":{
+                "dtype":"choice",
+                "choice":[
+                    "yes",
+                    "no"
+                ],
+                "required":true,
+                "desc":"During the IO500 benchmark execution was the system entirely dedicated to running the benchmark, if so, select YES. If there were other jobs running in the same cluster and storage system, select NO."
+            },
+            "version":{
+                "dtype":"string",
+                "desc":"The version of the IO500 used"
+            },
+            "nodeTypeName":{
+                "dtype":"string",
+                "desc":"The type of the nodes (matching the node name description as part of the supercomputer) that executed the benchmark",
+                "unit":""
+            },
+            "number_clientNodes":{
+                "dtype":"integer",
+                "desc":"The number of nodes that executed the IO500",
+                "required":true,
+                "unit":""
+            },
+            "procsPerNode":{
+                "dtype":"integer",
+                "desc":"The number of processes that executed the IO500 benchmark per Node",
+                "required":true,
+                "unit":""
+            },
+            "note":{
+                "dtype":"string",
+                "desc":"Any other information you may find useful",
+                "unit":""
+            }
+        },
+        "Energy":{
+            "max power supplied":{
+                "dtype":"number",
+                "desc":"The maximum power supply",
+                "unit":"W",
+                "default-unit":"MW"
+            },
+            "mean power":{
+                "dtype":"number",
+                "desc":"The mean power consumption",
+                "unit":"W",
+                "default-unit":"MW"
+            },
+            "energy per year":{
+                "dtype":"number",
+                "desc":"Energy consumption",
+                "unit":"kWh",
+                "default-unit":"kWh"
+            },
+            "pue":{
+                "dtype":"number",
+                "desc":"Power usage effectiveness"
+            }
+        },
+        "Cost":{
+            "initial costs":{
+                "dtype":"number",
+                "desc":"Costs for the component",
+                "unit":"$",
+                "default-unit":"M$"
+            },
+            "annual maintanance costs":{
+                "dtype":"number",
+                "desc":"Costs for the upkeep of the component",
+                "unit":"$",
+                "default-unit":"$"
+            }
+        },
+        "Details":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            }
+        },
+        "Nodes":{
+            "name":{
+                "dtype":"string",
+                "desc":"Name of the node configuration (could be the hostname prefix)",
+                "required":"",
+                "pattern":"[a-zA-Z]+[a-zA-Z0-9_ ,\\-+]+"
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"Nodes"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor",
+                "required":true
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            },
+            "count":{
+                "dtype":"integer",
+                "required":true,
+                "desc":"Number of nodes"
+            },
+            "distribution":{
+                "dtype":"choice",
+                "desc":"The distribution of your operating system",
+                "choice":[
+                    "RedHat",
+                    "SUSE Enterprise",
+                    "SUSE Community",
+                    "Ubuntu",
+                    "CentOS",
+                    "other"
+                ],
+                "required":true
+            },
+            "distribution version":{
+                "dtype":"string",
+                "desc":"The version of the distribution kernel, e.g., 20.04.1",
+                "required":true
+            },
+            "kernel version":{
+                "dtype":"string",
+                "desc":"The version of the (Linux) kernel, e.g., 5.3.0-1028-azure",
+                "pattern":"[2-9].[0-9]+.*",
+                "required":true
+            },
+            "compute peak":{
+                "dtype":"number",
+                "desc":"Theoretic double precision FLOPS of all CPUs and accelerators",
+                "unit":"FLOPS",
+                "default-unit":"GFLOPS",
+                "aggregate":[
+                    "Accelerator.compute peak double*Accelerator.count",
+                    "processor.compute peak*processor.sockets"
+                ]
+            },
+            "installation date":{
+                "dtype":"text",
+                "desc":"Installation date of the nodes YYYY-MM-DD",
+                "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+            },
+            "Cooling":{
+                "dtype":"choice",
+                "desc":"Type of the cooling for the nodes",
+                "choice":[
+                    "cold water",
+                    "hot water",
+                    "air",
+                    "partially water",
+                    "immersion",
+                    "other"
+                ]
+            },
+            "SCHEMES":[
+                "Processor"
+            ],
+            "SCHEMES_multi":[
+                "Memory",
+                "Accelerator",
+                "StorageMedia",
+                "Interconnect"
+            ]
+        },
+        "Accelerator":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "load":"Accelerator",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "type":{
+                "dtype":"choice",
+                "desc":"Type of the accelerator",
+                "choice":[
+                    "Xeon Phi",
+                    "GPU",
+                    "XX"
+                ]
+            },
+            "count":{
+                "dtype":"integer",
+                "desc":"Number of accelerators"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "cores":{
+                "dtype":"integer",
+                "desc":"Number of cores"
+            },
+            "frequency":{
+                "dtype":"number",
+                "desc":"Speed of the processor",
+                "unit":"Hz",
+                "default-unit":"MHz"
+            },
+            "bus":{
+                "dtype":"choice",
+                "desc":"Type of the attachment",
+                "choice":[
+                    "PCIe 2.X",
+                    "PCIe 3.X"
+                ]
+            },
+            "peak throughput":{
+                "dtype":"number",
+                "desc":"The theoretic throughput to read/write data",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s"
+            },
+            "compute peak double":{
+                "dtype":"number",
+                "desc":"Double precision FLOPS",
+                "unit":"FLOPS",
+                "default-unit":"GFLOPS"
+            },
+            "SCHEMES":[
+                "Memory"
+            ]
+        },
+        "RAID":{
+            "Level":{
+                "dtype":"choice",
+                "desc":"RAID level",
+                "required":true,
+                "choice":[
+                    "Declustered RAID",
+                    "Spectrum Scale RAID",
+                    "RAID-0",
+                    "RAID-1",
+                    "RAID-10",
+                    "RAID-5",
+                    "RAID-6",
+                    "RAID-Z",
+                    "RAID-Z2",
+                    "RAID-Z3"
+                ]
+            },
+            "Devices":{
+                "dtype":"integer",
+                "desc":"Number of devices per RAID-set"
+            },
+            "Spares":{
+                "dtype":"integer",
+                "desc":"Number of spare devices"
+            }
+        },
+        "StorageMedia":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"storage"
+            },
+            "type":{
+                "dtype":"choice",
+                "desc":"",
+                "required":true,
+                "choice":[
+                    "Memory",
+                    "SSD",
+                    "Flash",
+                    "HDD",
+                    "PMEM",
+                    "Other"
+                ]
+            },
+            "count":{
+                "dtype":"integer",
+                "desc":"Number of storage devices in one server",
+                "required":true
+            },
+            "interface":{
+                "dtype":"choice",
+                "desc":"The storage interface, i.e., how is the storage attached",
+                "required":true,
+                "choice":[
+                    "USB2",
+                    "USB3",
+                    "SATA",
+                    "SATA2",
+                    "SATA3",
+                    "SAS1",
+                    "SAS2",
+                    "SAS3",
+                    "SAS4",
+                    "SAS5",
+                    "NVMe",
+                    "NVDIMM",
+                    "PCIe2x",
+                    "PCIe3x",
+                    "PCIe4x"
+                ]
+            },
+            "file system":{
+                "dtype":"choice",
+                "desc":"File system",
+                "required":true,
+                "choice":[
+                    "none",
+                    "EXT4",
+                    "XFS",
+                    "ZFS",
+                    "LDISKFS",
+                    "Btrfs",
+                    "tmpfs",
+                    "other"
+                ]
+            },
+            "vendor":{
+                "dtype":"string",
+                "required":true,
+                "desc":"Vendor"
+            },
+            "net capacity":{
+                "dtype":"number",
+                "desc":"Net (usable) capacity",
+                "unit":"Byte",
+                "default-unit":"TiB",
+                "required":true
+            },
+            "raw capacity":{
+                "dtype":"integer",
+                "desc":"Raw capacity without overhead for fault-tolerance",
+                "unit":"Byte",
+                "default-unit":"GB"
+            },
+            "peak throughput":{
+                "dtype":"number",
+                "desc":"The theoretic throughput",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s"
+            },
+            "IOPS":{
+                "dtype":"number",
+                "desc":"The theoretic number of IOPS",
+                "unit":"OP/s",
+                "default-unit":"kOP/s"
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            },
+            "SCHEMES":[
+                "RAID"
+            ]
+        },
+        "Processor":{
+            "sockets":{
+                "dtype":"integer",
+                "desc":"Number of sockets",
+                "required":true
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Processor model",
+                "load":"cpu",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "required":true
+            },
+            "architecture":{
+                "dtype":"choice",
+                "desc":"Architecture of the processor",
+                "choice":[
+                    "x86_64",
+                    "RISC-V",
+                    "ARM",
+                    "ARM64",
+                    "Power",
+                    "Alpha",
+                    "Motorola 6800",
+                    "Z80",
+                    "MIPS",
+                    "SPARC",
+                    "other"
+                ],
+                "required":true
+            },
+            "vendor":{
+                "desc":"Vendor of the processor",
+                "dtype":"choice",
+                "choice":[
+                    "AMD",
+                    "ARM",
+                    "ARM",
+                    "Fujitsu",
+                    "Intel",
+                    "other"
+                ]
+            },
+            "microarchitecture":{
+                "desc":"Processor microarchitecture",
+                "dtype":"choice",
+                "choice":[
+                    "Silvermont",
+                    "Haswell",
+                    "Broadwell",
+                    "Airmont",
+                    "Skylake",
+                    "Goldmont",
+                    "Kaby Lake",
+                    "Coffee Lake",
+                    "Goldmont Plus",
+                    "Cannon Lake",
+                    "Whiskey Lake",
+                    "Amber Lake",
+                    "Cascade Lake",
+                    "Comet Lake",
+                    "Sunny Cove",
+                    "Tremont",
+                    "Cooper Lake",
+                    "Willow Cove",
+                    "Rocket Lake",
+                    "Bulldozer",
+                    "Zen",
+                    "Zen2",
+                    "Zen3",
+                    "other"
+                ],
+                "required":true
+            },
+            "cores per socket":{
+                "dtype":"integer",
+                "desc":"Number of physical cores per socket",
+                "required":true
+            },
+            "threads per core":{
+                "dtype":"integer",
+                "desc":"Number of logical cores per CPU (SMT)",
+                "required":true
+            },
+            "frequency":{
+                "dtype":"number",
+                "desc":"Speed of the processor",
+                "unit":"Hz",
+                "default-unit":"MHz",
+                "required":true
+            },
+            "L2 cache size":{
+                "dtype":"integer",
+                "desc":"Cache size",
+                "unit":"Byte",
+                "default-unit":"MiB"
+            },
+            "L3 cache size":{
+                "dtype":"integer",
+                "desc":"Cache size",
+                "unit":"Byte",
+                "default-unit":"MiB"
+            },
+            "compute peak":{
+                "dtype":"number",
+                "desc":"Double precision FLOPS per processor",
+                "unit":"FLOPS",
+                "default-unit":"GFLOPS"
+            }
+        },
+        "Memory":{
+            "model":{
+                "dtype":"string",
+                "desc":"Processor model",
+                "load":"Memory",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "type":{
+                "dtype":"choice",
+                "desc":"",
+                "choice":[
+                    "DDR3",
+                    "DDR4",
+                    "GDDR4",
+                    "GDDR5",
+                    "GDDR6",
+                    "HBM"
+                ]
+            },
+            "frequency":{
+                "dtype":"number",
+                "desc":"Speed of the memory",
+                "unit":"Hz",
+                "default-unit":"MHz"
+            },
+            "net capacity":{
+                "dtype":"number",
+                "desc":"Net (usable) capacity",
+                "unit":"Byte",
+                "default-unit":"GB",
+                "required":true
+            },
+            "channels":{
+                "dtype":"integer",
+                "desc":"The number of memory channels"
+            },
+            "bus peak throughput":{
+                "dtype":"number",
+                "desc":"The theoretic memory throughput",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s"
+            },
+            "protection":{
+                "dtype":"choice",
+                "desc":"",
+                "choice":[
+                    "None",
+                    "ECC"
+                ]
+            }
+        },
+        "Interconnect":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"Interconnect",
+                "required":true
+            },
+            "type":{
+                "dtype":"choice",
+                "desc":"",
+                "choice":[
+                    "Infiniband",
+                    "Ethernet",
+                    "Omni-Path",
+                    "Sunway",
+                    "Aries",
+                    "Gemini",
+                    "BXI",
+                    "BXI2"
+                ],
+                "required":true
+            },
+            "speed":{
+                "dtype":"choice",
+                "desc":"",
+                "choice":[
+                    "100 MBit",
+                    "1 GBit",
+                    "4 GBit",
+                    "10 GBit",
+                    "25 GBit",
+                    "32 GBit",
+                    "50 GBit",
+                    "100 GBit",
+                    "200 GBit",
+                    "400 GBit"
+                ],
+                "required":true
+            },
+            "features":{
+                "dtype":"options",
+                "desc":"Enabled features",
+                "required":true,
+                "choice":[
+                    "RDMA"
+                ]
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor",
+                "required":true
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            },
+            "peak throughput":{
+                "dtype":"number",
+                "desc":"The best throughput",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s"
+            },
+            "links":{
+                "dtype":"integer",
+                "desc":"The number of physical network links of this interconnect type",
+                "required":true
+            }
+        },
+        "tape library":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"tape"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "slots":{
+                "dtype":"integer",
+                "desc":"The number of slots for tapes"
+            },
+            "drives":{
+                "dtype":"integer",
+                "desc":"The number of tape drives"
+            },
+            "robots":{
+                "dtype":"integer",
+                "desc":"The number of robots serving tapes"
+            },
+            "max power supplied":{
+                "dtype":"number",
+                "desc":"The maximum power supply",
+                "unit":"W",
+                "default-unit":"kW"
+            },
+            "mean power":{
+                "dtype":"number",
+                "desc":"The mean power consumption",
+                "unit":"W",
+                "default-unit":"kW"
+            },
+            "SCHEMES":[
+                "Footprint",
+                "Cost"
+            ]
+        },
+        "Lustre":{
+            "version":{
+                "dtype":"string",
+                "desc":"The Lustre Version, e.g. 2.11-patch1-XYZ",
+                "pattern":"[2-9].[0-9]+.*"
+            },
+            "backend":{
+                "dtype":"choice",
+                "desc":"The backend used for Lustre",
+                "choice":[
+                    "LDISKFS",
+                    "ZFS"
+                ]
+            },
+            "features":{
+                "dtype":"options",
+                "desc":"Enabled features",
+                "choice":[
+                    "DNE1",
+                    "DNE2"
+                ]
+            },
+            "SCHEMES_multi":[
+                "OSS:Servers:The Lustre object storage servers",
+                "MDS:Servers:The Lustre metadata servers"
+            ]
+        },
+        "DAOS":{
+            "Version":{
+                "dtype":"integer",
+                "desc":"The Version of DAOS"
+            },
+            "SCHEMES_multi":[
+                "Servers:Servers:A set of identical configured DAOS servers"
+            ]
+        },
+        "WekaIO":{
+            "version":{
+                "dtype":"integer",
+                "desc":"The Version of Weka used"
+            },
+            "SCHEMES_multi":[
+                "Servers:Servers:A set of identical configured Weka servers"
+            ]
+        },
+        "SpectrumScale":{
+            "Version":{
+                "dtype":"integer",
+                "desc":"The Version of GPFS"
+            },
+            "Release":{
+                "dtype":"integer",
+                "desc":"The Version of GPFS"
+            },
+            "Mod":{
+                "dtype":"integer",
+                "desc":"The Version of GPFS"
+            },
+            "FixPack":{
+                "dtype":"integer",
+                "desc":"The Version of GPFS"
+            },
+            "SCHEMES":[
+                "Client Options:SpectrumScaleClientOptions",
+                "FileSystem Options:GPFSFileSystemOptions",
+                "Cluster Options:GPFSClusterOptions"
+            ],
+            "SCHEMES_multi":[
+                "Data Servers:GPFSDataServers:A set of GPFS data servers",
+                "Metadata Servers:GPFSMetadataServers:A set of GPFS metadata servers"
+            ]
+        },
+        "GPFSDataServers":{
+            "SCHEMES":[
+                "Servers"
+            ],
+            "NSD usage":{
+                "dtype":"choice",
+                "choice":[
+                    "dataOnly",
+                    "dataAndMetadata"
+                ]
+            }
+        },
+        "GPFSMetadataServers":{
+            "SCHEMES":[
+                "Servers"
+            ]
+        },
+        "GPFSFileSystemOptions":{
+            "Stripe Size":{
+                "unit":"Byte",
+                "default-unit":"KiB",
+                "dtype":"number",
+                "desc":"TODO"
+            },
+            "Replication":{
+                "dtype":"choice",
+                "choice":[
+                    "1",
+                    "2",
+                    "3"
+                ],
+                "desc":"TODO"
+            },
+            "Erasure Coding":{
+                "dtype":"string",
+                "desc":"(Encoding) TODO"
+            },
+            "Encryption":{
+                "dtype":"choice",
+                "choice":[
+                    "Yes",
+                    "No"
+                ],
+                "desc":"TODO"
+            },
+            "Inodes (limit:preallocated)":{
+                "dtype":"string",
+                "desc":"TODO"
+            }
+        },
+        "GPFSClusterOptions":{
+            "seqDiscardThreshold":{
+                "dtype":"number",
+                "desc":"TODO"
+            },
+            "workerThreads":{
+                "dtype":"number",
+                "desc":"TODO"
+            },
+            "maxStatCache":{
+                "dtype":"number",
+                "desc":"TODO"
+            },
+            "maxFilesToCache":{
+                "dtype":"number",
+                "desc":"TODO"
+            },
+            "maxMBpS":{
+                "dtype":"number",
+                "desc":"TODO"
+            }
+        },
+        "SpectrumScaleClientOptions":{
+            "PagePool Capacity":{
+                "unit":"Byte",
+                "default-unit":"GiB",
+                "desc":"XXX",
+                "dtype":"number"
+            },
+            "features":{
+                "dtype":"choice",
+                "choice":[
+                    "LROC",
+                    "HAWC"
+                ]
+            }
+        },
+        "BeeGFS":{
+            "version":{
+                "dtype":"string",
+                "desc":"The BeeGFS version",
+                "pattern":"[1-9]+.[0-9]+.*"
+            },
+            "protocol":{
+                "dtype":"choice",
+                "desc":"The protocol used for communication with storage and metadata",
+                "choice":[
+                    "UDP",
+                    "TCP",
+                    "RDMA"
+                ]
+            },
+            "SCHEMES_multi":[
+                "Metadata Server:Servers:The specification of the server running the BeeGFS server process for metadata",
+                "Storage Server:Servers:The specification of the server running the BeeGFS server process for storage targets"
+            ]
+        },
+        "NAS":{
+            "protocol":{
+                "dtype":"choice",
+                "desc":"The protocol for connection to clients",
+                "choice":[
+                    "SMB",
+                    "CIFS",
+                    "NFS",
+                    "other"
+                ]
+            },
+            "protocol version":{
+                "dtype":"text",
+                "desc":"The version of the protocol in use."
+            },
+            "transfer protocol":{
+                "dtype":"choice",
+                "desc":"The protocol for connection to clients",
+                "choice":[
+                    "TCP",
+                    "UDP",
+                    "NConnect",
+                    "RoCE",
+                    "other"
+                ]
+            },
+            "SCHEMES_multi":[
+                "Servers"
+            ]
+        },
+        "Servers":{
+            "name":{
+                "dtype":"string",
+                "desc":"Name of the server, e.g., hostname",
+                "required":"",
+                "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+"
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"Servers"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            },
+            "count":{
+                "dtype":"integer",
+                "desc":"Number of nodes",
+                "required":true
+            },
+            "distribution":{
+                "dtype":"choice",
+                "desc":"The distribution of your operating system",
+                "required":true,
+                "choice":[
+                    "RedHat",
+                    "SUSE Enterprise",
+                    "SUSE Community",
+                    "Ubuntu",
+                    "CentOS",
+                    "other"
+                ]
+            },
+            "distribution version":{
+                "dtype":"string",
+                "desc":"The version of the distribution kernel, e.g., 20.04.1",
+                "required":true
+            },
+            "kernel version":{
+                "dtype":"string",
+                "desc":"The version of the (Linux) kernel, e.g., 5.3.0-1028-azure",
+                "pattern":"[2-9].[0-9]+.*",
+                "required":true
+            },
+            "installation date":{
+                "dtype":"text",
+                "desc":"Installation date of the nodes YYYY-MM",
+                "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+            },
+            "refresh date":{
+                "dtype":"text",
+                "desc":"The most recent date when the storage system underwent significant changes such as reformat or growth. format: MM/YYYY",
+                "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+            },
+            "Cooling":{
+                "dtype":"choice",
+                "desc":"Type of the cooling for the nodes",
+                "choice":[
+                    "cold water",
+                    "hot water",
+                    "air",
+                    "partially water",
+                    "immersion",
+                    "other"
+                ]
+            },
+            "SCHEMES":[
+                "Processor"
+            ],
+            "SCHEMES_multi":[
+                "StorageMedia",
+                "Memory",
+                "Interconnect"
+            ]
+        },
+        "tapeArchive":{
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                "load":"TapeArchive"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "power consumption":{
+                "dtype":"number",
+                "desc":"Power consumption",
+                "unit":"W",
+                "default-unit":"W"
+            },
+            "slots":{
+                "dtype":"integer",
+                "desc":"The number of slots for tapes",
+                "aggregate":[
+                    "tape library.slots"
+                ]
+            },
+            "drives":{
+                "dtype":"integer",
+                "desc":"The number of tape drives",
+                "aggregate":[
+                    "tape library.drives"
+                ]
+            },
+            "robots":{
+                "dtype":"integer",
+                "desc":"The number of robots serving tapes",
+                "aggregate":[
+                    "tape library.robots"
+                ]
+            },
+            "max power supplied":{
+                "dtype":"number",
+                "desc":"The maximum power supply",
+                "unit":"W",
+                "default-unit":"kW"
+            },
+            "mean power":{
+                "dtype":"number",
+                "desc":"The mean power consumption",
+                "unit":"W",
+                "default-unit":"kW"
+            },
+            "SCHEMES_multi":[
+                "tape library"
+            ],
+            "SCHEMES":[
+                
+            ]
+        },
+        "Cooling":{
+            "name":{
+                "dtype":"text",
+                "desc":"Name of the cooling",
+                "enabled":true,
+                "required":true,
+                "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+"
+            },
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "load":"Cooling",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "SCHEMES":[
+                "Energy",
+                "Cost"
+            ]
+        },
+        "Footprint":{
+            "width":{
+                "dtype":"number",
+                "desc":"Size",
+                "unit":"m",
+                "default-unit":"m"
+            },
+            "length":{
+                "dtype":"number",
+                "desc":"Size",
+                "unit":"m",
+                "default-unit":"m"
+            },
+            "height":{
+                "dtype":"number",
+                "desc":"Size",
+                "unit":"m",
+                "default-unit":"m"
+            },
+            "area":{
+                "dtype":"number",
+                "desc":"Area",
+                "unit":"m^2",
+                "default-unit":"m^2"
+            },
+            "weight":{
+                "dtype":"number",
+                "desc":"Weight",
+                "unit":"kg",
+                "default-unit":"kg"
+            }
+        },
+        "Room":{
+            "name":{
+                "dtype":"text",
+                "desc":"Name of the room",
+                "enabled":true,
+                "required":true,
+                "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+"
+            },
+            "SCHEMES":[
+                "Energy",
+                "Cost",
+                "Footprint"
+            ],
+            "SCHEMES_multi":[
+                "Cooling",
+                "Pump",
+                "AirConditioning"
+            ]
+        },
+        "Pump":{
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "load":"Cooling",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "SCHEMES":[
+                "Energy",
+                "Cost"
+            ]
+        },
+        "AirConditioning":{
+            "vendor":{
+                "dtype":"string",
+                "desc":"Vendor"
+            },
+            "model":{
+                "dtype":"string",
+                "desc":"Exact model description of the component",
+                "load":"Cooling",
+                "pattern":"[\\-+a-zA-Z_ 0-9]+"
+            },
+            "SCHEMES":[
+                "Energy",
+                "Cost"
+            ]
+        },
+        "Benchmarks":{
+            "graph500":{
+                "dtype":"number",
+                "desc":"GTEPS"
+            },
+            "graph500 problem scale":{
+                "dtype":"number",
+                "desc":""
+            },
+            "top500":{
+                "dtype":"number",
+                "desc":"",
+                "unit":"FLOPS",
+                "default-unit":"PFLOPS"
+            },
+            "green500":{
+                "dtype":"number",
+                "desc":"",
+                "unit":"FLOPS/W",
+                "default-unit":"MFLOPS/W"
+            }
+        }
+    },
+    "SYSTEM":{
+        "Site":{
+            "abbreviation":{
+                "dtype":"text",
+                "desc":"Name of the site abbreviated",
+                "enabled":true,
+                "required":true,
+                "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+"
+            },
+            "institution":{
+                "dtype":"text",
+                "desc":"Name of the institution full name",
+                "enabled":true,
+                "pattern":"[a-zA-Z_0-9]+[a-zA-Z0-9_ \\-+]+",
+                "required":true
+            },
+            "location":{
+                "dtype":"text",
+                "desc":"GPS coordinates of the site"
+            },
+            "webpage":{
+                "dtype":"url",
+                "desc":"URL of the site"
+            },
+            "SCHEMES":[
+                "IO500",
+                "Energy",
+                "Cost"
+            ],
+            "nationality":{
+                "dtype":"choice",
+                "required":true,
+                "choice":[
+                    "AFG",
+                    "ALA",
+                    "ALB",
+                    "DZA",
+                    "ASM",
+                    "AND",
+                    "AGO",
+                    "AIA",
+                    "ATA",
+                    "ATG",
+                    "ARG",
+                    "ARM",
+                    "ABW",
+                    "AUS",
+                    "AUT",
+                    "AZE",
+                    "BHS",
+                    "BHR",
+                    "BGD",
+                    "BRB",
+                    "BLR",
+                    "BEL",
+                    "BLZ",
+                    "BEN",
+                    "BMU",
+                    "BTN",
+                    "BOL",
+                    "BES",
+                    "BIH",
+                    "BWA",
+                    "BVT",
+                    "BRA",
+                    "IOT",
+                    "BRN",
+                    "BGR",
+                    "BFA",
+                    "BDI",
+                    "CPV",
+                    "KHM",
+                    "CMR",
+                    "CAN",
+                    "CYM",
+                    "CAF",
+                    "TCD",
+                    "CHL",
+                    "CHN",
+                    "CXR",
+                    "CCK",
+                    "COL",
+                    "COM",
+                    "COG",
+                    "COD",
+                    "COK",
+                    "CRI",
+                    "CIV",
+                    "HRV",
+                    "CUB",
+                    "CUW",
+                    "CYP",
+                    "CZE",
+                    "DNK",
+                    "DJI",
+                    "DMA",
+                    "DOM",
+                    "ECU",
+                    "EGY",
+                    "SLV",
+                    "GNQ",
+                    "ERI",
+                    "EST",
+                    "SWZ",
+                    "ETH",
+                    "FLK",
+                    "FRO",
+                    "FJI",
+                    "FIN",
+                    "FRA",
+                    "GUF",
+                    "PYF",
+                    "ATF",
+                    "GAB",
+                    "GMB",
+                    "GEO",
+                    "DEU",
+                    "GHA",
+                    "GIB",
+                    "GRC",
+                    "GRL",
+                    "GRD",
+                    "GLP",
+                    "GUM",
+                    "GTM",
+                    "GGY",
+                    "GIN",
+                    "GNB",
+                    "GUY",
+                    "HTI",
+                    "HMD",
+                    "VAT",
+                    "HND",
+                    "HKG",
+                    "HUN",
+                    "ISL",
+                    "IND",
+                    "IDN",
+                    "IRN",
+                    "IRQ",
+                    "IRL",
+                    "IMN",
+                    "ISR",
+                    "ITA",
+                    "JAM",
+                    "JPN",
+                    "JEY",
+                    "JOR",
+                    "KAZ",
+                    "KEN",
+                    "KIR",
+                    "PRK",
+                    "KOR",
+                    "KWT",
+                    "KGZ",
+                    "LAO",
+                    "LVA",
+                    "LBN",
+                    "LSO",
+                    "LBR",
+                    "LBY",
+                    "LIE",
+                    "LTU",
+                    "LUX",
+                    "MAC",
+                    "MDG",
+                    "MWI",
+                    "MYS",
+                    "MDV",
+                    "MLI",
+                    "MLT",
+                    "MHL",
+                    "MTQ",
+                    "MRT",
+                    "MUS",
+                    "MYT",
+                    "MEX",
+                    "FSM",
+                    "MDA",
+                    "MCO",
+                    "MNG",
+                    "MNE",
+                    "MSR",
+                    "MAR",
+                    "MOZ",
+                    "MMR",
+                    "NAM",
+                    "NRU",
+                    "NPL",
+                    "NLD",
+                    "NCL",
+                    "NZL",
+                    "NIC",
+                    "NER",
+                    "NGA",
+                    "NIU",
+                    "NFK",
+                    "MKD",
+                    "MNP",
+                    "NOR",
+                    "OMN",
+                    "PAK",
+                    "PLW",
+                    "PSE",
+                    "PAN",
+                    "PNG",
+                    "PRY",
+                    "PER",
+                    "PHL",
+                    "PCN",
+                    "POL",
+                    "PRT",
+                    "PRI",
+                    "QAT",
+                    "REU",
+                    "ROU",
+                    "RUS",
+                    "RWA",
+                    "BLM",
+                    "SHN",
+                    "KNA",
+                    "LCA",
+                    "MAF",
+                    "SPM",
+                    "VCT",
+                    "WSM",
+                    "SMR",
+                    "STP",
+                    "SAU",
+                    "SEN",
+                    "SRB",
+                    "SYC",
+                    "SLE",
+                    "SGP",
+                    "SXM",
+                    "SVK",
+                    "SVN",
+                    "SLB",
+                    "SOM",
+                    "ZAF",
+                    "SGS",
+                    "SSD",
+                    "ESP",
+                    "LKA",
+                    "SDN",
+                    "SUR",
+                    "SJM",
+                    "SWE",
+                    "CHE",
+                    "SYR",
+                    "TWN",
+                    "TJK",
+                    "TZA",
+                    "THA",
+                    "TLS",
+                    "TGO",
+                    "TKL",
+                    "TON",
+                    "TTO",
+                    "TUN",
+                    "TUR",
+                    "TKM",
+                    "TCA",
+                    "TUV",
+                    "UGA",
+                    "UKR",
+                    "ARE",
+                    "GBR",
+                    "USA",
+                    "UMI",
+                    "URY",
+                    "UZB",
+                    "VUT",
+                    "VEN",
+                    "VNM",
+                    "VGB",
+                    "VIR",
+                    "WLF",
+                    "ESH",
+                    "YEM",
+                    "ZMB",
+                    "ZWE"
+                ]
+            },
+            "annual staff costs":{
+                "dtype":"number",
+                "desc":"Costs for the overall site staff per year",
+                "unit":"$",
+                "default-unit":"k$"
+            },
+            "energy costs per kWh":{
+                "dtype":"number",
+                "desc":"Amortized costs per kWH",
+                "unit":"$",
+                "default-unit":"$"
+            },
+            "Supercomputer":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the supercomputer",
+                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
+                    "required":true
+                },
+                "integrator":{
+                    "dtype":"string",
+                    "desc":"The system integrator"
+                },
+                "installation date":{
+                    "dtype":"text",
+                    "desc":"Installation date of the supercomputer YYYY-MM",
+                    "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+                },
+                "total nodes":{
+                    "dtype":"integer",
+                    "desc":"Total number of nodes",
+                    "required":true,
+                    "aggregate":[
+                        "Nodes.count"
+                    ]
+                },
+                "total cores":{
+                    "required":true,
+                    "dtype":"integer",
+                    "desc":"Total number of CPU/GPU cores",
+                    "aggregate":[
+                        "Nodes.Processor.sockets * Nodes.Processor.cores per socket * Nodes.count"
+                    ]
+                },
+                "compute peak":{
+                    "dtype":"number",
+                    "desc":"Double precision FLOPS of all CPUs and accelerators",
+                    "unit":"FLOPS",
+                    "default-unit":"PFLOPS",
+                    "aggregate":[
+                        "Nodes.compute peak * Nodes.count"
+                    ]
+                },
+                "memory capacity":{
+                    "dtype":"number",
+                    "desc":"Net (usable) capacity of CPU/GPU memory",
+                    "unit":"Byte",
+                    "required":true,
+                    "default-unit":"TB",
+                    "aggregate":[
+                        "Nodes.Memory.net capacity * Nodes.count",
+                        "Nodes.Accelerator.Memory.net capacity * Nodes.Accelerator.count * Nodes.count"
+                    ]
+                },
+                "memory throughput":{
+                    "dtype":"number",
+                    "desc":"Throughput of all GPU/CPUs",
+                    "unit":"Byte/s",
+                    "default-unit":"TB/s",
+                    "aggregate":[
+                        "Nodes.Memory.bus peak throughput* Nodes.count",
+                        "Nodes.Accelerator.Memory.bus peak throughput * Nodes.Accelerator.count * Nodes.count"
+                    ]
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost",
+                    "Benchmarks"
+                ],
+                "SCHEMES_multi":[
+                    "Nodes"
+                ]
+            },
+            "Network":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the network",
+                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
+                    "required":""
+                },
+                "vendor":{
+                    "dtype":"string",
+                    "desc":"Vendor",
+                    "required":true
+                },
+                "power consumption":{
+                    "dtype":"number",
+                    "desc":"Power consumption",
+                    "unit":"W",
+                    "default-unit":"W"
+                },
+                "type":{
+                    "dtype":"choice",
+                    "desc":"Type of the network",
+                    "required":true,
+                    "choice":[
+                        "Aries",
+                        "Slingshot",
+                        "Infiniband",
+                        "Ethernet",
+                        "Omnipath",
+                        "Ethernet",
+                        "Internet",
+                        "Sunway"
+                    ]
+                },
+                "topology":{
+                    "dtype":"choice",
+                    "desc":"Type of the network topology",
+                    "required":true,
+                    "choice":[
+                        "3D-Torus",
+                        "Dragon-Fly",
+                        "Fat-tree",
+                        "other"
+                    ]
+                },
+                "bisection bandwidth":{
+                    "dtype":"number",
+                    "desc":"Bisection bandwidth of the network / maximum throughput",
+                    "unit":"Byte/s",
+                    "default-unit":"MiB/s"
+                },
+                "blocking factor":{
+                    "dtype":"string",
+                    "desc":"The blocking factor of the network",
+                    "unit":""
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost"
+                ]
+            },
+            "StorageSystem":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the storage",
+                    "pattern":"[/a-zA-Z]+[/a-zA-Z0-9_ -]+",
+                    "required":""
+                },
+                "model":{
+                    "dtype":"string",
+                    "desc":"Model is applicable for vendor storage hardware to wrap the whole hardware configuration with details (e.g. DDN AI400X vs. AI400X2)",
+                    "pattern":"[\\-+a-zA-Z_ 0-9]+",
+                    "load":"storagesystem",
+                    "required":true
+                },
+                "usage":{
+                    "dtype":"choice",
+                    "required":true,
+                    "desc":"How is the storage system used. Production means the storage system is used with end-users and must be stable",
+                    "choice":[
+                        "production",
+                        "research/test"
+                    ]
+                },
+                "overlapping_compute_storage":{
+                    "dtype":"choice",
+                    "choice":[
+                        "yes",
+                        "no"
+                    ],
+                    "required":true,
+                    "desc":"Are actually the compute nodes providing the storage"
+                },
+                "overlapping_metadata_dataServers":{
+                    "dtype":"choice",
+                    "choice":[
+                        "yes",
+                        "no"
+                    ],
+                    "required":true,
+                    "desc":"Is metadata and data stored on the same servers"
+                },
+                "vendor":{
+                    "dtype":"string",
+                    "desc":"Vendor",
+                    "required":true
+                },
+                "type":{
+                    "dtype":"choice",
+                    "desc":"Type of the storage",
+                    "required":true,
+                    "choice":[
+                        "file system",
+                        "burst buffer",
+                        "object storage",
+                        "tapeArchive",
+                        "MAID"
+                    ]
+                },
+                "software":{
+                    "dtype":"string",
+                    "desc":"Software used",
+                    "required":true
+                },
+                "frameworks":{
+                    "dtype":"options",
+                    "desc":"Software frameworks used for the development",
+                    "required":true,
+                    "choice":[
+                        "SPDK",
+                        "DPDK"
+                    ]
+                },
+                "client storage access":{
+                    "dtype":"choice",
+                    "desc":"How does the client access the storage? e.g. via a kernel mount",
+                    "required":true,
+                    "choice":[
+                        "mount",
+                        "syscall interception",
+                        "library linked to IO500",
+                        "other"
+                    ]
+                },
+                "client mount options":{
+                    "dtype":"string",
+                    "desc":"The options used in the mount command on the client",
+                    "required":true
+                },
+                "version":{
+                    "dtype":"string",
+                    "desc":"Version of the software",
+                    "required":true
+                },
+                "installation date":{
+                    "dtype":"text",
+                    "desc":"Installation date of the storage YYYY-MM",
+                    "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+                },
+                "net capacity":{
+                    "dtype":"number",
+                    "desc":"Net, i.e., usable capacity of the overall storage system, includes redundancy measures",
+                    "unit":"Byte",
+                    "default-unit":"PiB",
+                    "aggregate":"",
+                    "required":true
+                },
+                "raw capacity":{
+                    "dtype":"number",
+                    "desc":"Capacity of the overall storage system without redundancy",
+                    "unit":"Byte",
+                    "default-unit":"PiB",
+                    "aggregate":[
+                        "Lustre.OSS.StorageMedia.raw capacity * Lustre.OSS.StorageMedia.count *  Lustre.OSS.count"
+                    ]
+                },
+                "peak write":{
+                    "dtype":"number",
+                    "desc":"Peak write performance",
+                    "unit":"Byte/s",
+                    "default-unit":"GiB/s"
+                },
+                "peak read":{
+                    "dtype":"number",
+                    "desc":"Peak read performance",
+                    "unit":"Byte/s",
+                    "default-unit":"GiB/s"
+                },
+                "Servers":{
+                    "dtype":"integer",
+                    "desc":"Total number of servers",
+                    "required":true,
+                    "aggregate":[
+                        "Lustre.OSS.count",
+                        "Lustre.MDS.count"
+                    ]
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost"
+                ],
+                "SCHEMES_multi":[
+                    "Lustre",
+                    "SpectrumScale",
+                    "BeeGFS",
+                    "NAS",
+                    "DAOS",
+                    "WekaIO",
+                    "IME"
+                ]
+            },
+            "Building":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the building",
+                    "required":true,
+                    "pattern":"[/a-zA-Z]+[/a-zA-Z0-9_ -]+"
+                },
+                "construction date":{
+                    "dtype":"text",
+                    "desc":"Date of the building YYYY-MM",
+                    "pattern":"(([1-9]|10|11|12)-)?(19|20)[0-9][0-9]"
+                },
+                "max power supplied":{
+                    "dtype":"number",
+                    "desc":"The maximum power supply",
+                    "unit":"W",
+                    "default-unit":"MW"
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost",
+                    "Footprint"
+                ],
+                "SCHEMES_multi":[
+                    "Room",
+                    "Cooling",
+                    "Pump",
+                    "AirConditioning"
+                ]
+            }
+        }
+    },
+    "CONNECT":{
+        "Network":{
+            "source":[
+                "Network"
+            ],
+            "target":[
+                "Nodes",
+                "Network"
+            ],
+            "width":"800",
+            "height":"400"
+        },
+        "Building":{
+            "source":[
+                "Building"
+            ],
+            "target":[
+                "Supercomputer",
+                "StorageSystem",
+                "Room",
+                "Cooling",
+                "AirConditioning"
+            ],
+            "width":"800",
+            "height":"400",
+            "readonly":false
+        }
+    },
+    "UNITS":{
+        "OP":[
+            [
+                "OP",
+                1
+            ],
+            [
+                "kOP",
+                1000
+            ],
+            [
+                "MOP",
+                1000000
+            ],
+            [
+                "GOP",
+                1000000000
+            ],
+            [
+                "TOP",
+                1000000000000
+            ]
+        ],
+        "OP/s":[
+            [
+                "OP/s",
+                1
+            ],
+            [
+                "kOP/s",
+                1000
+            ],
+            [
+                "MOP/s",
+                1000000
+            ],
+            [
+                "GOP/s",
+                1000000000
+            ],
+            [
+                "TOP/s",
+                1000000000000
+            ]
+        ],
+        "Byte/s":[
+            [
+                "Byte/s",
+                1
+            ],
+            [
+                "KiB/s",
+                1024
+            ],
+            [
+                "MiB/s",
+                1048576
+            ],
+            [
+                "GiB/s",
+                1073741824
+            ],
+            [
+                "TiB/s",
+                1099511627776
+            ],
+            [
+                "PiB/s",
+                1125899906842624
+            ],
+            [
+                "EiB/s",
+                1152921504606847000
+            ],
+            [
+                "KB/s",
+                1000
+            ],
+            [
+                "MB/s",
+                1000000
+            ],
+            [
+                "GB/s",
+                1000000000
+            ],
+            [
+                "TB/s",
+                1000000000000
+            ],
+            [
+                "PB/s",
+                1000000000000000
+            ],
+            [
+                "EB/s",
+                1e+18
+            ]
+        ],
+        "kWh":[
+            [
+                "kWh",
+                1
+            ],
+            [
+                "MWh",
+                1000
+            ],
+            [
+                "GWh",
+                1000000
+            ]
+        ],
+        "W":[
+            [
+                "W",
+                1
+            ],
+            [
+                "kW",
+                1000
+            ],
+            [
+                "MW",
+                1000
+            ],
+            [
+                "GW",
+                1000000
+            ]
+        ],
+        "$":[
+            [
+                "$",
+                1
+            ],
+            [
+                "k$",
+                1000
+            ],
+            [
+                "M$",
+                1000000
+            ]
+        ],
+        "Hz":[
+            [
+                "kHZ",
+                1000
+            ],
+            [
+                "MHz",
+                1000000
+            ],
+            [
+                "GHz",
+                1000000000
+            ]
+        ],
+        "Byte":[
+            [
+                "Byte",
+                1
+            ],
+            [
+                "KiB",
+                1024
+            ],
+            [
+                "MiB",
+                1048576
+            ],
+            [
+                "GiB",
+                1073741824
+            ],
+            [
+                "TiB",
+                1099511627776
+            ],
+            [
+                "PiB",
+                1125899906842624
+            ],
+            [
+                "EiB",
+                1152921504606847000
+            ],
+            [
+                "KB",
+                1000
+            ],
+            [
+                "MB",
+                1000000
+            ],
+            [
+                "GB",
+                1000000000
+            ],
+            [
+                "TB",
+                1000000000000
+            ],
+            [
+                "PB",
+                1000000000000000
+            ],
+            [
+                "EB",
+                1e+18
+            ]
+        ],
+        "time":[
+            [
+                "ns",
+                1e-09
+            ],
+            [
+                "us",
+                1e-06
+            ],
+            [
+                "ms",
+                0.001
+            ],
+            [
+                "s",
+                1
+            ],
+            [
+                "min",
+                60
+            ],
+            [
+                "hour",
+                3600
+            ],
+            [
+                "day",
+                86400
+            ],
+            [
+                "week",
+                604800
+            ],
+            [
+                "month",
+                2628000
+            ],
+            [
+                "year",
+                31536000
+            ]
+        ],
+        "FLOPS":[
+            [
+                "FLOPS",
+                1
+            ],
+            [
+                "kFLOPS",
+                1000
+            ],
+            [
+                "MFLOPS",
+                1000000
+            ],
+            [
+                "GFLOPS",
+                1000000000
+            ],
+            [
+                "TFLOPS",
+                1000000000000
+            ],
+            [
+                "PFLOPS",
+                1000000000000000
+            ]
+        ],
+        "FLOPS/W":[
+            [
+                "FLOPS/W",
+                1
+            ],
+            [
+                "kFLOPS/W",
+                1000
+            ],
+            [
+                "MFLOPS/W",
+                1000000
+            ],
+            [
+                "GFLOPS/W",
+                1000000000
+            ],
+            [
+                "TFLOPS/W",
+                1000000000000
+            ],
+            [
+                "PFLOPS/W",
+                1000000000000000
+            ]
+        ],
+        "m":[
+            [
+                "m",
+                1
+            ],
+            [
+                "ft",
+                3.28084
+            ]
+        ],
+        "kg":[
+            [
+                "kg",
+                1
+            ],
+            [
+                "pounds",
+                2.20462
+            ]
+        ],
+        "m^2":[
+            [
+                "m^2",
+                1
+            ],
+            [
+                "ft^2",
+                0.09290341
+            ]
+        ]
+    },
+    "GLOBALS":{
+        "scope":"list"
+    }
+}

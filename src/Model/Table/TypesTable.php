@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -12,7 +11,6 @@ use Cake\Validation\Validator;
  * Types Model
  *
  * @property \App\Model\Table\ListingsTable&\Cake\ORM\Association\HasMany $Listings
- *
  * @method \App\Model\Entity\Type newEmptyEntity()
  * @method \App\Model\Entity\Type newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Type[] newEntities(array $data, array $options = [])
@@ -68,7 +66,7 @@ class TypesTable extends Table
 
         $validator
             ->scalar('url')
-            ->maxLength('url', 10)
+            ->maxLength('url', 20)
             ->requirePresence('url', 'create')
             ->notEmptyString('url');
 

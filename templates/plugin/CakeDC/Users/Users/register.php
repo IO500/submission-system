@@ -9,6 +9,8 @@ use Cake\Core\Configure;
         <legend><?php echo __d('cake_d_c/users', 'REGISTRATION') ?></legend>
         <?php
         echo $this->Form->control('username', ['label' => __d('cake_d_c/users', 'Username')]);
+        echo $this->Form->control('first_name', ['label' => __d('cake_d_c/users', 'First name')]);
+        echo $this->Form->control('last_name', ['label' => __d('cake_d_c/users', 'Last name')]);
         echo $this->Form->control('email', ['label' => __d('cake_d_c/users', 'Email')]);
         echo $this->Form->control('password', ['label' => __d('cake_d_c/users', 'Password')]);
         echo $this->Form->control('password_confirm', [
@@ -16,8 +18,6 @@ use Cake\Core\Configure;
             'type' => 'password',
             'label' => __d('cake_d_c/users', 'Confirm password')
         ]);
-        echo $this->Form->control('first_name', ['label' => __d('cake_d_c/users', 'First name')]);
-        echo $this->Form->control('last_name', ['label' => __d('cake_d_c/users', 'Last name')]);
 
         if (Configure::read('Users.Tos.required')) {
             echo $this->Form->control('tos', ['type' => 'checkbox', 'label' => __d('cake_d_c/users', 'Accept TOS conditions?'), 'required' => true]);

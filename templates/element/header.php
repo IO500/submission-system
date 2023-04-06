@@ -7,6 +7,17 @@
         <ul class="links">
             <li>
                 <?php
+                echo $this->AuthLink->link(__('Users'),
+                    [
+                        'controller' => 'users',
+                        'action' => 'index',
+                        'plugin' => 'CakeDC/Users'
+                    ]
+                );
+                ?>
+            </li>
+            <li>
+                <?php
                 echo $this->AuthLink->link(__('Types'),
                     [
                         'controller' => 'types',
@@ -21,6 +32,28 @@
                 echo $this->AuthLink->link(__('Releases'),
                     [
                         'controller' => 'releases',
+                        'action' => 'index',
+                        'plugin' => null
+                    ]
+                );
+                ?>
+            </li>
+            <li>
+                <?php
+                echo $this->AuthLink->link(__('Status'),
+                    [
+                        'controller' => 'status',
+                        'action' => 'index',
+                        'plugin' => null
+                    ]
+                );
+                ?>
+            </li>
+            <li>
+                <?php
+                echo $this->AuthLink->link(__('Scores'),
+                    [
+                        'controller' => 'reproducibilityScores',
                         'action' => 'index',
                         'plugin' => null
                     ]
