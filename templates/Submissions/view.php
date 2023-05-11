@@ -6,6 +6,21 @@
     <h3><?php echo __('SUMMARY') ?></h3>
 </div>
 
+<div class="submissions edit content">
+    <div class="column-responsive column">
+        <table class="tb tb-info">
+            <tr>
+                <th><?php echo _('Sumitter') ?></th>
+                <td><?php echo h($submission->users->first_name . ' ' . $submission->users->last_name) ?></td>
+            </tr>
+            <tr>
+                <th><?php echo _('Email') ?></th>
+                <td><?php echo h($submission->users->email) ?></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 <div class="row">
     <div class="column-responsive column-80">
         <div class="submissions view content">
@@ -33,7 +48,7 @@
                             <th><?php echo _('Storage Vendor') ?></th>
                             <td><?php echo h($submission->information_storage_vendor) ?></td>
                         </tr>
-
+                        <tr>
                             <th><?php echo _('Filesystem Type') ?></th>
                             <td><?php echo h($submission->information_filesystem_type) ?></td>
                         </tr>

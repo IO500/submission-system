@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Archive\Tar;
+
 namespace App\Controller;
 
 /**
@@ -729,6 +731,82 @@ class SubmissionsController extends AppController
                     $content = $zip->getFromName($result_file);
 
                     $zip->close();
+
+                    $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*time\s*(\S*)\s*seconds/m';
+
+                    preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+                    $results = [];
+
+                    foreach ($matches as $match) {
+                        if ($match[1] == 'timestamp') {
+                            continue;
+                        }
+
+                        $results[$match[1]] = $match[2];
+                    }
+
+                    $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)/m';
+
+                    preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+                    $match = $matches[0];
+
+                    $total = [];
+
+                    $total[$match[1]] = $match[2];
+                    $total[$match[4]] = $match[5];
+                    $total[$match[7]] = $match[8];
+
+                    $submission->io500_bw = $total['Bandwidth'];
+                    $submission->io500_md = $total['IOPS'];
+                    $submission->io500_score = $total['TOTAL'];
+
+                    $submission->ior_easy_write = $results['ior-easy-write'] ?? null;
+                    $submission->ior_easy_read = $results['ior-easy-read'] ?? null;
+                    $submission->ior_hard_write = $results['ior-hard-write'] ?? null;
+                    $submission->ior_hard_read = $results['ior-hard-read'] ?? null;
+
+                    $submission->mdtest_easy_write = $results['mdtest-easy-write'] ?? null;
+                    $submission->mdtest_easy_stat = $results['mdtest-easy-stat'] ?? null;
+                    $submission->mdtest_easy_delete = $results['mdtest-easy-delete'] ?? null;
+                    $submission->mdtest_hard_write = $results['mdtest-hard-write'] ?? null;
+                    $submission->mdtest_hard_stat = $results['mdtest-hard-stat'] ?? null;
+                    $submission->mdtest_hard_read = $results['mdtest-hard-read'] ?? null;
+                    $submission->mdtest_hard_delete = $results['mdtest-hard-delete'] ?? null;
+
+                    $submission->find_mixed = $results['find'] ?? null;
+
+                    return $submission;
+                } else {
+                    return null;
+                }
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
+        if (strpos($submission->result_tar_type, 'application/x-compressed-tar') !== false) {
+            try {
+                if (!is_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar)) {
+                    return null;
+                }
+
+                $fh = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator('phar://' . ROOT . DS . $submission->result_tar_dir . $submission->result_tar),
+                    \RecursiveIteratorIterator::CHILD_FIRST
+                );
+
+                $result_file;
+
+                foreach ($fh as $splFileInfo) {
+                    if (basename($splFileInfo->getPathname()) == 'result_summary.txt') {
+                            $result_file = $splFileInfo->getPathname();
+                    }
+                }
+
+                if ($result_file) {
+                    $content = file_get_contents($result_file);
 
                     $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*time\s*(\S*)\s*seconds/m';
 
