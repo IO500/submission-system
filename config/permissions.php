@@ -179,6 +179,12 @@ return [
             'action' => ['index', 'view', 'edit']
         ],
         [
+            'role' => '*',
+            'controller' => 'Questionnaires',
+            'action' => ['sample'],
+            'bypassAuth' => true,
+        ],
+        [
             'role' => 'user',
             'controller' => 'Submissions',
             'action' => ['add', 'edit', 'mine', 'prepare', 'model', 'results', 'confirmation']

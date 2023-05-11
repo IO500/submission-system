@@ -153,4 +153,18 @@ class QuestionnairesController extends AppController
 
         $this->set(compact('questionnaire', 'submission', 'scores'));
     }
+
+    /**
+     * Sample method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function sample()
+    {
+        $questionnaire = $this->Questionnaires->newEmptyEntity();
+
+        $scores = $this->Questionnaires->ReproducibilityScores->find('list');
+
+        $this->set(compact('questionnaire', 'scores'));
+    }
 }
