@@ -130,6 +130,12 @@ class QuestionnairesController extends AppController
             ],
         ]);
 
+        if (!$submission->questionnaire) {
+            $this->Flash->error(__('This submission did not complete the questionnaire yet!'));
+
+            return $this->redirect(['controller' => 'submissions', 'action' => 'view', $submission->id]);
+        }
+
         $questionnaire = $this->Questionnaires->get($submission->questionnaire->id);
 
         // Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.

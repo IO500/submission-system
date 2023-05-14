@@ -48,6 +48,8 @@
 
                         if (!empty($submission->questionnaire)) {
                             echo $this->AuthLink->link('<i class="fa-solid fa-clipboard"></i>', ['controller' => 'Questionnaires', 'action' => 'view', $submission->id], ['escape' => false]);
+                        } else {
+                            echo $this->AuthLink->link('<i class="fa-solid fa-clipboard"></i>', ['controller' => 'Questionnaires', 'action' => 'view', $submission->id], ['escape' => false, 'class' => 'unavailable']);
                         }
                         ?>
                     </td>

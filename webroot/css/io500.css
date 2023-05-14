@@ -1243,3 +1243,11 @@ form #json {
     float: left;
     width: 75%;
 }
+
+a.unavailable > i {
+    color: #8f8f8f;
+}
+
+a.unavailable:hover i {
+    color: #fff;
+}
