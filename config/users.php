@@ -125,7 +125,8 @@ $config = [
         ],
         'AuthenticationComponent' => [
             'load' => true,
-            'loginRedirect' => '/',
+            'loginRedirect' => '/io-500-hub',
+            'logoutRedirect' => '/io-500-hub',
             'requireIdentity' => false
         ],
         'Authenticators' => [
