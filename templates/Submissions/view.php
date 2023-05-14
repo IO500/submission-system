@@ -6,21 +6,6 @@
     <h3><?php echo __('SUMMARY') ?></h3>
 </div>
 
-<div class="submissions edit content">
-    <div class="column-responsive column">
-        <table class="tb tb-info">
-            <tr>
-                <th><?php echo _('Sumitter') ?></th>
-                <td><?php echo h($submission->users->first_name . ' ' . $submission->users->last_name) ?></td>
-            </tr>
-            <tr>
-                <th><?php echo _('Email') ?></th>
-                <td><?php echo h($submission->users->email) ?></td>
-            </tr>
-        </table>
-    </div>
-</div>
-
 <div class="row">
     <div class="column-responsive column-80">
         <div class="submissions view content">
@@ -34,6 +19,27 @@
                 ?>
             </div>
             <?php } ?>
+
+            <div class="io-information">
+                <div class="information-metadata">
+                    <h4>SUBMISSION DETAILS</h4>
+
+                    <table class="tb tb-info">
+                        <tr>
+                            <th><?php echo _('Sumitter') ?></th>
+                            <td><?php echo h($submission->user->first_name . ' ' . $submission->user->last_name) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Email') ?></th>
+                            <td><?php echo h($submission->user->email) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Received') ?></th>
+                            <td><?php echo h($submission->information_submission_date) ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
             <div class="io-information">
                 <div class="information-metadata">

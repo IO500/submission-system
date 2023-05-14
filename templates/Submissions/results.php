@@ -42,7 +42,7 @@
                 <?php
                 echo $this->Form->control('result_tar', [
                     'type' => 'file',
-                    'label' => 'Results File (.zip)',
+                    'label' => 'Results File (.zip or .tgz file only)',
                     'required' => ($submission->result_tar ? false : true)
                 ]);
                 ?>
