@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Datasource\ConnectionManager;
-use App\Controller\AppController;
 
 /**
  * Releases Controller
@@ -23,8 +22,8 @@ class ReleasesController extends AppController
     {
         $settings = [
             'order' => [
-                'release_date' => 'DESC'
-            ]
+                'release_date' => 'DESC',
+            ],
         ];
 
         $releases = $this->paginate($this->Releases, $settings);
@@ -44,7 +43,7 @@ class ReleasesController extends AppController
         $release = $this->Releases->get($id, [
             'contain' => [
                 'Listings',
-                'Submissions'
+                'Submissions',
             ],
         ]);
 
@@ -95,7 +94,7 @@ class ReleasesController extends AppController
 
             return $this->redirect(['action' => 'index']);
         } else {
-            $this->Flash->warning(__('Changing the release acronym will break existing refering URLs!'));            
+            $this->Flash->warning(__('Changing the release acronym will break existing refering URLs!'));
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -116,25 +115,39 @@ class ReleasesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects to index.
      */
-    public function synchronize() {
+    public function synchronize()
+    {
         # We will re-create the view with all submissions
         $connection = ConnectionManager::get('default');
 
         # We need the name of each table that should be in the view (for valid and released lists)
         $releases = $this->Releases->find('all')
             ->where([
-                'Releases.release_date <=' => date('Y-m-d')
+                'Releases.release_date <=' => date('Y-m-d'),
             ])
             ->contain([
                 'Listings' => [
-                    'Types'
-                ]
+                    'Types',
+                ],
             ]);
+
+        $found = $connection->execute(
+            "SELECT 
+                COUNT(TABLE_NAME) AS total
+            FROM 
+                information_schema.TABLES 
+            WHERE
+                TABLE_SCHEMA = 'io500_db_shadow' AND
+                TABLE_NAME = 'listings_submissions'
+            "
+        )->fetch('assoc')['total'];
 
         # Use a transaction to avoid data corruption
         $connection->begin();
 
-        $connection->execute('DROP VIEW listings_submissions');
+        if ($found) {
+            $connection->execute('DROP VIEW listings_submissions');
+        }
 
         $query = 'CREATE VIEW listings_submissions AS ';
 

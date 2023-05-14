@@ -70,7 +70,6 @@ use Cake\ORM\Entity;
  * @property string|null $marker_score
  * @property string|null $marker_md
  * @property string|null $storage_data
- * @property string $status
  * @property bool|null $include_in_io500
  * @property \Cake\I18n\FrozenDate|null $valid_from
  * @property \Cake\I18n\FrozenDate|null $valid_to
@@ -117,6 +116,6 @@ class Submission extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true
+        '*' => true,
     ];
 }

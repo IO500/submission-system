@@ -88,8 +88,8 @@ return [
      * enable timestamping regardless of debug value.
      */
     'Asset' => [
-        //'timestamp' => true,
-        // 'cacheTime' => '+1 year'
+        'timestamp' => true,
+        'cacheTime' => '+1 year'
     ],
 
     /*
@@ -417,5 +417,6 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        'timeout' => 1440
     ],
 ];

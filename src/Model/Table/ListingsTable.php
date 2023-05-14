@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -14,7 +13,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\TypesTable&\Cake\ORM\Association\BelongsTo $Types
  * @property \App\Model\Table\ReleasesTable&\Cake\ORM\Association\BelongsTo $Releases
  * @property \App\Model\Table\SubmissionsTable&\Cake\ORM\Association\BelongsToMany $Submissions
- *
  * @method \App\Model\Entity\Listing newEmptyEntity()
  * @method \App\Model\Entity\Listing newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Listing[] newEntities(array $data, array $options = [])
@@ -54,7 +52,7 @@ class ListingsTable extends Table
             'joinType' => 'INNER',
         ]);
         $this->hasMany('ListingsSubmissions', [
-            'foreignKey' => 'listing_id'
+            'foreignKey' => 'listing_id',
         ]);
         $this->belongsToMany('Submissions', [
             'foreignKey' => 'listing_id',

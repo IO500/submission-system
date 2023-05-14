@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -13,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ReleasesTable&\Cake\ORM\Association\BelongsTo $Releases
  * @property \App\Model\Table\ListingsTable&\Cake\ORM\Association\BelongsToMany $Listings
- *
  * @method \App\Model\Entity\Submission newEmptyEntity()
  * @method \App\Model\Entity\Submission newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Submission[] newEntities(array $data, array $options = [])
@@ -47,10 +45,25 @@ class SubmissionsTable extends Table
         $this->belongsTo('Releases', [
             'foreignKey' => 'release_id',
         ]);
+
+        $this->belongsTo('Users', [
+            'className' => 'CakeDC/Users.Users',
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER',
+        ]);
+
+        $this->belongsTo('Status', [
+            'foreignKey' => 'status_id',
+        ]);
+
         $this->belongsToMany('Listings', [
             'foreignKey' => 'submission_id',
             'targetForeignKey' => 'listing_id',
             'joinTable' => 'listings_submissions',
+        ]);
+
+        $this->hasOne('Questionnaires', [
+            'foreignKey' => 'submission_id',
         ]);
 
         $this->addBehavior('Josegonzalez/Upload.Upload', [
@@ -101,7 +114,7 @@ class SubmissionsTable extends Table
                     return strtolower($data->getClientFilename());
                 },
                 'keepFilesOnDelete' => false,
-            ]
+            ],
         ]);
     }
 
@@ -118,7 +131,7 @@ class SubmissionsTable extends Table
         $validator->add('result_tar', 'fileSuccessfulWrite', [
             'rule' => 'isSuccessfulWrite',
             'message' => 'This upload failed',
-            'provider' => 'upload'
+            'provider' => 'upload',
         ]);
 
         $validator
@@ -397,11 +410,6 @@ class SubmissionsTable extends Table
         $validator
             ->scalar('storage_data')
             ->allowEmptyString('storage_data');
-
-        $validator
-            ->scalar('status')
-            ->requirePresence('status', 'create')
-            ->notEmptyString('status');
 
         $validator
             ->boolean('include_in_io500')

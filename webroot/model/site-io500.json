@@ -1,0 +1,105 @@
+{
+    "DATA":{
+        "type":"Site",
+        "att":{
+            "abbreviation":"",
+            "institution":"",
+            "nationality":""
+        },
+        "childs":[
+            {
+                "type":"IO500",
+                "att":{
+
+                },
+                "childs":[
+                    {
+                        "type":"io500_information",
+                        "att":{
+
+                        },
+                        "childs": [
+                            
+                        ]
+                    }
+                ]
+            },
+            {
+                "type":"StorageSystem",
+                "att":{
+                    "name":""
+                },
+                "childs":[
+                    
+                ]
+            },
+            {
+                "type":"Supercomputer",
+                "att":{
+                    "name":""
+                },
+                "childs":[
+                    {
+                        "type":"Nodes",
+                        "att":{
+                            
+                        },
+                        "childs":[
+                            {
+                                "type":"Processor",
+                                "att":{
+                                    "name":""
+                                },
+                                "childs":[
+                                    
+                                ]
+                            },
+                            {
+                                "type":"Memory",
+                                "att":{
+                                    "name":""
+                                },
+                                "childs":[
+                                    
+                                ]
+                            },
+                            {
+                                "type":"Interconnect",
+                                "att":{
+                                    "name":""
+                                },
+                                "childs":[
+                                    
+                                ]
+                            },
+                            {
+                                "type":"StorageMedia",
+                                "att":{
+                                    "name":""
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "GRAPH":{
+        "Network":{
+            "pos":[
+                
+            ],
+            "edges":[
+                
+            ]
+        },
+        "Building":{
+            "pos":[
+                
+            ],
+            "edges":[
+                
+            ]
+        }
+    }
+}

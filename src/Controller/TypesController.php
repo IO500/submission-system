@@ -36,8 +36,8 @@ class TypesController extends AppController
             'contain' => [
                 'Listings' => [
                     'Types',
-                    'Releases'
-                ]
+                    'Releases',
+                ],
             ],
         ]);
 

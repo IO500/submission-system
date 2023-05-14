@@ -1,8 +1,14 @@
+<div class="submissions index content">
+    <h2>SUBMISSION #<?php echo h($submission->id) ?></h2>
+    
+    <div class="both"></div>
+
+    <h3><?php echo __('SUMMARY') ?></h3>
+</div>
+
 <div class="row">
     <div class="column-responsive column-80">
         <div class="submissions view content">
-            <h2>Submission #<?php echo h($submission->id) . ' - ' . h($submission->information_system) ?></h2>
-
             <?php if ($submission->cdcl_url) { ?>
             <div class="submissions-action">
                 <?php
@@ -14,7 +20,28 @@
             </div>
             <?php } ?>
 
-            <div class="information">
+            <div class="io-information">
+                <div class="information-metadata">
+                    <h4>SUBMISSION DETAILS</h4>
+
+                    <table class="tb tb-info">
+                        <tr>
+                            <th><?php echo _('Sumitter') ?></th>
+                            <td><?php echo h($submission->user->first_name . ' ' . $submission->user->last_name) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Email') ?></th>
+                            <td><?php echo h($submission->user->email) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Received') ?></th>
+                            <td><?php echo h($submission->information_submission_date) ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="io-information">
                 <div class="information-metadata">
                     <h4>INFORMATION</h4>
 
@@ -27,7 +54,7 @@
                             <th><?php echo _('Storage Vendor') ?></th>
                             <td><?php echo h($submission->information_storage_vendor) ?></td>
                         </tr>
-
+                        <tr>
                             <th><?php echo _('Filesystem Type') ?></th>
                             <td><?php echo h($submission->information_filesystem_type) ?></td>
                         </tr>
@@ -252,3 +279,43 @@
         </div>
     </div>
 </div>
+
+<?php
+// Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.
+if (date('Y-m-d') <= $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
+?>
+
+<div class="submissions edit content">
+    <div class="column-responsive column">
+        <div class="types form content">
+            <fieldset>
+                <legend>UPDATE SUBMISSION STATUS</legend>
+
+                <?php
+                echo $this->Form->create($submission);
+
+                echo $this->Form->control('status_id', 
+                    [
+                        'options' => $status,
+                        'value' => $submission->status_id
+                    ]
+                );
+                ?>
+
+                <div class="form-buttons">
+                    <?php
+                    echo $this->Form->button(__('SAVE'));
+                    ?>
+                </div>
+
+                <?php
+                echo $this->Form->end();
+                ?>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<?php
+}
+?>
