@@ -93,11 +93,11 @@ function provide_hooks() {
         jQuery("#dcl_wrap").html('<div id="status"></div>' +
             '<form id="dcl_data">' +
             '<div id="data_fields_wrap"></div>' +
-            //'<p id=dcl_edtbuttons>' +
-            //  '<button class="submitButton" type="button" onclick="loadData()">Load JSON</button>' +
-            //  '<button class="submitButton" type="button" onclick="submitDCLChanges()">Save JSON</button>' +
+            '<p id=dcl_edtbuttons>' +
+              '<button class="submitButton" type="button" onclick="loadDCLJSONFile()">Load JSON</button>' +
+              '<button class="submitButton" type="button" onclick="downloadDCLJSONFile()">Save JSON</button>' +
             //  '<button class="submitButton" type="button" onclick="loadData(dcl_reset_data)">Reset</button>' +
-            //'</p>' +
+            '</p>' +
             '</form>' +
             '<div id="dcl_graph_fields"></div>'
         )

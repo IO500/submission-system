@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Archive\Tar;
+
 namespace App\Controller;
 
 /**
@@ -75,6 +77,7 @@ class SubmissionsController extends AppController
             'contain' => [
                 'Releases',
                 'Listings',
+                'Users',
             ],
         ]);
 
@@ -204,7 +207,7 @@ class SubmissionsController extends AppController
 
         $json_storage_system = $this->find_information($json, 'type', 'STORAGESYSTEM');
 
-        $submission->information_filesystem_type = $json_storage_system['att']['model'] ?? null;
+        $submission->information_filesystem_type = $json_storage_system['att']['software'] ?? null;
         $submission->information_filesystem_name = $json_storage_system['att']['name'] ?? null;
         $submission->information_filesystem_version = $json_storage_system['att']['version'] ?? null;
 
@@ -707,7 +710,7 @@ class SubmissionsController extends AppController
     private function metrics($submission)
     {
         // IO500 metrics
-        if (strpos($submission->result_tar_type, 'zip') !== false) {
+        /* if (strpos($submission->result_tar_type, 'zip') !== false) {
             try {
                 $zip = new \ZipArchive();
 
@@ -782,6 +785,81 @@ class SubmissionsController extends AppController
             } catch (\Exception $e) {
                 return null;
             }
+        } */
+
+        //if (strpos($submission->result_tar_type, 'application/x-compressed-tar') !== false) {
+        try {
+            if (!is_file(ROOT . DS . $submission->result_tar_dir . $submission->result_tar)) {
+                return null;
+            }
+
+            $fh = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator('phar://' . ROOT . DS . $submission->result_tar_dir . $submission->result_tar),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            $result_file;
+
+            foreach ($fh as $splFileInfo) {
+                if (basename($splFileInfo->getPathname()) == 'result_summary.txt') {
+                        $result_file = $splFileInfo->getPathname();
+                }
+            }
+
+            if ($result_file) {
+                $content = file_get_contents($result_file);
+
+                $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*time\s*(\S*)\s*seconds/m';
+
+                preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+                $results = [];
+
+                foreach ($matches as $match) {
+                    if ($match[1] == 'timestamp') {
+                        continue;
+                    }
+
+                    $results[$match[1]] = $match[2];
+                }
+
+                $re = '/\[.*\]\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)\s*(\S*)\s*:\s*(\S*)\s*(\S*)/m';
+
+                preg_match_all($re, $content, $matches, PREG_SET_ORDER, 0);
+
+                $match = $matches[0];
+
+                $total = [];
+
+                $total[$match[1]] = $match[2];
+                $total[$match[4]] = $match[5];
+                $total[$match[7]] = $match[8];
+
+                $submission->io500_bw = $total['Bandwidth'];
+                $submission->io500_md = $total['IOPS'];
+                $submission->io500_score = $total['TOTAL'];
+
+                $submission->ior_easy_write = $results['ior-easy-write'] ?? null;
+                $submission->ior_easy_read = $results['ior-easy-read'] ?? null;
+                $submission->ior_hard_write = $results['ior-hard-write'] ?? null;
+                $submission->ior_hard_read = $results['ior-hard-read'] ?? null;
+
+                $submission->mdtest_easy_write = $results['mdtest-easy-write'] ?? null;
+                $submission->mdtest_easy_stat = $results['mdtest-easy-stat'] ?? null;
+                $submission->mdtest_easy_delete = $results['mdtest-easy-delete'] ?? null;
+                $submission->mdtest_hard_write = $results['mdtest-hard-write'] ?? null;
+                $submission->mdtest_hard_stat = $results['mdtest-hard-stat'] ?? null;
+                $submission->mdtest_hard_read = $results['mdtest-hard-read'] ?? null;
+                $submission->mdtest_hard_delete = $results['mdtest-hard-delete'] ?? null;
+
+                $submission->find_mixed = $results['find'] ?? null;
+
+                return $submission;
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
         }
 
         return null;
@@ -882,7 +960,7 @@ class SubmissionsController extends AppController
                 $submission = $this->metrics($submission);
 
                 if (!$submission) {
-                    $this->Flash->error(__('Unable to extract the benchmark results. Please, provide a .zip file.'));    
+                    $this->Flash->error(__('Unable to extract the benchmark results. Please, provide a .zip or .tgz file.'));
 
                     return $this->redirect(['action' => 'results', $id]);
                 }
@@ -1268,21 +1346,23 @@ class SubmissionsController extends AppController
      */
     private function find_information($array, $key, $value, $nth = 1)
     {
-        $iterator = new \RecursiveArrayIterator($array);
-        $recursive = new \RecursiveIteratorIterator(
-            $iterator,
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
+        if (is_array($array)) {
+            $iterator = new \RecursiveArrayIterator($array);
+            $recursive = new \RecursiveIteratorIterator(
+                $iterator,
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        $n = 1;
+            $n = 1;
 
-        foreach ($recursive as $k => $v) {
-            if ($k === $key && strtolower($v) == strtolower($value)) {
-                if ($n == $nth) {
-                    return $recursive->getSubIterator($recursive->getDepth() - 1)->current();
+            foreach ($recursive as $k => $v) {
+                if ($k === $key && strtolower($v) == strtolower($value)) {
+                    if ($n == $nth) {
+                        return $recursive->getSubIterator($recursive->getDepth() - 1)->current();
+                    }
+
+                    $n++;
                 }
-
-                $n++;
             }
         }
 

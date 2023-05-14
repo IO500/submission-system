@@ -859,6 +859,23 @@ function submitDCLChanges() {
     return true;
 }
 
+function downloadDCLJSONFile() {
+    var payload = getJSON()
+    if (!payload) return;
+
+    var data = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
+    var element = document.createElement('a');
+
+    element.setAttribute('href', data);
+    element.setAttribute('download', 'site.json');
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+
+}
+
 function loadDCLJSONFile() {
     fileInput = document.createElement("input")
     fileInput.type = 'file'
