@@ -46,6 +46,12 @@ class SubmissionsTable extends Table
             'foreignKey' => 'release_id',
         ]);
 
+        $this->belongsTo('Users', [
+            'className' => 'CakeDC/Users.Users',
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER',
+        ]);
+
         $this->belongsTo('Status', [
             'foreignKey' => 'status_id',
         ]);

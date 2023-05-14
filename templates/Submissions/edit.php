@@ -36,7 +36,13 @@
                     'label' => false
                 ]
             );
+            ?>
 
+            <p class="notice">
+                <i class="fa-solid fa-circle-exclamation"></i> JSON files created before the new system adoption might not be fully compatible and may require you to manually input some fields.
+            </p>
+
+            <?php
             echo $this->Form->button(
                 __('Submit'),
                 [

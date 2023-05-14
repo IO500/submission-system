@@ -22,6 +22,27 @@
 
             <div class="io-information">
                 <div class="information-metadata">
+                    <h4>SUBMISSION DETAILS</h4>
+
+                    <table class="tb tb-info">
+                        <tr>
+                            <th><?php echo _('Sumitter') ?></th>
+                            <td><?php echo h($submission->user->first_name . ' ' . $submission->user->last_name) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Email') ?></th>
+                            <td><?php echo h($submission->user->email) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?php echo _('Received') ?></th>
+                            <td><?php echo h($submission->information_submission_date) ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="io-information">
+                <div class="information-metadata">
                     <h4>INFORMATION</h4>
 
                     <table class="tb tb-info">
@@ -33,7 +54,7 @@
                             <th><?php echo _('Storage Vendor') ?></th>
                             <td><?php echo h($submission->information_storage_vendor) ?></td>
                         </tr>
-
+                        <tr>
                             <th><?php echo _('Filesystem Type') ?></th>
                             <td><?php echo h($submission->information_filesystem_type) ?></td>
                         </tr>

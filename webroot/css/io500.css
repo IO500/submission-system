@@ -1236,3 +1236,10 @@ form #json {
 .red-stripe {
     color: #cc1717;
 }
+
+.notice {
+    text-align: left;
+    font-size: 12px;
+    float: left;
+    width: 75%;
+}

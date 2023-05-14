@@ -272,7 +272,7 @@
                 <legend>Reproducibility</legend>
 
                 <p>
-                    Given the 4 possible reproducibility scores listed in the reproducibility description, what score do you believe your submission will be assigned? Please double check the definitions of each reproducibility level and ensure you have provided enough information to meet your expected score.
+                    Given the 4 possible reproducibility scores listed in the <?php echo $this->Html->link('reproducibility description', 'https://io500.org/the-lists#reproducibility-scores', ['class' => 'link', 'target' => '_blank']); ?>, what score do you believe your submission will be assigned? Please double check the definitions of each reproducibility level and ensure you have provided enough information to meet your expected score.
                 </p>
 
                 <?php
