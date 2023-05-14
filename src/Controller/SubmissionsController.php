@@ -270,6 +270,9 @@ class SubmissionsController extends AppController
      */
     private function parse_lustre($submission, $json_lustre)
     {
+        $submission->information_ds_software_version = $json_lustre_server['att']['version'] ?? null;
+        $submission->information_md_software_version = $json_lustre_server['att']['version'] ?? null;
+
         // Data Server
         $json_lustre_server = $this->find_information($json_lustre, 'type', 'OSS');
 
@@ -299,11 +302,19 @@ class SubmissionsController extends AppController
         $json_lustre_server_interconnect = $this->find_information($json_lustre_server, 'type', 'INTERCONNECT');
 
         if ($json_lustre_server_interconnect) {
+            $submission->information_ds_network = $json_lustre_server_media['att']['count'] ?? null; // equals to information_ds_interconnect_type
             $submission->information_ds_interconnect_type = $json_lustre_server_interconnect['att']['type'] ?? null;
             $submission->information_ds_interconnect_vendor = $json_lustre_server_interconnect['att']['vendor'] ?? null;
             $submission->information_ds_interconnect_bandwidth = isset($json_lustre_server_interconnect['att']['peak throughput']) ? implode(' ', $json_lustre_server_interconnect['att']['peak throughput']) : null;
             $submission->information_ds_interconnect_links = $json_lustre_server_interconnect['att']['links'] ?? null;
             $submission->information_ds_interconnect_rdma = isset($json_lustre_server_interconnect['att']['features']) ? (strpos($json_lustre_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
+        }
+
+        $json_lustre_server_media = $this->find_information($json_lustre_server, 'type', 'STORAGEMEDIA');
+
+        if ($json_lustre_server_media) {
+            $submission->information_ds_storage_type = $json_lustre_server_media['att']['type'] ?? null;
+            $submission->information_ds_storage_interface = $json_lustre_server_media['att']['interface'] ?? null;
         }
 
         // Metadata Server
@@ -318,30 +329,36 @@ class SubmissionsController extends AppController
 
         $json_lustre_server_processor = $this->find_information($json_lustre_server, 'type', 'PROCESSOR')['att'];
 
-        $submission->information_md_architecture = $json_lustre_server_processor['architecture'] ?? null;
-        $submission->information_md_model = $json_lustre_server_processor['model'] ?? null;
-        $submission->information_md_sockets = $json_lustre_server_processor['sockets'] ?? null;
-        $submission->information_md_cores_per_socket = $json_lustre_server_processor['cores per socket'] ?? null;
-        $submission->information_md_clock = isset($json_lustre_server_processor['frequency']) ? implode(' ', $json_lustre_server_processor['frequency']) : null;
+        if ($json_lustre_server_processor) {
+            $submission->information_md_architecture = $json_lustre_server_processor['architecture'] ?? null;
+            $submission->information_md_model = $json_lustre_server_processor['model'] ?? null;
+            $submission->information_md_sockets = $json_lustre_server_processor['sockets'] ?? null;
+            $submission->information_md_cores_per_socket = $json_lustre_server_processor['cores per socket'] ?? null;
+            $submission->information_md_clock = isset($json_lustre_server_processor['frequency']) ? implode(' ', $json_lustre_server_processor['frequency']) : null;
+        }
 
         $json_lustre_server_memory = $this->find_information($json_lustre_server, 'type', 'MEMORY')['att'];
 
-        $submission->information_md_volatile_memory_capacity = isset($json_lustre_server_memory['net capacity']) ? implode(' ', $json_lustre_server_memory['net capacity']) : null;
+        if ($json_lustre_server_memory) {
+            $submission->information_md_volatile_memory_capacity = isset($json_lustre_server_memory['net capacity']) ? implode(' ', $json_lustre_server_memory['net capacity']) : null;
+        }
 
         $json_lustre_server_interconnect = $this->find_information($json_lustre_server, 'type', 'INTERCONNECT')['att'];
 
-        $submission->information_md_interconnect_type = $json_lustre_server_interconnect['type'] ?? null;
-        $submission->information_md_interconnect_vendor = $json_lustre_server_interconnect['vendor'] ?? null;
-        $submission->information_md_interconnect_bandwidth = isset($json_lustre_server_interconnect['peak throughput']) ? implode(' ', $json_lustre_server_interconnect['peak throughput']) : null;
-        $submission->information_md_interconnect_links = $json_lustre_server_interconnect['links'] ?? null;
-        $submission->information_md_interconnect_rdma = isset($json_lustre_server_interconnect['features']) ? (strpos($json_lustre_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+        if ($json_lustre_server_interconnect) {
+            $submission->information_md_interconnect_type = $json_lustre_server_interconnect['type'] ?? null; // same as information_md_network
+            $submission->information_md_interconnect_vendor = $json_lustre_server_interconnect['vendor'] ?? null;
+            $submission->information_md_interconnect_bandwidth = isset($json_lustre_server_interconnect['peak throughput']) ? implode(' ', $json_lustre_server_interconnect['peak throughput']) : null;
+            $submission->information_md_interconnect_links = $json_lustre_server_interconnect['links'] ?? null;
+            $submission->information_md_interconnect_rdma = isset($json_lustre_server_interconnect['features']) ? (strpos($json_lustre_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+        }
 
         $json_lustre_server_media = $this->find_information($json_lustre_server, 'type', 'STORAGEMEDIA', 1);
 
         if ($json_lustre_server_media) {
-            $submission->information_md_media_primary_type = $json_lustre_server_media['att']['type'] ?? null;
+            $submission->information_md_media_primary_type = $json_lustre_server_media['att']['type'] ?? null; // same as information_md_storage_type
             $submission->information_md_media_primary_vendor = $json_lustre_server_media['att']['vendor'] ?? null;
-            $submission->information_md_media_primary_interface = $json_lustre_server_media['att']['interface'] ?? null;
+            $submission->information_md_media_primary_interface = $json_lustre_server_media['att']['interface'] ?? null; // same as information_md_storage_interface
             $submission->information_md_media_primary_count = $json_lustre_server_media['att']['count'] ?? null;
             $submission->information_md_media_primary_capacity = isset($json_lustre_server_media['att']['net capacity']) ? implode(' ', $json_lustre_server_media['att']['net capacity']) : null;
         }
@@ -368,6 +385,9 @@ class SubmissionsController extends AppController
      */
     private function parse_spectrum($submission, $json_spectrum)
     {
+        $submission->information_ds_software_version = $json_spectrum_server['att']['version'] ?? null;
+        $submission->information_md_software_version = $json_spectrum_server['att']['version'] ?? null;
+
         // Data Server
         $json_spectrum_server = $this->find_information($json_spectrum, 'type', 'DATA SERVERS');
         $json_spectrum_server = $this->find_information($json_spectrum_server, 'type', 'SERVERS');
@@ -403,6 +423,13 @@ class SubmissionsController extends AppController
             $submission->information_ds_interconnect_bandwidth = isset($json_spectrum_server_interconnect['att']['peak throughput']) ? implode(' ', $json_spectrum_server_interconnect['att']['peak throughput']) : null;
             $submission->information_ds_interconnect_links = $json_spectrum_server_interconnect['att']['links'] ?? null;
             $submission->information_ds_interconnect_rdma = isset($json_spectrum_server_interconnect['att']['features']) ? (strpos($json_spectrum_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
+        }
+
+        $json_spectrum_server_media = $this->find_information($json_spectrum_server, 'type', 'STORAGEMEDIA');
+
+        if ($json_spectrum_server_media) {
+            $submission->information_ds_storage_type = $json_spectrum_server_media['att']['type'] ?? null;
+            $submission->information_ds_storage_interface = $json_spectrum_server_media['att']['interface'] ?? null;
         }
 
         // Metadata Server
@@ -449,9 +476,9 @@ class SubmissionsController extends AppController
         $json_spectrum_server_media = $this->find_information($json_spectrum_server, 'type', 'STORAGEMEDIA', 2);
 
         if ($json_spectrum_server_media) {
-            $submission->information_md_media_secondary_type = $json_spectrum_server_media['att']['type'] ?? null;
+            $submission->information_md_media_secondary_type = $json_spectrum_server_media['att']['type'] ?? null; // same as information_md_storage_type
             $submission->information_md_media_secondary_vendor = $json_spectrum_server_media['att']['vendor'] ?? null;
-            $submission->information_md_media_secondary_interface = $json_spectrum_server_media['att']['interface'] ?? null;
+            $submission->information_md_media_secondary_interface = $json_spectrum_server_media['att']['interface'] ?? null; // same as information_md_storage_interface
             $submission->information_md_media_secondary_count = $json_spectrum_server_media['att']['count'] ?? null;
             $submission->information_md_media_secondary_capacity = isset($json_spectrum_server_media['att']['net capacity']) ? implode(' ', $json_spectrum_server_media['att']['net capacity']) : null;
         }
@@ -468,6 +495,9 @@ class SubmissionsController extends AppController
      */
     private function parse_beegfs($submission, $json_beegfs)
     {
+        $submission->information_ds_software_version = $json_beegfs_server['att']['version'] ?? null;
+        $submission->information_md_software_version = $json_beegfs_server['att']['version'] ?? null;
+
         // Data Server
         $json_beegfs_server = $this->find_information($json_beegfs, 'type', 'STORAGE SERVER');
 
@@ -504,6 +534,13 @@ class SubmissionsController extends AppController
             $submission->information_ds_interconnect_rdma = isset($json_beegfs_server_interconnect['att']['features']) ? (strpos($json_beegfs_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
         }
 
+        $json_beegfs_server_media = $this->find_information($json_beegfs_server, 'type', 'STORAGEMEDIA');
+
+        if ($json_beegfs_server_media) {
+            $submission->information_ds_storage_type = $json_beegfs_server_media['att']['type'] ?? null;
+            $submission->information_ds_storage_interface = $json_beegfs_server_media['att']['interface'] ?? null;
+        }
+
         // Metadata Server
         $json_beegfs_server = $this->find_information($json_beegfs, 'type', 'METADATA SERVER');
 
@@ -516,23 +553,29 @@ class SubmissionsController extends AppController
 
         $json_beegfs_server_processor = $this->find_information($json_beegfs_server, 'type', 'PROCESSOR')['att'];
 
-        $submission->information_md_architecture = $json_beegfs_server_processor['architecture'] ?? null;
-        $submission->information_md_model = $json_beegfs_server_processor['model'] ?? null;
-        $submission->information_md_sockets = $json_beegfs_server_processor['sockets'] ?? null;
-        $submission->information_md_cores_per_socket = $json_beegfs_server_processor['cores per socket'] ?? null;
-        $submission->information_md_clock = isset($json_beegfs_server_processor['frequency']) ? implode(' ', $json_beegfs_server_processor['frequency']) : null;
+        if ($json_beegfs_server_processor) {
+            $submission->information_md_architecture = $json_beegfs_server_processor['architecture'] ?? null;
+            $submission->information_md_model = $json_beegfs_server_processor['model'] ?? null;
+            $submission->information_md_sockets = $json_beegfs_server_processor['sockets'] ?? null;
+            $submission->information_md_cores_per_socket = $json_beegfs_server_processor['cores per socket'] ?? null;
+            $submission->information_md_clock = isset($json_beegfs_server_processor['frequency']) ? implode(' ', $json_beegfs_server_processor['frequency']) : null;
+        }
 
         $json_beegfs_server_memory = $this->find_information($json_beegfs_server, 'type', 'MEMORY')['att'];
 
-        $submission->information_md_volatile_memory_capacity = isset($json_beegfs_server_memory['net capacity']) ? implode(' ', $json_beegfs_server_memory['net capacity']) : null;
+        if ($json_beegfs_server_memory) {
+            $submission->information_md_volatile_memory_capacity = isset($json_beegfs_server_memory['net capacity']) ? implode(' ', $json_beegfs_server_memory['net capacity']) : null;
+        }
 
         $json_beegfs_server_interconnect = $this->find_information($json_beegfs_server, 'type', 'INTERCONNECT')['att'];
 
-        $submission->information_md_interconnect_type = $json_beegfs_server_interconnect['type'] ?? null;
-        $submission->information_md_interconnect_vendor = $json_beegfs_server_interconnect['vendor'] ?? null;
-        $submission->information_md_interconnect_bandwidth = isset($json_beegfs_server_interconnect['peak throughput']) ? implode(' ', $json_beegfs_server_interconnect['peak throughput']) : null;
-        $submission->information_md_interconnect_links = $json_beegfs_server_interconnect['links'] ?? null;
-        $submission->information_md_interconnect_rdma = isset($json_beegfs_server_interconnect['features']) ? (strpos($json_beegfs_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+        if ($json_beegfs_server_interconnect) {
+            $submission->information_md_interconnect_type = $json_beegfs_server_interconnect['type'] ?? null;
+            $submission->information_md_interconnect_vendor = $json_beegfs_server_interconnect['vendor'] ?? null;
+            $submission->information_md_interconnect_bandwidth = isset($json_beegfs_server_interconnect['peak throughput']) ? implode(' ', $json_beegfs_server_interconnect['peak throughput']) : null;
+            $submission->information_md_interconnect_links = $json_beegfs_server_interconnect['links'] ?? null;
+            $submission->information_md_interconnect_rdma = isset($json_beegfs_server_interconnect['features']) ? (strpos($json_beegfs_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+        }
 
         $json_beegfs_server_media = $this->find_information($json_beegfs_server, 'type', 'STORAGEMEDIA', 1);
 
@@ -566,6 +609,8 @@ class SubmissionsController extends AppController
      */
     private function parse_nas($submission, $json_nas)
     {
+        $submission->information_ds_software_version = $json_nas_server['att']['version'] ?? null;
+
         // Data Server
         $json_nas_server = $this->find_information($json_nas, 'type', 'SERVERS');
 
@@ -614,6 +659,8 @@ class SubmissionsController extends AppController
      */
     private function parse_daos($submission, $json_daos)
     {
+        $submission->information_ds_software_version = $json_daos['att']['version'] ?? null;
+
         // Data Server
         $json_daos_server = $this->find_information($json_daos, 'type', 'SERVERS');
 
@@ -662,6 +709,8 @@ class SubmissionsController extends AppController
      */
     private function parse_wekaio($submission, $json_wekaio)
     {
+        $submission->information_ds_software_version = $json_wekaio['att']['version'] ?? null;
+
         // Data Server
         $json_wekaio_server = $this->find_information($json_wekaio, 'type', 'SERVERS');
 
