@@ -66,6 +66,8 @@ echo $this->Html->script(
         'd3.min.js',
         'jquery.min.js',
         'math.min.js',
+        'https://unpkg.com/@popperjs/core@2',
+        'https://unpkg.com/tippy.js@6',
         'dcl.js',
         'dcl-load.js',
         'dcl-move.js',
@@ -80,14 +82,19 @@ $url_site = $this->Url->build([
     'controller' => 'webroot',
     'action' => 'files',
     'submissions',
-    $submission->id . '.json'
+    $submission->id . '.json',
+    '?' => [
+        'timestamp' => time()
+    ]
 ]);
-
 
 $url_schema = $this->Url->build([
     'controller' => 'webroot',
     'action' => 'model',
-    'schema-io500.json'
+    'schema-io500.json',
+    '?' => [
+        'timestamp' => time()
+    ]
 ]);
 
 $this->Html->scriptBlock(
