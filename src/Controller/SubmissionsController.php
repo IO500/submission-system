@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
+namespace App\Controller;
 use Archive\Tar;
+use Cake\Datasource\ConnectionManager;
 
 namespace App\Controller;
 
@@ -178,7 +180,6 @@ class SubmissionsController extends AppController
 
         $json_client = $this->find_information($json_supercomputer, 'type', 'NODES');
 
-        $submission->information_client_nodes = $json_client['att']['count'] ?? null;
         $submission->information_client_operating_system = $json_client['att']['distribution'] ?? null;
         $submission->information_client_operating_system_version = $json_client['att']['distribution version'] ?? null;
         $submission->information_client_kernel_version = $json_client['att']['kernel version'] ?? null;
@@ -1081,6 +1082,11 @@ class SubmissionsController extends AppController
             return $this->redirect(['action' => 'mine']);
         }
 
+        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && ($submission->status_id == 3 || $submission->status_id == 4)) {
+            $this->Flash->error(__('This submission has a final verdict. To modify its metadata, please reach out to the committee.'));
+
+            return $this->redirect(['action' => 'mine']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
@@ -1105,7 +1111,7 @@ class SubmissionsController extends AppController
         $releases = $this->Submissions->Releases->find('list', ['limit' => 200]);
 
         $json = ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json';
-
+        echo $json;die();
         if (!is_file($json)) {
             $this->Flash->error(__('Unable to fetch the file in the server.'));
 
@@ -1367,12 +1373,15 @@ class SubmissionsController extends AppController
         $new_submissions = $this->Submissions->find('all')
             ->contain([
                 'Releases',
+                'Status'
             ])
             ->where([
                 'Submissions.information_submission_date >=' => $listing->release->release_date,
+                'Submissions.status_id' => 3
             ])
             ->limit($limit);
 
+        $total_new = $new_submissions->count();
         foreach ($new_submissions as $submission) {
             // We will use the latest valid score to display
             $submission->is_new = true;
@@ -1397,6 +1406,7 @@ class SubmissionsController extends AppController
         $this->set('types', $types);
         $this->set('releases', $releases);
         $this->set('submissions', $records);
+        $this->set('total_new', $total_new);
     }
 
     /**
@@ -1443,5 +1453,83 @@ class SubmissionsController extends AppController
         }
 
         return null;
+    }
+
+    /**
+     * Export method
+     *
+     * @return \Cake\Http\Response|null|void Downloads a CSV
+     */
+    public function export($release_acronym = null)
+    {
+        $db = ConnectionManager::get('default');
+
+        // Create a schema collection.
+        $collection = $db->getSchemaCollection();
+
+        // Get a single table (instance of Schema\TableSchema)
+        $tableSchema = $collection->describe('submissions');
+
+        // Get columns list from table
+        $columns = $tableSchema->columns();
+
+        $release = $this->Submissions->Releases->find('all')
+            ->where([
+                'Releases.acronym' => strtoupper($release_acronym),
+            ])
+            ->first();
+
+        $submissions = $this->Submissions->find('all')
+            ->where([
+                'Submissions.release_id' => $release->id,
+                'Submissions.status_id' => 3
+            ])
+            ->order([
+                'Submissions.io500_score' => 'DESC',
+            ]);
+
+        $this->set(compact('submissions'));
+        $this->setResponse($this->getResponse()->withDownload($release_acronym . '-accepted-submissions.csv'));
+        $this->viewBuilder()
+            ->setClassName('CsvView.Csv')
+            ->setOptions([
+                'header' => $columns,
+                'serialize' => 'submissions',
+            ]);
+    }
+
+    /**
+     * Download method
+     *
+     * @return \Cake\Http\Response|null|void Downloads a CSV
+     */
+    public function download($id, $type)
+    {
+        $submission = $this->Submissions->get($id);
+
+        switch ($type) {
+            case 'results':
+                $file_path = ROOT . DS . $submission->result_tar_dir . DS . $submission->result_tar;
+                $name = $result_tar;
+                break;
+
+            case 'scripts':
+                $file_path = ROOT . DS . $submission->job_script_dir . DS . $submission->job_script;
+                $name = $result_tar;
+                break;
+
+            case 'output':
+                $file_path = ROOT . DS . $submission->job_output_dir . DS . $submission->job_output;
+                $name = $result_tar;
+                break;
+            
+            default:
+                break;
+        }
+
+        return $this->response->withFile($file_path, array(
+            'download' => true,
+            'name' => $name,
+        ));
     }
 }
