@@ -49,6 +49,9 @@
         ?>
     </fieldset>
 
+    <fieldset class="highlight">
+        <strong><?php echo strtoupper($release_acronym); ?></strong> has <strong><?php echo $total_new; ?> accepted submissions</strong>. Before building the next release, make sure all submissions are reviewed. Only accepted submissions will be available for selection!
+    </fieldset>
 
     <div class="table-responsive custom-table">
         <table class="tb">
@@ -108,7 +111,7 @@
                     <td class="tb-number"><?php echo $this->Number->format($submission->io500_md, ['places' => 2, 'precision' => 2]) ?></td>
                     <td class="tb-center">
                         <?php
-                        if ($submission->release->acronym == strtoupper($release_acronym)) {
+                        // if ($submission->release->acronym == strtoupper($release_acronym)) {
                             if ($submission->information_10_node_challenge) {
                         ?>
                             <i class="fas fa-check"></i>
@@ -118,12 +121,12 @@
                             <i class="fas fa-ban"></i>
                         <?php
                             }
-                        }
+                        // }
                         ?>
                     </td>
                     <td class="tb-center">
                         <?php 
-                        if ($submission->release->acronym == strtoupper($release_acronym)) {
+                        // if ($submission->release->acronym == strtoupper($release_acronym)) {
                             if ($submission->include_in_io500) {
                         ?>
                             <i class="fas fa-check"></i>
@@ -133,7 +136,7 @@
                             <i class="fas fa-ban"></i>
                         <?php
                             }
-                        }
+                        // }
                         ?>
                     </td>
                 </tr>

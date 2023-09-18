@@ -66,6 +66,8 @@ echo $this->Html->script(
         'd3.min.js',
         'jquery.min.js',
         'math.min.js',
+        'https://unpkg.com/@popperjs/core@2',
+        'https://unpkg.com/tippy.js@6',
         'dcl.js',
         'dcl-load.js',
         'dcl-move.js',
@@ -118,5 +120,7 @@ $this->Html->scriptBlock(
 );
 ?>
 
+<!--
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
+-->

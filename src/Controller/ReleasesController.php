@@ -28,7 +28,13 @@ class ReleasesController extends AppController
 
         $releases = $this->paginate($this->Releases, $settings);
 
-        $this->set(compact('releases'));
+        $next_release = $this->Releases->find('all')
+            ->order([
+                'Releases.release_date' => 'DESC',
+            ])
+            ->first();
+
+        $this->set(compact('releases', 'next_release'));
     }
 
     /**
@@ -43,7 +49,9 @@ class ReleasesController extends AppController
         $release = $this->Releases->get($id, [
             'contain' => [
                 'Listings',
-                'Submissions',
+                'Submissions' => [
+                    'Status'
+                ]
             ],
         ]);
 

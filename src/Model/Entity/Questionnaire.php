@@ -38,20 +38,6 @@ class Questionnaire extends Entity
      * @var array
      */
     protected $_accessible = [
-        'submission_id' => true,
-        'system_purpose' => true,
-        'availability' => true,
-        'storage_system_software' => true,
-        'runtime_environment' => true,
-        'fault_tolerance_mechanisms' => true,
-        'execution' => true,
-        'caching' => true,
-        'data_source' => true,
-        'trust' => true,
-        'reproducibility' => true,
-        'feedback' => true,
-        'created' => true,
-        'modified' => true,
-        'submission' => true,
+        '*' => true,
     ];
 }

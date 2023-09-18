@@ -1,6 +1,45 @@
 <div class="submissions index content">
     <h2>SUBMISSION #<?php echo h($submission->id) ?></h2>
     
+            <div class="submissions-action">
+                <?php
+        if ($submission->cdcl_url) {
+                echo $this->Html->link(_('DATA CENTER LIST'), $submission->cdcl_url, [
+                    'class' => 'button-navigation',
+                    'target' => '_blank'
+                ]);
+        }
+
+        echo $this->Html->link('<i class="fa-solid fa-cloud-arrow-down"></i> ' . __('RESULTS'), [
+            'controller' => 'Submissions',
+            'action' => 'download',
+            $submission->id, 
+            'results'
+        ], [
+            'escape' => false,
+            'class' => 'button float-right'
+        ]);
+        echo $this->Html->link('<i class="fa-solid fa-cloud-arrow-down"></i> ' . __('SCRIPTS'), [
+            'controller' => 'Submissions',
+            'action' => 'download',
+            $submission->id, 
+            'scripts'
+        ], [
+            'escape' => false,
+            'class' => 'button float-right'
+        ]);
+        echo $this->Html->link('<i class="fa-solid fa-cloud-arrow-down"></i> ' . __('OUTPUT'), [
+            'controller' => 'Submissions',
+            'action' => 'download',
+            $submission->id, 
+            'output'
+        ], [
+            'escape' => false,
+            'class' => 'button float-right'
+        ]);
+                ?>
+            </div>
+
     <div class="both"></div>
 
     <h3><?php echo __('SUMMARY') ?></h3>
@@ -9,17 +48,6 @@
 <div class="row">
     <div class="column-responsive column-80">
         <div class="submissions view content">
-            <?php if ($submission->cdcl_url) { ?>
-            <div class="submissions-action">
-                <?php
-                echo $this->Html->link(_('DATA CENTER LIST'), $submission->cdcl_url, [
-                    'class' => 'button-navigation',
-                    'target' => '_blank'
-                ]);
-                ?>
-            </div>
-            <?php } ?>
-
             <div class="io-information">
                 <div class="information-metadata">
                     <h4>SUBMISSION DETAILS</h4>

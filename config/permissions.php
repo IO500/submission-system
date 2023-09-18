@@ -171,7 +171,7 @@ return [
         [
             'role' => 'committee',
             'controller' => 'Submissions',
-            'action' => ['index', 'view', 'edit', 'build', 'system', 'status']
+            'action' => ['index', 'view', 'edit', 'build', 'system', 'status', 'export', 'download']
         ],
         [
             'role' => 'committee',
@@ -210,7 +210,7 @@ return [
         [
             'role' => 'committee',
             'controller' => 'Listings',
-            'action' => ['index', 'view', 'add', 'edit', 'delete']
+            'action' => ['index', 'view', 'add', 'edit', 'delete', 'download']
         ],     
     ]
 ];

@@ -67,10 +67,24 @@
                 <p>Please, notice that once created you cannot edit a list. If you need to make corrections you can open it and click on remove. You will then be able to re-build it. For already released lists, you can only make modifications by opening a public PR on GitHub.</p>
             </div>
 
-            <div class="related">
+            <div class="submissions index content">
                 <h2><?php echo __('New Submissions') ?></h2>
 
-                <p>These are the new submissions received for this new list release:</p>
+                    <div class="submissions-action">
+                    <?php
+                    echo $this->Html->link('DOWNLOAD', [
+                        'controller' => 'submissions',
+                        'action' => 'export',
+                        strtolower($release->acronym)
+                    ], [
+                        'class' => 'button-navigation'
+                    ]);
+                    ?>
+                </div>
+
+                <div class="release-information">
+                    <p>These are the new submissions received for this new list release:</p>
+                </div>
 
                 <?php if (!empty($release->submissions)) { ?>
                 <div class="table-responsive">
@@ -82,18 +96,22 @@
                             <th><?php echo __('Filesystem Type') ?></th>
                             <th><?php echo __('Nodes') ?></th>
                             <th class="tb-number"><?php echo __('Score') ?></th>
+                            <th class="tb-center"><?php echo __('Status') ?></th>
                             <th class="tb-actions"><?php echo __('Actions') ?></th>
                         </tr>
-                        <?php foreach ($release->submissions as $submissions) { ?>
+                        <?php foreach ($release->submissions as $submission) { ?>
                         <tr>
-                            <td class="tb-id"><?php echo h($submissions->id) ?></td>
-                            <td><?php echo h($submissions->information_system) ?></td>
-                            <td><?php echo h($submissions->information_institution) ?></td>
-                            <td><?php echo h($submissions->information_filesystem_type) ?></td>
-                            <td><?php echo h($submissions->information_client_nodes) ?></td>
-                            <td class="tb-number"><?php echo $this->Number->format($submissions->io500_score, ['places' => 2, 'precision' => 2]) ?></td>
+                            <td class="tb-id"><?php echo h($submission->id) ?></td>
+                            <td><?php echo h($submission->information_system) ?></td>
+                            <td><?php echo h($submission->information_institution) ?></td>
+                            <td><?php echo h($submission->information_filesystem_type) ?></td>
+                            <td><?php echo h($submission->information_client_nodes) ?></td>
+                            <td class="tb-number"><?php echo $this->Number->format($submission->io500_score, ['places' => 2, 'precision' => 2]) ?></td>
                             <td class="tb-actions">
-                                <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submissions->id], ['escape' => false]) ?>
+                                <strong class="status status-<?php echo h($submission->status->id) ?>"><?php echo h($submission->status->name) ?></strong>
+                            </td>
+                            <td class="tb-actions">
+                                <?php echo $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Submissions', 'action' => 'view', $submission->id], ['escape' => false]) ?>
                             </td>
                         </tr>
                         <?php } ?>

@@ -28,13 +28,15 @@
                 "dtype":"integer",
                 "desc":"The number of nodes that executed the IO500",
                 "required":true,
-                "unit":""
+                "unit":"",
+                "db":"information_client_nodes"
             },
             "procsPerNode":{
                 "dtype":"integer",
                 "desc":"The number of processes that executed the IO500 benchmark per Node",
                 "required":true,
-                "unit":""
+                "unit":"",
+                "db":"information_client_procs_per_node"
             },
             "note":{
                 "dtype":"string",
@@ -124,7 +126,8 @@
             "count":{
                 "dtype":"integer",
                 "required":true,
-                "desc":"Number of nodes"
+                "desc":"Number of nodes",
+                "db":"information_client_nodes"
             },
             "distribution":{
                 "dtype":"choice",
@@ -137,18 +140,21 @@
                     "CentOS",
                     "other"
                 ],
-                "required":true
+                "required":true,
+                "db":"information_client_operating_system"
             },
             "distribution version":{
                 "dtype":"string",
                 "desc":"The version of the distribution kernel, e.g., 20.04.1",
-                "required":true
+                "required":true,
+                "information_client_operating_system_version":true
             },
             "kernel version":{
                 "dtype":"string",
                 "desc":"The version of the (Linux) kernel, e.g., 5.3.0-1028-azure",
                 "pattern":"[2-9].[0-9]+.*",
-                "required":true
+                "required":true,
+                "db":"information_client_kernel_version"
             },
             "compute peak":{
                 "dtype":"number",
@@ -281,7 +287,7 @@
             },
             "type":{
                 "dtype":"choice",
-                "desc":"",
+                "desc":"Storage media type",
                 "required":true,
                 "choice":[
                     "Memory",
@@ -290,7 +296,8 @@
                     "HDD",
                     "PMEM",
                     "Other"
-                ]
+                ],
+                "db":"information_ds_storage_type"
             },
             "count":{
                 "dtype":"integer",
@@ -317,7 +324,8 @@
                     "PCIe2x",
                     "PCIe3x",
                     "PCIe4x"
-                ]
+                ],
+                "db":"information_ds_storage_interface"
             },
             "file system":{
                 "dtype":"choice",
@@ -378,14 +386,16 @@
             "sockets":{
                 "dtype":"integer",
                 "desc":"Number of sockets",
-                "required":true
+                "required":true,
+                "db":"information_client_sockets,information_ds_sockets,information_md_sockets"
             },
             "model":{
                 "dtype":"string",
                 "desc":"Processor model",
                 "load":"cpu",
                 "pattern":"[\\-+a-zA-Z_ 0-9]+",
-                "required":true
+                "required":true,
+                "db":"information_client_model,information_ds_model,information_md_model"
             },
             "architecture":{
                 "dtype":"choice",
@@ -403,7 +413,8 @@
                     "SPARC",
                     "other"
                 ],
-                "required":true
+                "required":true,
+                "db":"information_client_architecture,information_ds_architecture,information_md_architecture"
             },
             "vendor":{
                 "desc":"Vendor of the processor",
@@ -451,7 +462,8 @@
             "cores per socket":{
                 "dtype":"integer",
                 "desc":"Number of physical cores per socket",
-                "required":true
+                "required":true,
+                "db":"information_client_sockets,information_ds_sockets,information_md_sockets"
             },
             "threads per core":{
                 "dtype":"integer",
@@ -463,7 +475,8 @@
                 "desc":"Speed of the processor",
                 "unit":"Hz",
                 "default-unit":"MHz",
-                "required":true
+                "required":true,
+                "db":"information_client_clock,information_ds_clock,information_md_clock"
             },
             "L2 cache size":{
                 "dtype":"integer",
@@ -514,7 +527,8 @@
                 "desc":"Net (usable) capacity",
                 "unit":"Byte",
                 "default-unit":"GB",
-                "required":true
+                "required":true,
+                "db":"information_client_volatile_memory_capacity,information_ds_volatile_memory_capacity,information_md_volatile_memory_capacity"
             },
             "channels":{
                 "dtype":"integer",
@@ -556,7 +570,8 @@
                     "BXI",
                     "BXI2"
                 ],
-                "required":true
+                "required":true,
+                "db":"information_client_interconnect_type,information_ds_interconnect_type,information_md_interconnect_type"
             },
             "speed":{
                 "dtype":"choice",
@@ -581,12 +596,14 @@
                 "required":true,
                 "choice":[
                     "RDMA"
-                ]
+                ],
+                "db":"information_client_interconnect_rdma,information_ds_interconnect_rdma,information_md_interconnect_rdma"
             },
             "vendor":{
                 "dtype":"string",
                 "desc":"Vendor",
-                "required":true
+                "required":true,
+                "db":"information_client_interconnect_vendor,information_ds_interconnect_vendor,information_md_interconnect_vendor"
             },
             "power consumption":{
                 "dtype":"number",
@@ -603,7 +620,8 @@
             "links":{
                 "dtype":"integer",
                 "desc":"The number of physical network links of this interconnect type",
-                "required":true
+                "required":true,
+                "db":"information_client_interconnect_links,information_ds_interconnect_links,information_md_interconnect_links"
             }
         },
         "tape library":{
@@ -881,7 +899,8 @@
             "count":{
                 "dtype":"integer",
                 "desc":"Number of nodes",
-                "required":true
+                "required":true,
+                "db":"information_ds_nodes,information_md_nodes"
             },
             "distribution":{
                 "dtype":"choice",
@@ -894,18 +913,21 @@
                     "Ubuntu",
                     "CentOS",
                     "other"
-                ]
+                ],
+                "db":"information_ds_operating_system,information_md_operating_system"
             },
             "distribution version":{
                 "dtype":"string",
                 "desc":"The version of the distribution kernel, e.g., 20.04.1",
-                "required":true
+                "required":true,
+                "db":"information_ds_operating_system_version,information_md_operating_system_version"
             },
             "kernel version":{
                 "dtype":"string",
                 "desc":"The version of the (Linux) kernel, e.g., 5.3.0-1028-azure",
                 "pattern":"[2-9].[0-9]+.*",
-                "required":true
+                "required":true,
+                "db":"information_ds_kernel_version,information_md_kernel_version"
             },
             "installation date":{
                 "dtype":"text",
@@ -1138,7 +1160,8 @@
                 "desc":"Name of the institution full name",
                 "enabled":true,
                 "pattern":"[a-zA-Z_0-9]+[a-zA-Z0-9_ \\-+]+",
-                "required":true
+                "required":true,
+                "db":"information_institution"
             },
             "location":{
                 "dtype":"text",
@@ -1425,7 +1448,8 @@
                     "dtype":"text",
                     "desc":"Name of the supercomputer",
                     "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
-                    "required":true
+                    "required":true,
+                    "db":"information_system"
                 },
                 "integrator":{
                     "dtype":"string",
@@ -1556,7 +1580,8 @@
                     "dtype":"text",
                     "desc":"Name of the storage",
                     "pattern":"[/a-zA-Z]+[/a-zA-Z0-9_ -]+",
-                    "required":""
+                    "required":true,
+                    "db":"information_filesystem_name"
                 },
                 "model":{
                     "dtype":"string",
@@ -1595,7 +1620,8 @@
                 "vendor":{
                     "dtype":"string",
                     "desc":"Vendor",
-                    "required":true
+                    "required":true,
+                    "db":"information_storage_vendor"
                 },
                 "type":{
                     "dtype":"choice",
@@ -1607,7 +1633,8 @@
                         "object storage",
                         "tapeArchive",
                         "MAID"
-                    ]
+                    ],
+                    "db":"information_filesystem_type"
                 },
                 "software":{
                     "dtype":"string",
@@ -1642,7 +1669,8 @@
                 "version":{
                     "dtype":"string",
                     "desc":"Version of the software",
-                    "required":true
+                    "required":true,
+                    "db":"information_filesystem_version"
                 },
                 "installation date":{
                     "dtype":"text",

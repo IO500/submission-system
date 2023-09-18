@@ -251,7 +251,7 @@
                 echo $this->Form->control('reproducibility_score_id', [
                     'label' => false,
                     'required' => true,
-                    'options' => $scores,                    
+                    'options' => $scores,
                 ]);
                 ?>
             </fieldset>

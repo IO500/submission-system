@@ -24,8 +24,21 @@
                 <?php echo $this->Text->autoParagraph($listing->description); ?>
             </div>
 
-            <div class="related">
+            <div class="submissions index content">
                 <h2><?php echo __('Rank') ?></h2>
+                <div class="submissions-action">
+                    <?php
+                    echo $this->Html->link(__('DOWNLOAD'), [
+                        'controller' => 'Listings',
+                        'action' => 'download',
+                        strtolower($listing->release->acronym),
+                        $listing->type->url
+                    ], [
+                        'class' => 'button-navigation',
+                        'target' => '_blank'
+                    ]);
+                    ?>
+                </div>
 
                 <?php if (!empty($submissions)) { ?>
                 <div class="table-responsive">
