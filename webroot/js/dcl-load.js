@@ -90,14 +90,16 @@ function loadData(data) {
 
 function provide_hooks() {
     if (!dcl_global_readonly) {
-        jQuery("#dcl_wrap").html('<div id="status"></div>' +
-            '<form id="dcl_data">' +
-            '<div id="data_fields_wrap"></div>' +
+        jQuery("#dcl_wrap").html(
             '<p id=dcl_edtbuttons>' +
-              '<button class="submitButton" type="button" onclick="loadDCLJSONFile()">Load JSON</button>' +
-              '<button class="submitButton" type="button" onclick="downloadDCLJSONFile()">Save JSON</button>' +
+              '<em>You can load a previous JSON file and update accordingly for this new submissions. However, notice that JSON created before ISC23 are not fully compatiable, thus some fields might not be automatically populated if you choose to use those files.</em>' +
+              '<button class="submitButton" type="button" onclick="loadDCLJSONFile()">UPLOAD JSON</button>' +
+              '<button class="submitButton" type="button" onclick="downloadDCLJSONFile()">DOWNLOAD JSON</button>' +
             //  '<button class="submitButton" type="button" onclick="loadData(dcl_reset_data)">Reset</button>' +
             '</p>' +
+            '<div id="status"></div>' +
+            '<form id="dcl_data">' +
+            '<div id="data_fields_wrap"></div>' +
             '</form>' +
             '<div id="dcl_graph_fields"></div>'
         )
