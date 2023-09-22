@@ -1111,7 +1111,7 @@ class SubmissionsController extends AppController
         $releases = $this->Submissions->Releases->find('list', ['limit' => 200]);
 
         $json = ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json';
-        echo $json;die();
+
         if (!is_file($json)) {
             $this->Flash->error(__('Unable to fetch the file in the server.'));
 
