@@ -176,7 +176,7 @@ return [
         [
             'role' => 'committee',
             'controller' => 'Questionnaires',
-            'action' => ['index', 'view', 'edit']
+            'action' => ['index', 'view', 'edit', 'fill', 'update']
         ],
         [
             'role' => '*',

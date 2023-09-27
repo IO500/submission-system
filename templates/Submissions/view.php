@@ -55,11 +55,27 @@
                     <table class="tb tb-info">
                         <tr>
                             <th><?php echo _('Sumitter') ?></th>
-                            <td><?php echo h($submission->user->first_name . ' ' . $submission->user->last_name) ?></td>
+                            <td>
+                                <?php
+                                if (isset($submission->user)) {
+                                    echo h($submission->user->first_name . ' ' . $submission->user->last_name);
+                                } else {
+                                    echo '<i>This submission was migrated from previous system</i>';
+                                }
+                                ?>                                    
+                            </td>
                         </tr>
                         <tr>
                             <th><?php echo _('Email') ?></th>
-                            <td><?php echo h($submission->user->email) ?></td>
+                            <td>
+                                <?php
+                                if (isset($submission->user)) {
+                                    echo h($submission->user->email);
+                                } else {
+                                    echo '';
+                                }
+                                ?>
+                            </td>
                         </tr>
                         <tr>
                             <th><?php echo _('Received') ?></th>
