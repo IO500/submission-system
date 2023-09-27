@@ -39,7 +39,11 @@
                         <?php } ?>
                     </td>
                     <td class="tb-actions">
+                        <?php if (isset($submission->status)) { ?>
                         <strong class="status status-<?php echo h($submission->status->id) ?>"><?php echo h($submission->status->name) ?></strong>
+                        <?php } else { ?>
+                            -
+                        <?php } ?>
                     </td>
                     <td class="tb-actions">
                         <?php

@@ -26,10 +26,9 @@ class QuestionnairesController extends AppController
                 'Listings',
                 'Questionnaires',
             ],
-            //,
-            //'conditions' => [
-            //    'Submissions.user_id' => $userID
-            //]
+            'conditions' => [
+                'Submissions.user_id' => $userID
+            ]
         ]);
 
         // Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.
@@ -39,7 +38,7 @@ class QuestionnairesController extends AppController
 
         if ($submission->questionnaire) {
             // Questionnaire was already filled, redirect o edit
-            return $this->redirect(['action' => 'edit', $submission->questionnaire->id]);
+            return $this->redirect(['action' => 'edit', $submission->id]);
         }
 
         $questionnaire = $this->Questionnaires->newEmptyEntity();
@@ -53,6 +52,86 @@ class QuestionnairesController extends AppController
                 $this->Flash->success(__('The questionnaire has been saved.'));
 
                 return $this->redirect(['controller' => 'submissions', 'action' => 'confirmation', $submission->id]);
+            }
+
+            $this->Flash->error(__('The questionnaire could not be saved. Please, try again.'));
+        }
+
+        $scores = $this->Questionnaires->ReproducibilityScores->find('list');
+
+        $this->set(compact('questionnaire', 'submission', 'scores'));
+    }
+
+    /**
+     * Fill method (committee)
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function fill($submission_id)
+    {
+        $submission = $this->Questionnaires->Submissions->get($submission_id, [
+            'contain' => [
+                'Releases',
+                'Listings',
+                'Questionnaires',
+            ],
+        ]);
+
+        if ($submission->questionnaire) {
+            // Questionnaire was already filled, redirect o edit
+            return $this->redirect(['action' => 'update', $submission->id]);
+        }
+
+        $questionnaire = $this->Questionnaires->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+            $questionnaire = $this->Questionnaires->patchEntity($questionnaire, $this->request->getData());
+
+            $questionnaire->submission_id = $submission->id;
+
+            if ($this->Questionnaires->save($questionnaire)) {
+                $this->Flash->success(__('The questionnaire has been saved.'));
+
+                return $this->redirect(['controller' => 'submissions', 'action' => 'view', $submission->id]);
+            }
+
+            $this->Flash->error(__('The questionnaire could not be saved. Please, try again.'));
+        }
+
+        $scores = $this->Questionnaires->ReproducibilityScores->find('list');
+
+        $this->set(compact('questionnaire', 'submission', 'scores'));
+    }
+
+    /**
+     * Update method (committee)
+     *
+     * @param null $submission_id Questionnaire id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function update($submission_id = null)
+    {
+        $submission = $this->Questionnaires->Submissions->get($submission_id, [
+            'contain' => [
+                'Releases',
+                'Listings',
+                'Questionnaires',
+            ],
+            'conditions' => [
+                'Submissions.id' => $submission_id
+            ],
+        ]);
+
+        $questionnaire = $this->Questionnaires->get($submission->questionnaire->id);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $questionnaire = $this->Questionnaires->patchEntity($questionnaire, $this->request->getData());
+
+            if ($this->Questionnaires->save($questionnaire)) {
+                $this->Flash->success(__('The questionnaire has been saved.'));
+
+                return $this->redirect(['controller' => 'submissions', 'action' => 'view', $submission->id]);
             }
 
             $this->Flash->error(__('The questionnaire could not be saved. Please, try again.'));
