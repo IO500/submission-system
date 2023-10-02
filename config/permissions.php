@@ -187,7 +187,7 @@ return [
         [
             'role' => 'user',
             'controller' => 'Submissions',
-            'action' => ['add', 'edit', 'mine', 'prepare', 'model', 'results', 'confirmation']
+            'action' => ['add', 'edit', 'mine', 'prepare', 'model', 'results', 'confirmation', 'metadata']
         ],
         [
             'role' => ['user'],
