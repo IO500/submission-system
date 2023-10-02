@@ -1075,18 +1075,75 @@ class SubmissionsController extends AppController
             ],
         ]);
 
+        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && ($submission->status_id == 3)) {
+            $this->Flash->error(__('This submission has a final verdict. You can now only modify its metadata.'));
+
+            return $this->redirect(['action' => 'metadata', $submission->id]);
+        }
+
         // Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.
-        if (date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
+        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
             $this->Flash->error(__('This submission was already released in a list. To modify its metadata, open a GitHub pull request with the change.'));
 
             return $this->redirect(['action' => 'mine']);
         }
 
-        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && ($submission->status_id == 3 || $submission->status_id == 4)) {
-            $this->Flash->error(__('This submission has a final verdict. To modify its metadata, please reach out to the committee.'));
-
-            return $this->redirect(['action' => 'mine']);
+        if ($this->getRequest()->getSession()->read('Auth.role') == 'committee' && date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
+            $this->Flash->warning(__('This submission was already released in a list. Be careful will updates!'));
         }
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+
+            $submission = $this->Submissions->patchEntity($submission, $data);
+            $submission->upload_hash = sha1($submission->user_id . $submission->information_submission_date);
+
+            $json = json_decode($data['json'], true);
+
+            $submission = $this->parse($submission, $json);
+
+            if ($this->Submissions->save($submission)) {
+                file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json', $data['json']);
+
+                $this->Flash->success(__('The submission has been saved.'));
+
+                return $this->redirect(['action' => 'results', $submission->id]);
+            } else {
+                $this->Flash->error(__('The submission could not be saved. Please, try again.'));
+            }
+        }
+
+        $releases = $this->Submissions->Releases->find('list', ['limit' => 200]);
+
+        $json = ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json';
+
+        if (!is_file($json)) {
+            $this->Flash->error(__('Unable to fetch the file in the server.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $submission->json = file_get_contents($json);
+
+        $this->set(compact('submission', 'releases'));
+    }
+
+    /**
+     * Metadata method
+     *
+     * @param string|null $id Submission id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function metadata($id = null)
+    {
+        $submission = $this->Submissions->get($id, [
+            'contain' => [
+                'Releases',
+                'Listings',
+            ],
+        ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
