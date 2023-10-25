@@ -34,7 +34,6 @@
     <li class="active">Confirmation</li>
 </ul>
 
-
 <div class="submissions index content">
     <h2><?php echo __('CONFIRMATION') ?></h2>
 
@@ -109,68 +108,6 @@
                         <tr>
                             <th><?php echo _('Filesystem Version') ?></th>
                             <td><?php echo h($submission->information_filesystem_version) ?></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="information-metadata">
-                    <h4>METADATA SERVER</h4>
-
-                    <table class="tb tb-info">
-                        <tr>
-                            <th><?php echo _('Storage Type') ?></th>
-                            <td><?php echo h($submission->information_md_storage_type) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Volatile Memory') ?></th>
-                            <td><?php echo h($submission->information_md_volatile_memory_capacity) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Storage Interface') ?></th>
-                            <td><?php echo h($submission->information_md_storage_interface) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Network') ?></th>
-                            <td><?php echo h($submission->information_md_network) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Software Version') ?></th>
-                            <td><?php echo h($submission->information_md_software_version) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('OS Version') ?></th>
-                            <td><?php echo h($submission->information_md_operating_system_version) ?></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="information-data">
-                    <h4>DATA SERVER</h4>
-
-                    <table class="tb tb-info">
-                        <tr>
-                            <th><?php echo _('Storage Type') ?></th>
-                            <td><?php echo h($submission->information_ds_storage_type) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Volatile Memory') ?></th>
-                            <td><?php echo h($submission->information_ds_volatile_memory_capacity) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Storage Interface') ?></th>
-                            <td><?php echo h($submission->information_ds_storage_interface) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Network') ?></th>
-                            <td><?php echo h($submission->information_ds_network) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('Software Version') ?></th>
-                            <td><?php echo h($submission->information_ds_software_version) ?></td>
-                        </tr>
-                        <tr>
-                            <th><?php echo _('OS Version') ?></th>
-                            <td><?php echo h($submission->information_ds_operating_system_version) ?></td>
                         </tr>
                     </table>
                 </div>

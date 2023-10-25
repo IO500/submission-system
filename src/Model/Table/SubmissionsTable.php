@@ -11,7 +11,10 @@ use Cake\Validation\Validator;
  * Submissions Model
  *
  * @property \App\Model\Table\ReleasesTable&\Cake\ORM\Association\BelongsTo $Releases
+ * @property \CakeDC\Users\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\QuestionnairesTable&\Cake\ORM\Association\HasMany $Questionnaires
  * @property \App\Model\Table\ListingsTable&\Cake\ORM\Association\BelongsToMany $Listings
+ *
  * @method \App\Model\Entity\Submission newEmptyEntity()
  * @method \App\Model\Entity\Submission newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Submission[] newEntities(array $data, array $options = [])
@@ -428,6 +431,301 @@ class SubmissionsTable extends Table
             ->maxLength('cdcl_url', 255)
             ->allowEmptyString('cdcl_url');
 
+        $validator
+            ->integer('information_client_sockets')
+            ->requirePresence('information_client_sockets', 'create')
+            ->notEmptyString('information_client_sockets');
+
+        $validator
+            ->scalar('information_ds_clock')
+            ->maxLength('information_ds_clock', 25)
+            ->allowEmptyString('information_ds_clock');
+
+        $validator
+            ->integer('information_ds_media_secondary_count')
+            ->allowEmptyString('information_ds_media_secondary_count');
+
+        $validator
+            ->scalar('information_ds_media_primary_vendor')
+            ->maxLength('information_ds_media_primary_vendor', 255)
+            ->allowEmptyString('information_ds_media_primary_vendor');
+
+        $validator
+            ->scalar('information_ds_model')
+            ->maxLength('information_ds_model', 255)
+            ->allowEmptyString('information_ds_model');
+
+        $validator
+            ->scalar('information_ds_media_secondary_capacity')
+            ->maxLength('information_ds_media_secondary_capacity', 25)
+            ->allowEmptyString('information_ds_media_secondary_capacity');
+
+        $validator
+            ->boolean('information_md_spdk')
+            ->allowEmptyString('information_md_spdk');
+
+        $validator
+            ->scalar('information_md_media_secondary_vendor')
+            ->maxLength('information_md_media_secondary_vendor', 255)
+            ->allowEmptyString('information_md_media_secondary_vendor');
+
+        $validator
+            ->scalar('information_ds_kernel_version')
+            ->maxLength('information_ds_kernel_version', 255)
+            ->allowEmptyString('information_ds_kernel_version');
+
+        $validator
+            ->scalar('information_client_interconnect_vendor')
+            ->maxLength('information_client_interconnect_vendor', 255)
+            ->requirePresence('information_client_interconnect_vendor', 'create')
+            ->notEmptyString('information_client_interconnect_vendor');
+
+        $validator
+            ->boolean('information_ds_interconnect_rdma')
+            ->allowEmptyString('information_ds_interconnect_rdma');
+
+        $validator
+            ->scalar('information_ds_media_secondary_vendor')
+            ->maxLength('information_ds_media_secondary_vendor', 255)
+            ->allowEmptyString('information_ds_media_secondary_vendor');
+
+        $validator
+            ->boolean('information_client_dpdk')
+            ->requirePresence('information_client_dpdk', 'create')
+            ->notEmptyString('information_client_dpdk');
+
+        $validator
+            ->integer('information_md_interconnect_links')
+            ->allowEmptyString('information_md_interconnect_links');
+
+        $validator
+            ->boolean('information_md_dpdk')
+            ->allowEmptyString('information_md_dpdk');
+
+        $validator
+            ->scalar('information_ds_architecture')
+            ->maxLength('information_ds_architecture', 255)
+            ->allowEmptyString('information_ds_architecture');
+
+        $validator
+            ->scalar('information_md_interconnect_vendor')
+            ->maxLength('information_md_interconnect_vendor', 255)
+            ->allowEmptyString('information_md_interconnect_vendor');
+
+        $validator
+            ->integer('information_ds_interconnect_links')
+            ->allowEmptyString('information_ds_interconnect_links');
+
+        $validator
+            ->scalar('information_client_interconnect_type')
+            ->maxLength('information_client_interconnect_type', 255)
+            ->requirePresence('information_client_interconnect_type', 'create')
+            ->notEmptyString('information_client_interconnect_type');
+
+        $validator
+            ->integer('information_ds_cores_per_socket')
+            ->allowEmptyString('information_ds_cores_per_socket');
+
+        $validator
+            ->integer('information_md_media_primary_count')
+            ->allowEmptyString('information_md_media_primary_count');
+
+        $validator
+            ->integer('information_md_media_secondary_count')
+            ->allowEmptyString('information_md_media_secondary_count');
+
+        $validator
+            ->boolean('information_client_spdk')
+            ->requirePresence('information_client_spdk', 'create')
+            ->notEmptyString('information_client_spdk');
+
+        $validator
+            ->scalar('information_md_media_secondary_capacity')
+            ->maxLength('information_md_media_secondary_capacity', 255)
+            ->allowEmptyString('information_md_media_secondary_capacity');
+
+        $validator
+            ->scalar('information_md_kernel_version')
+            ->maxLength('information_md_kernel_version', 255)
+            ->allowEmptyString('information_md_kernel_version');
+
+        $validator
+            ->scalar('information_ds_interconnect_type')
+            ->maxLength('information_ds_interconnect_type', 255)
+            ->allowEmptyString('information_ds_interconnect_type');
+
+        $validator
+            ->scalar('information_ds_interconnect_vendor')
+            ->maxLength('information_ds_interconnect_vendor', 255)
+            ->allowEmptyString('information_ds_interconnect_vendor');
+
+        $validator
+            ->scalar('information_md_architecture')
+            ->maxLength('information_md_architecture', 255)
+            ->allowEmptyString('information_md_architecture');
+
+        $validator
+            ->integer('information_ds_sockets')
+            ->allowEmptyString('information_ds_sockets');
+
+        $validator
+            ->boolean('information_md_interconnect_rdma')
+            ->allowEmptyString('information_md_interconnect_rdma');
+
+        $validator
+            ->scalar('information_client_model')
+            ->maxLength('information_client_model', 255)
+            ->requirePresence('information_client_model', 'create')
+            ->notEmptyString('information_client_model');
+
+        $validator
+            ->scalar('information_md_media_secondary_interface')
+            ->maxLength('information_md_media_secondary_interface', 255)
+            ->allowEmptyString('information_md_media_secondary_interface');
+
+        $validator
+            ->integer('information_client_interconnect_links')
+            ->requirePresence('information_client_interconnect_links', 'create')
+            ->notEmptyString('information_client_interconnect_links');
+
+        $validator
+            ->scalar('information_ds_operating_system')
+            ->maxLength('information_ds_operating_system', 255)
+            ->allowEmptyString('information_ds_operating_system');
+
+        $validator
+            ->boolean('information_ds_spdk')
+            ->allowEmptyString('information_ds_spdk');
+
+        $validator
+            ->integer('information_client_cores_per_socket')
+            ->requirePresence('information_client_cores_per_socket', 'create')
+            ->notEmptyString('information_client_cores_per_socket');
+
+        $validator
+            ->scalar('information_md_interconnect_bandwidth')
+            ->maxLength('information_md_interconnect_bandwidth', 25)
+            ->allowEmptyString('information_md_interconnect_bandwidth');
+
+        $validator
+            ->scalar('information_client_volatile_memory_capacity')
+            ->maxLength('information_client_volatile_memory_capacity', 255)
+            ->requirePresence('information_client_volatile_memory_capacity', 'create')
+            ->notEmptyString('information_client_volatile_memory_capacity');
+
+        $validator
+            ->scalar('information_client_clock')
+            ->maxLength('information_client_clock', 25)
+            ->requirePresence('information_client_clock', 'create')
+            ->notEmptyString('information_client_clock');
+
+        $validator
+            ->scalar('information_ds_media_secondary_interface')
+            ->maxLength('information_ds_media_secondary_interface', 255)
+            ->allowEmptyString('information_ds_media_secondary_interface');
+
+        $validator
+            ->scalar('information_md_clock')
+            ->maxLength('information_md_clock', 25)
+            ->allowEmptyString('information_md_clock');
+
+        $validator
+            ->integer('information_ds_media_primary_count')
+            ->allowEmptyString('information_ds_media_primary_count');
+
+        $validator
+            ->scalar('information_client_architecture')
+            ->maxLength('information_client_architecture', 255)
+            ->requirePresence('information_client_architecture', 'create')
+            ->notEmptyString('information_client_architecture');
+
+        $validator
+            ->boolean('information_client_interconnect_rdma')
+            ->requirePresence('information_client_interconnect_rdma', 'create')
+            ->notEmptyString('information_client_interconnect_rdma');
+
+        $validator
+            ->scalar('information_md_media_primary_type')
+            ->maxLength('information_md_media_primary_type', 255)
+            ->allowEmptyString('information_md_media_primary_type');
+
+        $validator
+            ->scalar('information_md_model')
+            ->maxLength('information_md_model', 255)
+            ->allowEmptyString('information_md_model');
+
+        $validator
+            ->scalar('information_ds_interconnect_bandwidth')
+            ->maxLength('information_ds_interconnect_bandwidth', 25)
+            ->allowEmptyString('information_ds_interconnect_bandwidth');
+
+        $validator
+            ->scalar('information_md_operating_system')
+            ->maxLength('information_md_operating_system', 255)
+            ->allowEmptyString('information_md_operating_system');
+
+        $validator
+            ->boolean('information_ds_dpdk')
+            ->allowEmptyString('information_ds_dpdk');
+
+        $validator
+            ->scalar('information_client_interconnect_bandwidth')
+            ->maxLength('information_client_interconnect_bandwidth', 25)
+            ->allowEmptyString('information_client_interconnect_bandwidth');
+
+        $validator
+            ->scalar('information_ds_media_primary_interface')
+            ->maxLength('information_ds_media_primary_interface', 255)
+            ->allowEmptyString('information_ds_media_primary_interface');
+
+        $validator
+            ->integer('information_md_cores_per_socket')
+            ->allowEmptyString('information_md_cores_per_socket');
+
+        $validator
+            ->scalar('information_ds_media_primary_capacity')
+            ->maxLength('information_ds_media_primary_capacity', 25)
+            ->allowEmptyString('information_ds_media_primary_capacity');
+
+        $validator
+            ->scalar('information_md_media_secondary_type')
+            ->maxLength('information_md_media_secondary_type', 255)
+            ->allowEmptyString('information_md_media_secondary_type');
+
+        $validator
+            ->scalar('information_ds_media_secondary_type')
+            ->maxLength('information_ds_media_secondary_type', 255)
+            ->allowEmptyString('information_ds_media_secondary_type');
+
+        $validator
+            ->scalar('information_md_media_primary_vendor')
+            ->maxLength('information_md_media_primary_vendor', 255)
+            ->allowEmptyString('information_md_media_primary_vendor');
+
+        $validator
+            ->scalar('information_md_media_primary_interface')
+            ->maxLength('information_md_media_primary_interface', 255)
+            ->allowEmptyString('information_md_media_primary_interface');
+
+        $validator
+            ->scalar('information_md_media_primary_capacity')
+            ->maxLength('information_md_media_primary_capacity', 25)
+            ->allowEmptyString('information_md_media_primary_capacity');
+
+        $validator
+            ->scalar('information_md_interconnect_type')
+            ->maxLength('information_md_interconnect_type', 255)
+            ->allowEmptyString('information_md_interconnect_type');
+
+        $validator
+            ->scalar('information_ds_media_primary_type')
+            ->maxLength('information_ds_media_primary_type', 255)
+            ->allowEmptyString('information_ds_media_primary_type');
+
+        $validator
+            ->integer('information_md_sockets')
+            ->allowEmptyString('information_md_sockets');
+
         return $validator;
     }
 
@@ -442,6 +740,7 @@ class SubmissionsTable extends Table
     {
         $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
         $rules->add($rules->existsIn(['release_id'], 'Releases'), ['errorField' => 'release_id']);
+        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }

@@ -297,6 +297,19 @@ nav .links > li > a {
     min-width: 500px;
 }
 
+.iziToast.iziIOValidation {
+    background: #f2c496;
+    min-width: 700px;
+}
+
+.iziToast.iziIOValidation>.iziToast-body .iziToast-message {
+    text-align: left;
+}
+
+.iziToast.iziIOValidation>.iziToast-body .iziToast-icon {
+    font-size: 16px;
+}
+
 .iziToast.iziIOStatus {
     background: #9bc7f7;
     min-width: 500px;

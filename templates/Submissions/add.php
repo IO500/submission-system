@@ -78,12 +78,23 @@ echo $this->Html->script(
     ]
 );
 
-$url_site = $this->Url->build([
-    'controller' => 'webroot',
-    'action' => 'model',
-    'site-io500.json'
-]);
-
+if ($submission->upload_hash) {
+    $url_site = $this->Url->build([
+        'controller' => 'webroot',
+        'action' => 'files',
+        'tmp',
+        $submission->upload_hash . '.json',
+        '?' => [
+            'timestamp' => time()
+        ]
+    ]);
+} else {
+    $url_site = $this->Url->build([
+        'controller' => 'webroot',
+        'action' => 'model',
+        'site-io500.json'
+    ]);
+}
 
 $url_schema = $this->Url->build([
     'controller' => 'webroot',
