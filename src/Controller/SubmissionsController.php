@@ -149,6 +149,8 @@ class SubmissionsController extends AppController
      */
     private function parse($submission, $json)
     {
+        $submission->errors = [];
+
         // Institution
         $json_site = $this->find_information($json, 'type', 'SITE');
 
@@ -160,11 +162,19 @@ class SubmissionsController extends AppController
 
         $json_supercomputer = $this->find_information($json_site, 'type', 'SUPERCOMPUTER');
 
+        if (!$json_supercomputer) {
+            $submission->errors[] = 'Your submission must contain information about at least one <strong>SUPERCOMPUTER</strong>';
+        }
+
         $submission->information_system = $json_supercomputer['att']['name'] ?? null;
 
         // IO500
 
         $json_io500 = $this->find_information($json_site, 'type', 'IO500');
+
+        if (!$json_io500) {
+            $submission->errors[] = 'Your submission must contain information about the <strong>IO500</strong> execution';
+        }
 
         $submission->information_client_nodes = $json_io500['att']['number_clientNodes'] ?? 0;
         $submission->information_client_procs_per_node = $json_io500['att']['procsPerNode'] ?? 0;
@@ -180,83 +190,103 @@ class SubmissionsController extends AppController
 
         $json_client = $this->find_information($json_supercomputer, 'type', 'NODES');
 
-        $submission->information_client_operating_system = $json_client['att']['distribution'] ?? null;
-        $submission->information_client_operating_system_version = $json_client['att']['distribution version'] ?? null;
-        $submission->information_client_kernel_version = $json_client['att']['kernel version'] ?? null;
+        if (!$json_client) {
+            $submission->errors[] = 'Your submission must contain information about the compute <strong>NODES</strong>';
+        } else {
+            $submission->information_client_operating_system = $json_client['att']['distribution'] ?? null;
+            $submission->information_client_operating_system_version = $json_client['att']['distribution version'] ?? null;
+            $submission->information_client_kernel_version = $json_client['att']['kernel version'] ?? null;
 
-        $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
+            $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
 
-        $json_client_processor = $this->find_information($json_client, 'type', 'PROCESSOR')['att'];
+            $json_client_processor = $this->find_information($json_client, 'type', 'PROCESSOR')['att'];
 
-        $submission->information_client_architecture = $json_client_processor['architecture'] ?? null;
-        $submission->information_client_model = $json_client_processor['model'] ?? null;
-        $submission->information_client_sockets = $json_client_processor['sockets'] ?? null;
-        $submission->information_client_cores_per_socket = $json_client_processor['cores per socket'] ?? null;
-        $submission->information_client_clock = isset($json_client_processor['frequency']) ? implode(' ', $json_client_processor['frequency']) : null;
+            if (!$json_client_processor) {
+                $submission->errors[] = 'Your submission must contain information about the <strong>PROCESSOR</strong> in the compute <strong>NODES</strong>';
+            } else {
+                $submission->information_client_architecture = $json_client_processor['architecture'] ?? null;
+                $submission->information_client_model = $json_client_processor['model'] ?? null;
+                $submission->information_client_sockets = $json_client_processor['sockets'] ?? null;
+                $submission->information_client_cores_per_socket = $json_client_processor['cores per socket'] ?? null;
+                $submission->information_client_clock = isset($json_client_processor['frequency']) ? implode(' ', $json_client_processor['frequency']) : null;
+            }
 
-        $json_client_memory = $this->find_information($json_client, 'type', 'MEMORY')['att'];
+            $json_client_memory = $this->find_information($json_client, 'type', 'MEMORY')['att'];
 
-        $submission->information_client_volatile_memory_capacity = isset($json_client_memory['net capacity']) ? implode(' ', $json_client_memory['net capacity']) : null;
+            if (!$json_client_memory) {
+                $submission->errors[] = 'Your submission must contain information about the <strong>MEMORY</strong> in the compute <strong>NODES</strong>';
+            } else {
+                $submission->information_client_volatile_memory_capacity = isset($json_client_memory['net capacity']) ? implode(' ', $json_client_memory['net capacity']) : null;
+            }
 
-        $json_client_interconnect = $this->find_information($json_client, 'type', 'INTERCONNECT')['att'];
-
-        $submission->information_client_interconnect_type = $json_client_interconnect['type'] ?? null;
-        $submission->information_client_interconnect_vendor = $json_client_interconnect['vendor'] ?? null;
-        $submission->information_client_interconnect_bandwidth = isset($json_client_interconnect['peak throughput']) ? implode(' ', $json_client_interconnect['peak throughput']) : null;
-        $submission->information_client_interconnect_links = $json_client_interconnect['links'] ?? null;
-        $submission->information_client_interconnect_rdma = isset($json_client_interconnect['features']) ? (strpos($json_client_interconnect['features'], 'RDMA') === false ? false : true) : false;
+            $json_client_interconnect = $this->find_information($json_client, 'type', 'INTERCONNECT')['att'];
+            
+            if (!$json_client_interconnect) {
+                $submission->errors[] = 'Your submission must contain information about the <strong>INTERCONNECT</strong> in the compute <strong>NODES</strong>';
+            } else {
+                $submission->information_client_interconnect_type = $json_client_interconnect['type'] ?? null;
+                $submission->information_client_interconnect_vendor = $json_client_interconnect['vendor'] ?? null;
+                $submission->information_client_interconnect_bandwidth = isset($json_client_interconnect['peak throughput']) ? implode(' ', $json_client_interconnect['peak throughput']) : null;
+                $submission->information_client_interconnect_links = $json_client_interconnect['links'] ?? null;
+                $submission->information_client_interconnect_rdma = isset($json_client_interconnect['features']) ? (strpos($json_client_interconnect['features'], 'RDMA') === false ? false : true) : false;
+            }
+        }
 
         $json_storage_system = $this->find_information($json, 'type', 'STORAGESYSTEM');
+        
+        if (!$json_storage_system) {
+            $submission->errors[] = 'Your submission must contain information about the <strong>STORAGE SYSTEM</strong>';
+        } else {
+            $submission->information_filesystem_type = $json_storage_system['att']['software'] ?? null;
+            $submission->information_filesystem_name = $json_storage_system['att']['name'] ?? null;
+            $submission->information_filesystem_version = $json_storage_system['att']['version'] ?? null;
 
-        $submission->information_filesystem_type = $json_storage_system['att']['software'] ?? null;
-        $submission->information_filesystem_name = $json_storage_system['att']['name'] ?? null;
-        $submission->information_filesystem_version = $json_storage_system['att']['version'] ?? null;
+            $submission->information_storage_vendor = $json_storage_system['att']['vendor'] ?? null;
 
-        $submission->information_storage_vendor = $json_storage_system['att']['vendor'] ?? null;
+            $submission->information_client_spdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'SPDK') === false ? false : true) : false;
+            $submission->information_client_dpdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'DPDK') === false ? false : true) : false;
 
-        $submission->information_client_spdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'SPDK') === false ? false : true) : false;
-        $submission->information_client_dpdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'DPDK') === false ? false : true) : false;
+            // LUSTRE
+            $json_lustre = $this->find_information($json_storage_system, 'type', 'LUSTRE');
 
-        // LUSTRE
-        $json_lustre = $this->find_information($json_storage_system, 'type', 'LUSTRE');
+            if ($json_lustre) {
+                $submission = $this->parse_lustre($submission, $json_lustre);
+            }
 
-        if ($json_lustre) {
-            $submission = $this->parse_lustre($submission, $json_lustre);
-        }
+            // SPECTRUMSCALE
+            $json_spectrum = $this->find_information($json_storage_system, 'type', 'SPECTRUMSCALE');
 
-        // SPECTRUMSCALE
-        $json_spectrum = $this->find_information($json_storage_system, 'type', 'SPECTRUMSCALE');
+            if ($json_spectrum) {
+                $submission = $this->parse_spectrum($submission, $json_spectrum);
+            }
 
-        if ($json_spectrum) {
-            $submission = $this->parse_spectrum($submission, $json_spectrum);
-        }
+            // BEEGFS
+            $json_beegfs = $this->find_information($json_storage_system, 'type', 'BEEGFS');
 
-        // BEEGFS
-        $json_beegfs = $this->find_information($json_storage_system, 'type', 'BEEGFS');
+            if ($json_beegfs) {
+                $submission = $this->parse_beegfs($submission, $json_beegfs);
+            }
 
-        if ($json_beegfs) {
-            $submission = $this->parse_beegfs($submission, $json_beegfs);
-        }
+            // NAS
+            $json_nas = $this->find_information($json_storage_system, 'type', 'NAS');
 
-        // NAS
-        $json_nas = $this->find_information($json_storage_system, 'type', 'NAS');
+            if ($json_nas) {
+                $submission = $this->parse_nas($submission, $json_nas);
+            }
 
-        if ($json_nas) {
-            $submission = $this->parse_nas($submission, $json_nas);
-        }
+            // DAOS
+            $json_daos = $this->find_information($json_storage_system, 'type', 'DAOS');
 
-        // DAOS
-        $json_daos = $this->find_information($json_storage_system, 'type', 'DAOS');
+            if ($json_daos) {
+                $submission = $this->parse_daos($submission, $json_daos);
+            }
 
-        if ($json_daos) {
-            $submission = $this->parse_daos($submission, $json_daos);
-        }
+            // WEKAIO
+            $json_wekaio = $this->find_information($json_storage_system, 'type', 'WEKAIO');
 
-        // WEKAIO
-        $json_wekaio = $this->find_information($json_storage_system, 'type', 'WEKAIO');
-
-        if ($json_wekaio) {
-            $submission = $this->parse_daos($submission, $json_wekaio);
+            if ($json_wekaio) {
+                $submission = $this->parse_daos($submission, $json_wekaio);
+            }
         }
 
         return $submission;
@@ -986,15 +1016,24 @@ class SubmissionsController extends AppController
 
             $submission = $this->parse($submission, $json);
 
-            if ($this->Submissions->save($submission)) {
-                //$submission = $this->metrics($submission);
-                //$this->Submissions->save($submission);
+            if ($submission->errors) {
+                foreach ($submission->errors as $error) {
+                    $this->Flash->validation($error);
+                }
 
-                file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json', $data['json']);
+                // Create a temporary JSON file with the filled data to restore
+                file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'tmp' . DS . $submission->upload_hash . '.json', $data['json']);
+            } else {
+                if ($this->Submissions->save($submission)) {
+                    //$submission = $this->metrics($submission);
+                    //$this->Submissions->save($submission);
 
-                $this->Flash->success(__('The submission has been saved.'));
+                    file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json', $data['json']);
 
-                return $this->redirect(['action' => 'results', $submission->id]);
+                    $this->Flash->success(__('The submission has been saved.'));
+
+                    return $this->redirect(['action' => 'results', $submission->id]);
+                }
             }
 
             $this->Flash->error(__('The submission could not be saved. Please, try again.'));
@@ -1075,18 +1114,84 @@ class SubmissionsController extends AppController
             ],
         ]);
 
+        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && ($submission->status_id == 3)) {
+            $this->Flash->error(__('This submission has a final verdict. You can now only modify its metadata.'));
+
+            return $this->redirect(['action' => 'metadata', $submission->id]);
+        }
+
         // Only allow submissions that are 'new' to be modified. Once released, they should follow the GitHub PR flow.
-        if (date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
+        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
             $this->Flash->error(__('This submission was already released in a list. To modify its metadata, open a GitHub pull request with the change.'));
 
             return $this->redirect(['action' => 'mine']);
         }
 
-        if ($this->getRequest()->getSession()->read('Auth.role') != 'committee' && ($submission->status_id == 3 || $submission->status_id == 4)) {
-            $this->Flash->error(__('This submission has a final verdict. To modify its metadata, please reach out to the committee.'));
-
-            return $this->redirect(['action' => 'mine']);
+        if ($this->getRequest()->getSession()->read('Auth.role') == 'committee' && date('Y-m-d') > $submission->release->release_date->i18nFormat('yyyy-MM-dd')) {
+            $this->Flash->warning(__('This submission was already released in a list. Be careful will updates!'));
         }
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+
+            $submission = $this->Submissions->patchEntity($submission, $data);
+            $submission->upload_hash = sha1($submission->user_id . $submission->information_submission_date);
+
+            $json = json_decode($data['json'], true);
+
+            $submission = $this->parse($submission, $json);
+
+            if ($submission->errors) {
+                foreach ($submission->errors as $error) {
+                    $this->Flash->validation($error);
+                }
+
+                // Create a temporary JSON file with the filled data to restore
+                file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'tmp' . DS . $submission->upload_hash . '.json', $data['json']);
+            } else {
+                if ($this->Submissions->save($submission)) {
+                    file_put_contents(ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json', $data['json']);
+
+                    $this->Flash->success(__('The submission has been saved.'));
+
+                    return $this->redirect(['action' => 'results', $submission->id]);
+                } else {
+                    $this->Flash->error(__('The submission could not be saved. Please, try again.'));
+                }
+            }
+        }
+
+        $releases = $this->Submissions->Releases->find('list', ['limit' => 200]);
+
+        $json = ROOT . DS . 'webroot' . DS . 'files' . DS . 'submissions' . DS . $submission->id . '.json';
+
+        if (!is_file($json)) {
+            $this->Flash->error(__('Unable to fetch the file in the server.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $submission->json = file_get_contents($json);
+
+        $this->set(compact('submission', 'releases'));
+    }
+
+    /**
+     * Metadata method
+     *
+     * @param string|null $id Submission id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function metadata($id = null)
+    {
+        $submission = $this->Submissions->get($id, [
+            'contain' => [
+                'Releases',
+                'Listings',
+            ],
+        ]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
