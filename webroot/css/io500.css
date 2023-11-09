@@ -443,6 +443,10 @@ table {
     width: 7%;
 }
 
+.tb .tb-text {
+    width: 15%;
+}
+
 .tb-actions, th.tb-actions {
     text-align: center;
     width: 15%;

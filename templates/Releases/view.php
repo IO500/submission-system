@@ -91,9 +91,10 @@
                     <table class="tb">
                         <tr>
                             <th class="tb-id"><?php echo __('ID') ?></th>
-                            <th><?php echo __('System') ?></th>
-                            <th><?php echo __('Institution') ?></th>
-                            <th><?php echo __('Filesystem Type') ?></th>
+                            <th class="tb-text"><?php echo __('System') ?></th>
+                            <th class="tb-text"><?php echo __('Institution') ?></th>
+                            <th class="tb-text"><?php echo __('Filesystem') ?></th>
+                            <th class="tb-text"><?php echo __('Type') ?></th>
                             <th><?php echo __('Nodes') ?></th>
                             <th class="tb-number"><?php echo __('Score') ?></th>
                             <th class="tb-center"><?php echo __('Status') ?></th>
@@ -104,6 +105,7 @@
                             <td class="tb-id"><?php echo h($submission->id) ?></td>
                             <td><?php echo h($submission->information_system) ?></td>
                             <td><?php echo h($submission->information_institution) ?></td>
+                            <td><?php echo h($submission->information_filesystem_name) ?></td>
                             <td><?php echo h($submission->information_filesystem_type) ?></td>
                             <td><?php echo h($submission->information_client_nodes) ?></td>
                             <td class="tb-number"><?php echo $this->Number->format($submission->io500_score, ['places' => 2, 'precision' => 2]) ?></td>

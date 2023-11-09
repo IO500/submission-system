@@ -7,9 +7,10 @@
                 <tr>
                     <th class="tb-id"><?php echo $this->Paginator->sort('id', 'ID') ?></th>
                     <th><?php echo $this->Paginator->sort('release_id', 'Release') ?></th>
-                    <th><?php echo $this->Paginator->sort('information_system', 'System') ?></th>
-                    <th><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
-                    <th><?php echo $this->Paginator->sort('information_filesystem_type', 'Filesystem') ?></th>
+                    <th class="tb-text"><?php echo $this->Paginator->sort('information_system', 'System') ?></th>
+                    <th class="tb-text"><?php echo $this->Paginator->sort('information_institution', 'Institution') ?></th>
+                    <th class="tb-text"><?php echo $this->Paginator->sort('information_filesystem_name', 'Filesystem') ?></th>
+                    <th class="tb-text"><?php echo $this->Paginator->sort('information_filesystem_type', 'Type') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'TEN') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', 'IO500') ?></th>
                     <th class="tb-center"><?php echo $this->Paginator->sort('status_id', 'Status') ?></th>
@@ -23,6 +24,7 @@
                     <td><?php echo $submission->has('release') ? $submission->release->acronym : '' ?></td>
                     <td><?php echo h($submission->information_system) ?></td>
                     <td><?php echo h($submission->information_institution) ?></td>
+                    <td><?php echo h($submission->information_filesystem_name) ?></td>
                     <td><?php echo h($submission->information_filesystem_type) ?></td>
                     <td class="tb-center">
                         <?php if ($submission->information_10_node_challenge === true) { ?>
