@@ -15,3 +15,6 @@
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
 </IfModule>
+
+Header add Access-Control-Allow-Origin: "https://io500.org"
+Header add Access-Control-Allow-Methods: "*"

@@ -1567,7 +1567,7 @@ class SubmissionsController extends AppController
      */
     public function export($release_acronym = null)
     {
-        $db = ConnectionManager::get('default');
+        $db = \Cake\Datasource\ConnectionManager::get('default');
 
         // Create a schema collection.
         $collection = $db->getSchemaCollection();

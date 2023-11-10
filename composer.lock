@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7ab628848b47aee48161f1b43dbb02b",
+    "content-hash": "e571e92aee5ea5a9a2c23f7dd4b900c0",
     "packages": [
         {
             "name": "cakedc/auth",
@@ -757,6 +757,81 @@
             "time": "2021-04-14T17:24:42+00:00"
         },
         {
+            "name": "friendsofcake/cakephp-csvview",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfCake/cakephp-csvview.git",
+                "reference": "e88b165e554a835d02fd8561faae761c8d748e90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfCake/cakephp-csvview/zipball/e88b165e554a835d02fd8561faae761c8d748e90",
+                "reference": "e88b165e554a835d02fd8561faae761c8d748e90",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^4.2",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "^4.0",
+                "phpunit/phpunit": "^9.5.0"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "CsvView\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jose Diaz-Gonzalez",
+                    "email": "email@josediazgonzalez.com",
+                    "homepage": "https://josediazgonzalez.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "ADmad",
+                    "homepage": "https://github.com/admad",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Mark Scherer",
+                    "homepage": "https://github.com/dereuromark",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Joshua Paling",
+                    "homepage": "https://github.com/joshuapaling",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Gaurish Sharma",
+                    "homepage": "https://github.com/gaurish",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Gregory Gaskill",
+                    "homepage": "https://github.com/chronon",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "A CSV View class for CakePHP",
+            "homepage": "https://github.com/friendsofcake/cakephp-csvview",
+            "keywords": [
+                "cakephp",
+                "csv",
+                "export",
+                "view"
+            ],
+            "time": "2023-01-17T18:04:00+00:00"
+        },
+        {
             "name": "google/recaptcha",
             "version": "1.2.4",
             "source": {
@@ -1334,67 +1409,6 @@
                 }
             ],
             "time": "2021-02-19T21:22:57+00:00"
-        },
-        {
-            "name": "muffin/footprint",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/UseMuffin/Footprint.git",
-                "reference": "65998077e751ce3af6aba7d8b8a9e74f2658ba63"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/UseMuffin/Footprint/zipball/65998077e751ce3af6aba7d8b8a9e74f2658ba63",
-                "reference": "65998077e751ce3af6aba7d8b8a9e74f2658ba63",
-                "shasum": ""
-            },
-            "require": {
-                "cakephp/cakephp": "^4.0"
-            },
-            "require-dev": {
-                "cakephp/authentication": "^2.3",
-                "cakephp/cakephp-codesniffer": "^4.0",
-                "phpunit/phpunit": "~8.5.0"
-            },
-            "type": "cakephp-plugin",
-            "autoload": {
-                "psr-4": {
-                    "Muffin\\Footprint\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jad Bitar",
-                    "homepage": "http://jadb.io",
-                    "role": "Author"
-                },
-                {
-                    "name": "ADmad",
-                    "homepage": "https://github.com/ADmad",
-                    "role": "Author"
-                },
-                {
-                    "name": "Others",
-                    "homepage": "https://github.com/usemuffin/footprint/graphs/contributors"
-                }
-            ],
-            "description": "CakePHP plugin to allow passing currently logged in user to model layer",
-            "homepage": "https://github.com/usemuffin/footprint",
-            "keywords": [
-                "cakephp",
-                "footprint",
-                "muffin"
-            ],
-            "support": {
-                "issues": "https://github.com/usemuffin/footprint/issues",
-                "source": "https://github.com/usemuffin/footprint"
-            },
-            "time": "2022-02-22T13:10:44+00:00"
         },
         {
             "name": "nxp/math-executor",
@@ -4028,6 +4042,63 @@
             "time": "2020-02-19T09:02:13+00:00"
         },
         {
+            "name": "muffin/footprint",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UseMuffin/Footprint.git",
+                "reference": "65998077e751ce3af6aba7d8b8a9e74f2658ba63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/UseMuffin/Footprint/zipball/65998077e751ce3af6aba7d8b8a9e74f2658ba63",
+                "reference": "65998077e751ce3af6aba7d8b8a9e74f2658ba63",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^4.0"
+            },
+            "require-dev": {
+                "cakephp/authentication": "^2.3",
+                "cakephp/cakephp-codesniffer": "^4.0",
+                "phpunit/phpunit": "~8.5.0"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Muffin\\Footprint\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jad Bitar",
+                    "homepage": "http://jadb.io",
+                    "role": "Author"
+                },
+                {
+                    "name": "ADmad",
+                    "homepage": "https://github.com/ADmad",
+                    "role": "Author"
+                },
+                {
+                    "name": "Others",
+                    "homepage": "https://github.com/usemuffin/footprint/graphs/contributors"
+                }
+            ],
+            "description": "CakePHP plugin to allow passing currently logged in user to model layer",
+            "homepage": "https://github.com/usemuffin/footprint",
+            "keywords": [
+                "cakephp",
+                "footprint",
+                "muffin"
+            ],
+            "time": "2022-02-22T13:10:44+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.10.2",
             "source": {
@@ -5805,7 +5876,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
@@ -6578,5 +6648,5 @@
         "php": ">=7.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "1.1.0"
 }
