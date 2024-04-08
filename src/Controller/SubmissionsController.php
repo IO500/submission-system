@@ -180,11 +180,20 @@ class SubmissionsController extends AppController
         $submission->information_client_procs_per_node = $json_io500['att']['procsPerNode'] ?? 0;
         $submission->information_client_total_procs = $submission->information_client_nodes * $submission->information_client_procs_per_node;
 
+        $submission->information_server_nodes = $json_io500['att']['number_serverNodes'] ?? 0;
+
         if ($submission->information_client_nodes == 10) {
             $submission->information_10_node_challenge = true;
         }
 
         $submission->information_note = $json_io500['att']['note'] ?? 0;
+
+        $submission->information_ds_storage_type = $json_io500['att']['storage type'] ?? null;
+        $submission->information_filesystem_type = $json_io500['att']['type of filesystem'] ?? null;
+
+        $submission->information_storage_capacity = isset($json_io500['att']['storage net capacity']) ? implode(' ', $json_io500['att']['storage net capacity']) : null;
+        $submission->information_clients_interconnect_bandwidth = isset($json_io500['att']['clients network bandwidth']) ? implode(' ', $json_io500['att']['clients network bandwidth']) : null;
+        $submission->information_servers_interconnect_bandwidth = isset($json_io500['att']['servers network bandwidth']) ? implode(' ', $json_io500['att']['servers network bandwidth']) : null;
 
         // Client Nodes
 
@@ -199,36 +208,36 @@ class SubmissionsController extends AppController
 
             $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
 
-            $json_client_processor = $this->find_information($json_client, 'type', 'PROCESSOR')['att'];
+            $json_client_processor = $this->find_information($json_client, 'type', 'PROCESSOR');
 
             if (!$json_client_processor) {
                 $submission->errors[] = 'Your submission must contain information about the <strong>PROCESSOR</strong> in the compute <strong>NODES</strong>';
             } else {
-                $submission->information_client_architecture = $json_client_processor['architecture'] ?? null;
-                $submission->information_client_model = $json_client_processor['model'] ?? null;
-                $submission->information_client_sockets = $json_client_processor['sockets'] ?? null;
-                $submission->information_client_cores_per_socket = $json_client_processor['cores per socket'] ?? null;
-                $submission->information_client_clock = isset($json_client_processor['frequency']) ? implode(' ', $json_client_processor['frequency']) : null;
+                $submission->information_client_architecture = $json_client_processor['att']['architecture'] ?? null;
+                $submission->information_client_model = $json_client_processor['att']['model'] ?? null;
+                $submission->information_client_sockets = $json_client_processor['att']['sockets'] ?? null;
+                $submission->information_client_cores_per_socket = $json_client_processor['att']['cores per socket'] ?? null;
+                $submission->information_client_clock = isset($json_client_processor['att']['frequency']) ? implode(' ', $json_client_processor['att']['frequency']) : null;
             }
 
-            $json_client_memory = $this->find_information($json_client, 'type', 'MEMORY')['att'];
+            $json_client_memory = $this->find_information($json_client, 'type', 'MEMORY');
 
             if (!$json_client_memory) {
                 $submission->errors[] = 'Your submission must contain information about the <strong>MEMORY</strong> in the compute <strong>NODES</strong>';
             } else {
-                $submission->information_client_volatile_memory_capacity = isset($json_client_memory['net capacity']) ? implode(' ', $json_client_memory['net capacity']) : null;
+                $submission->information_client_volatile_memory_capacity = isset($json_client_memory['att']['net capacity']) ? implode(' ', $json_client_memory['att']['net capacity']) : null;
             }
 
-            $json_client_interconnect = $this->find_information($json_client, 'type', 'INTERCONNECT')['att'];
+            $json_client_interconnect = $this->find_information($json_client, 'type', 'INTERCONNECT');
             
             if (!$json_client_interconnect) {
                 $submission->errors[] = 'Your submission must contain information about the <strong>INTERCONNECT</strong> in the compute <strong>NODES</strong>';
             } else {
-                $submission->information_client_interconnect_type = $json_client_interconnect['type'] ?? null;
-                $submission->information_client_interconnect_vendor = $json_client_interconnect['vendor'] ?? null;
-                $submission->information_client_interconnect_bandwidth = isset($json_client_interconnect['peak throughput']) ? implode(' ', $json_client_interconnect['peak throughput']) : null;
-                $submission->information_client_interconnect_links = $json_client_interconnect['links'] ?? null;
-                $submission->information_client_interconnect_rdma = isset($json_client_interconnect['features']) ? (strpos($json_client_interconnect['features'], 'RDMA') === false ? false : true) : false;
+                $submission->information_client_interconnect_type = $json_client_interconnect['att']['type'] ?? null;
+                $submission->information_client_interconnect_vendor = $json_client_interconnect['att']['vendor'] ?? null;
+                $submission->information_client_interconnect_bandwidth = isset($json_client_interconnect['att']['peak throughput']) ? implode(' ', $json_client_interconnect['att']['peak throughput']) : null;
+                $submission->information_client_interconnect_links = $json_client_interconnect['att']['links'] ?? null;
+                $submission->information_client_interconnect_rdma = isset($json_client_interconnect['att']['features']) ? (strpos($json_client_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
             }
         }
 
@@ -358,30 +367,30 @@ class SubmissionsController extends AppController
 
         $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
 
-        $json_lustre_server_processor = $this->find_information($json_lustre_server, 'type', 'PROCESSOR')['att'];
+        $json_lustre_server_processor = $this->find_information($json_lustre_server, 'type', 'PROCESSOR');
 
         if ($json_lustre_server_processor) {
-            $submission->information_md_architecture = $json_lustre_server_processor['architecture'] ?? null;
-            $submission->information_md_model = $json_lustre_server_processor['model'] ?? null;
-            $submission->information_md_sockets = $json_lustre_server_processor['sockets'] ?? null;
-            $submission->information_md_cores_per_socket = $json_lustre_server_processor['cores per socket'] ?? null;
-            $submission->information_md_clock = isset($json_lustre_server_processor['frequency']) ? implode(' ', $json_lustre_server_processor['frequency']) : null;
+            $submission->information_md_architecture = $json_lustre_server_processor['att']['architecture'] ?? null;
+            $submission->information_md_model = $json_lustre_server_processor['att']['model'] ?? null;
+            $submission->information_md_sockets = $json_lustre_server_processor['att']['sockets'] ?? null;
+            $submission->information_md_cores_per_socket = $json_lustre_server_processor['att']['cores per socket'] ?? null;
+            $submission->information_md_clock = isset($json_lustre_server_processor['att']['frequency']) ? implode(' ', $json_lustre_server_processor['att']['frequency']) : null;
         }
 
-        $json_lustre_server_memory = $this->find_information($json_lustre_server, 'type', 'MEMORY')['att'];
+        $json_lustre_server_memory = $this->find_information($json_lustre_server, 'type', 'MEMORY');
 
         if ($json_lustre_server_memory) {
-            $submission->information_md_volatile_memory_capacity = isset($json_lustre_server_memory['net capacity']) ? implode(' ', $json_lustre_server_memory['net capacity']) : null;
+            $submission->information_md_volatile_memory_capacity = isset($json_lustre_server_memory['att']['net capacity']) ? implode(' ', $json_lustre_server_memory['att']['net capacity']) : null;
         }
 
-        $json_lustre_server_interconnect = $this->find_information($json_lustre_server, 'type', 'INTERCONNECT')['att'];
+        $json_lustre_server_interconnect = $this->find_information($json_lustre_server, 'type', 'INTERCONNECT');
 
         if ($json_lustre_server_interconnect) {
-            $submission->information_md_interconnect_type = $json_lustre_server_interconnect['type'] ?? null; // same as information_md_network
-            $submission->information_md_interconnect_vendor = $json_lustre_server_interconnect['vendor'] ?? null;
-            $submission->information_md_interconnect_bandwidth = isset($json_lustre_server_interconnect['peak throughput']) ? implode(' ', $json_lustre_server_interconnect['peak throughput']) : null;
-            $submission->information_md_interconnect_links = $json_lustre_server_interconnect['links'] ?? null;
-            $submission->information_md_interconnect_rdma = isset($json_lustre_server_interconnect['features']) ? (strpos($json_lustre_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+            $submission->information_md_interconnect_type = $json_lustre_server_interconnect['att']['type'] ?? null; // same as information_md_network
+            $submission->information_md_interconnect_vendor = $json_lustre_server_interconnect['att']['vendor'] ?? null;
+            $submission->information_md_interconnect_bandwidth = isset($json_lustre_server_interconnect['att']['peak throughput']) ? implode(' ', $json_lustre_server_interconnect['att']['peak throughput']) : null;
+            $submission->information_md_interconnect_links = $json_lustre_server_interconnect['att']['links'] ?? null;
+            $submission->information_md_interconnect_rdma = isset($json_lustre_server_interconnect['att']['features']) ? (strpos($json_lustre_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
 
             $submission->information_md_network = $submission->information_md_interconnect_type;
         }
@@ -482,30 +491,30 @@ class SubmissionsController extends AppController
 
         $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
 
-        $json_spectrum_server_processor = $this->find_information($json_spectrum_server, 'type', 'PROCESSOR')['att'];
+        $json_spectrum_server_processor = $this->find_information($json_spectrum_server, 'type', 'PROCESSOR');
 
         if ($json_spectrum_server_processor) {
-            $submission->information_md_architecture = $json_spectrum_server_processor['architecture'] ?? null;
-            $submission->information_md_model = $json_spectrum_server_processor['model'] ?? null;
-            $submission->information_md_sockets = $json_spectrum_server_processor['sockets'] ?? null;
-            $submission->information_md_cores_per_socket = $json_spectrum_server_processor['cores per socket'] ?? null;
-            $submission->information_md_clock = isset($json_spectrum_server_processor['frequency']) ? implode(' ', $json_spectrum_server_processor['frequency']) : null;
+            $submission->information_md_architecture = $json_spectrum_server_processor['att']['architecture'] ?? null;
+            $submission->information_md_model = $json_spectrum_server_processor['att']['model'] ?? null;
+            $submission->information_md_sockets = $json_spectrum_server_processor['att']['sockets'] ?? null;
+            $submission->information_md_cores_per_socket = $json_spectrum_server_processor['att']['cores per socket'] ?? null;
+            $submission->information_md_clock = isset($json_spectrum_server_processor['att']['frequency']) ? implode(' ', $json_spectrum_server_processor['att']['frequency']) : null;
         }
 
-        $json_spectrum_server_memory = $this->find_information($json_spectrum_server, 'type', 'MEMORY')['att'];
+        $json_spectrum_server_memory = $this->find_information($json_spectrum_server, 'type', 'MEMORY');
 
         if ($json_spectrum_server_memory) {
-            $submission->information_md_volatile_memory_capacity = isset($json_spectrum_server_memory['net capacity']) ? implode(' ', $json_spectrum_server_memory['net capacity']) : null;
+            $submission->information_md_volatile_memory_capacity = isset($json_spectrum_server_memory['att']['net capacity']) ? implode(' ', $json_spectrum_server_memory['att']['net capacity']) : null;
         }
 
-        $json_spectrum_server_interconnect = $this->find_information($json_spectrum_server, 'type', 'INTERCONNECT')['att'];
+        $json_spectrum_server_interconnect = $this->find_information($json_spectrum_server, 'type', 'INTERCONNECT');
 
         if ($json_spectrum_server_interconnect) {
-            $submission->information_md_interconnect_type = $json_spectrum_server_interconnect['type'] ?? null; // same as information_md_network
-            $submission->information_md_interconnect_vendor = $json_spectrum_server_interconnect['vendor'] ?? null;
-            $submission->information_md_interconnect_bandwidth = isset($json_spectrum_server_interconnect['peak throughput']) ? implode(' ', $json_spectrum_server_interconnect['peak throughput']) : null;
-            $submission->information_md_interconnect_links = $json_spectrum_server_interconnect['links'] ?? null;
-            $submission->information_md_interconnect_rdma = isset($json_spectrum_server_interconnect['features']) ? (strpos($json_spectrum_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+            $submission->information_md_interconnect_type = $json_spectrum_server_interconnect['att']['type'] ?? null; // same as information_md_network
+            $submission->information_md_interconnect_vendor = $json_spectrum_server_interconnect['att']['vendor'] ?? null;
+            $submission->information_md_interconnect_bandwidth = isset($json_spectrum_server_interconnect['att']['peak throughput']) ? implode(' ', $json_spectrum_server_interconnect['att']['peak throughput']) : null;
+            $submission->information_md_interconnect_links = $json_spectrum_server_interconnect['att']['links'] ?? null;
+            $submission->information_md_interconnect_rdma = isset($json_spectrum_server_interconnect['att']['features']) ? (strpos($json_spectrum_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
 
             $submission->information_md_network = $submission->information_md_interconnect_type;
         }
@@ -603,30 +612,30 @@ class SubmissionsController extends AppController
 
         $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
 
-        $json_beegfs_server_processor = $this->find_information($json_beegfs_server, 'type', 'PROCESSOR')['att'];
+        $json_beegfs_server_processor = $this->find_information($json_beegfs_server, 'type', 'PROCESSOR');
 
         if ($json_beegfs_server_processor) {
-            $submission->information_md_architecture = $json_beegfs_server_processor['architecture'] ?? null;
-            $submission->information_md_model = $json_beegfs_server_processor['model'] ?? null;
-            $submission->information_md_sockets = $json_beegfs_server_processor['sockets'] ?? null;
-            $submission->information_md_cores_per_socket = $json_beegfs_server_processor['cores per socket'] ?? null;
-            $submission->information_md_clock = isset($json_beegfs_server_processor['frequency']) ? implode(' ', $json_beegfs_server_processor['frequency']) : null;
+            $submission->information_md_architecture = $json_beegfs_server_processor['att']['architecture'] ?? null;
+            $submission->information_md_model = $json_beegfs_server_processor['att']['model'] ?? null;
+            $submission->information_md_sockets = $json_beegfs_server_processor['att']['sockets'] ?? null;
+            $submission->information_md_cores_per_socket = $json_beegfs_server_processor['att']['cores per socket'] ?? null;
+            $submission->information_md_clock = isset($json_beegfs_server_processor['att']['frequency']) ? implode(' ', $json_beegfs_server_processor['att']['frequency']) : null;
         }
 
-        $json_beegfs_server_memory = $this->find_information($json_beegfs_server, 'type', 'MEMORY')['att'];
+        $json_beegfs_server_memory = $this->find_information($json_beegfs_server, 'type', 'MEMORY');
 
         if ($json_beegfs_server_memory) {
-            $submission->information_md_volatile_memory_capacity = isset($json_beegfs_server_memory['net capacity']) ? implode(' ', $json_beegfs_server_memory['net capacity']) : null;
+            $submission->information_md_volatile_memory_capacity = isset($json_beegfs_server_memory['att']['net capacity']) ? implode(' ', $json_beegfs_server_memory['att']['net capacity']) : null;
         }
 
-        $json_beegfs_server_interconnect = $this->find_information($json_beegfs_server, 'type', 'INTERCONNECT')['att'];
+        $json_beegfs_server_interconnect = $this->find_information($json_beegfs_server, 'type', 'INTERCONNECT');
 
         if ($json_beegfs_server_interconnect) {
-            $submission->information_md_interconnect_type = $json_beegfs_server_interconnect['type'] ?? null; // same as information_md_network
-            $submission->information_md_interconnect_vendor = $json_beegfs_server_interconnect['vendor'] ?? null;
-            $submission->information_md_interconnect_bandwidth = isset($json_beegfs_server_interconnect['peak throughput']) ? implode(' ', $json_beegfs_server_interconnect['peak throughput']) : null;
-            $submission->information_md_interconnect_links = $json_beegfs_server_interconnect['links'] ?? null;
-            $submission->information_md_interconnect_rdma = isset($json_beegfs_server_interconnect['features']) ? (strpos($json_beegfs_server_interconnect['features'], 'RDMA') === false ? false : true) : false;
+            $submission->information_md_interconnect_type = $json_beegfs_server_interconnect['att']['type'] ?? null; // same as information_md_network
+            $submission->information_md_interconnect_vendor = $json_beegfs_server_interconnect['att']['vendor'] ?? null;
+            $submission->information_md_interconnect_bandwidth = isset($json_beegfs_server_interconnect['att']['peak throughput']) ? implode(' ', $json_beegfs_server_interconnect['att']['peak throughput']) : null;
+            $submission->information_md_interconnect_links = $json_beegfs_server_interconnect['att']['links'] ?? null;
+            $submission->information_md_interconnect_rdma = isset($json_beegfs_server_interconnect['att']['features']) ? (strpos($json_beegfs_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
 
             $submission->information_md_network = $submission->information_md_interconnect_type;
         }
