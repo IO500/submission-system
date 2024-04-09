@@ -46,6 +46,20 @@ function createType_read_only(label, map, name, value, unit_selected) {
 }
 
 function dcl_choice_change(name) {
+    if (name.includes('typeoffilesystem')) {
+        console.log(name);
+
+        var filesystem = jQuery("#" + name).val();
+
+        var found = $('.StorageSystem').find('.schema_list').find('a').filter(function(index) {
+            return $(this).text() === filesystem;
+        });
+
+        if (!found.length) return;
+
+        found.click();
+    }
+
     var tgt = jQuery("#" + name + "_other");
     if (!tgt.length) return;
     var elem = jQuery("#" + name);

@@ -119,7 +119,8 @@ function dcl_startup() {
         dcl_loadCompleteFunctions = [update_names]
     }
     errfunc = function(jqXHR, textStatus, errorThrown) {
-        jQuery("#dcl_wrap").html("error " + textStatus + "\nServer:" + jqXHR.responseText)
+        //jQuery("#dcl_wrap").html("error " + textStatus + "\nServer:" + jqXHR.responseText)
+        jQuery("#dcl_wrap").html("Details of this submission are not available. If this submission was received before ISC22, you might find additional data in its file.")
     }
 
     if (!dcl_site.startsWith("https")) {

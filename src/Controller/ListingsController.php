@@ -38,7 +38,7 @@ class ListingsController extends AppController
         $table = str_replace('-', '_', $table);
 
         // We need to dinamically link the model to the correct table
-        $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
+        $this->Listings->ListingsSubmissions = $this->fetchTable('ListingsSubmissions', [
             'table' => $table,
         ]);
 
@@ -101,7 +101,7 @@ class ListingsController extends AppController
             $this->create_table($table);
 
             // We need to dinamically link the model to the new table
-            $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
+            $this->Listings->ListingsSubmissions = $this->fetchTable('ListingsSubmissions', [
                 'table' => $table,
             ]);
 
@@ -160,7 +160,7 @@ class ListingsController extends AppController
 
                 // Unlink previous table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
-                $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
+                $this->Listings->ListingsSubmissions = $this->fetchTable('ListingsSubmissions', [
                     'table' => $previous_table,
                 ]);
 //die($previous_table);
@@ -217,7 +217,7 @@ class ListingsController extends AppController
 //die();
                 // We need to dinamically link the model to the new table
                 \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
-                $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
+                $this->Listings->ListingsSubmissions = $this->fetchTable('ListingsSubmissions', [
                     'table' => $table,
                 ]);
 //dd($table);
@@ -450,7 +450,7 @@ class ListingsController extends AppController
 
         // We need to dinamically link the model to the new table
         \Cake\ORM\TableRegistry::remove('ListingsSubmissions');
-        $this->Listings->ListingsSubmissions = $this->getTableLocator()->get('ListingsSubmissions', [
+        $this->Listings->ListingsSubmissions = $this->fetchTable('ListingsSubmissions', [
             'table' => $table,
         ]);
 

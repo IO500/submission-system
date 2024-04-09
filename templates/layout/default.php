@@ -41,5 +41,10 @@
 
     <?php echo $this->Html->script('default') ?>
     <?php echo $this->fetch('scriptBottom') ?>
+
+    <script type="module">
+      import BugsnagPerformance from '//d2wy8f7a9ursnm.cloudfront.net/v1/bugsnag-performance.min.js'
+      BugsnagPerformance.start({ apiKey: '7dd60037ac8b6b98432fa8024f131b9a' })
+    </script>
 </body>
 </html>

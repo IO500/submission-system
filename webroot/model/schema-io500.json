@@ -38,6 +38,64 @@
                 "unit":"",
                 "db":"information_client_procs_per_node"
             },
+            "number_serverNodes":{
+                "dtype":"integer",
+                "desc":"Total number of servers (for both data and metadata)",
+                "required":true,
+                "unit":"",
+                "db":"information_server_nodes"
+            },
+            "storage type":{
+                "dtype":"choice",
+                "desc":"Storage media type",
+                "required":true,
+                "choice":[
+                    "Memory",                    
+                    "PMEM",
+                    "Flash",
+                    "SSD",
+                    "HDD",
+                    "HDD/SSD",
+                    "Other"
+                ],
+                "db":"information_ds_storage_type"
+            },
+            "storage net capacity":{
+                "dtype":"number",
+                "desc":"Overall (usable) storage capacity",
+                "unit":"Byte",
+                "default-unit":"TiB",
+                "required":true
+            },
+            "clients network bandwidth":{
+                "dtype":"number",
+                "desc":"Client network bandwidth / maximum throughput",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s",
+                "required":true
+            },
+            "servers network bandwidth":{
+                "dtype":"number",
+                "desc":"Server network bandwidth / maximum throughput",
+                "unit":"Byte/s",
+                "default-unit":"MiB/s",
+                "required":true
+            },
+            "type of filesystem":{
+                "dtype":"choice",
+                "desc":"Type of file system",
+                "required":true,
+                "choice":[
+                    "Lustre",
+                    "SpectrumScale",
+                    "BeeGFS",
+                    "NAS",
+                    "DAOS",
+                    "WekaIO",
+                    "IME"
+                ],
+                "db":"information_filesystem_type"
+            },
             "note":{
                 "dtype":"string",
                 "desc":"Any other information you may find useful",

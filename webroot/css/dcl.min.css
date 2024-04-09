@@ -381,3 +381,7 @@ select.cdcl-unit {
     float: right;
 }
 
+.schema.IO500 {
+    border-color: #cc1717;
+    border-width: 2px;
+}

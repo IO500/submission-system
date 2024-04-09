@@ -46,6 +46,12 @@
                         },
                         "childs":[
                             {
+                                "type":"StorageMedia",
+                                "att":{
+                                    "name":""
+                                }
+                            },
+                            {
                                 "type":"Processor",
                                 "att":{
                                     "name":""
@@ -71,12 +77,6 @@
                                 "childs":[
                                     
                                 ]
-                            },
-                            {
-                                "type":"StorageMedia",
-                                "att":{
-                                    "name":""
-                                }
                             }
                         ]
                     }
