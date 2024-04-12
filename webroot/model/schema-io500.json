@@ -490,6 +490,8 @@
                 "desc":"Processor microarchitecture",
                 "dtype":"choice",
                 "choice":[
+                    "Sapphire Rapids",
+                    "Ice Lake",
                     "Silvermont",
                     "Haswell",
                     "Broadwell",
@@ -1501,138 +1503,7 @@
                 "unit":"$",
                 "default-unit":"$"
             },
-            "Supercomputer":{
-                "name":{
-                    "dtype":"text",
-                    "desc":"Name of the supercomputer",
-                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
-                    "required":true,
-                    "db":"information_system"
-                },
-                "integrator":{
-                    "dtype":"string",
-                    "desc":"The system integrator"
-                },
-                "installation date":{
-                    "dtype":"text",
-                    "desc":"Installation date of the supercomputer YYYY-MM",
-                    "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
-                },
-                "total nodes":{
-                    "dtype":"integer",
-                    "desc":"Total number of nodes",
-                    "required":true,
-                    "aggregate":[
-                        "Nodes.count"
-                    ]
-                },
-                "total cores":{
-                    "required":true,
-                    "dtype":"integer",
-                    "desc":"Total number of CPU/GPU cores",
-                    "aggregate":[
-                        "Nodes.Processor.sockets * Nodes.Processor.cores per socket * Nodes.count"
-                    ]
-                },
-                "compute peak":{
-                    "dtype":"number",
-                    "desc":"Double precision FLOPS of all CPUs and accelerators",
-                    "unit":"FLOPS",
-                    "default-unit":"PFLOPS",
-                    "aggregate":[
-                        "Nodes.compute peak * Nodes.count"
-                    ]
-                },
-                "memory capacity":{
-                    "dtype":"number",
-                    "desc":"Net (usable) capacity of CPU/GPU memory",
-                    "unit":"Byte",
-                    "required":true,
-                    "default-unit":"TB",
-                    "aggregate":[
-                        "Nodes.Memory.net capacity * Nodes.count",
-                        "Nodes.Accelerator.Memory.net capacity * Nodes.Accelerator.count * Nodes.count"
-                    ]
-                },
-                "memory throughput":{
-                    "dtype":"number",
-                    "desc":"Throughput of all GPU/CPUs",
-                    "unit":"Byte/s",
-                    "default-unit":"TB/s",
-                    "aggregate":[
-                        "Nodes.Memory.bus peak throughput* Nodes.count",
-                        "Nodes.Accelerator.Memory.bus peak throughput * Nodes.Accelerator.count * Nodes.count"
-                    ]
-                },
-                "SCHEMES":[
-                    "Energy",
-                    "Cost",
-                    "Benchmarks"
-                ],
-                "SCHEMES_multi":[
-                    "Nodes"
-                ]
-            },
-            "Network":{
-                "name":{
-                    "dtype":"text",
-                    "desc":"Name of the network",
-                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
-                    "required":""
-                },
-                "vendor":{
-                    "dtype":"string",
-                    "desc":"Vendor",
-                    "required":true
-                },
-                "power consumption":{
-                    "dtype":"number",
-                    "desc":"Power consumption",
-                    "unit":"W",
-                    "default-unit":"W"
-                },
-                "type":{
-                    "dtype":"choice",
-                    "desc":"Type of the network",
-                    "required":true,
-                    "choice":[
-                        "Aries",
-                        "Slingshot",
-                        "Infiniband",
-                        "Ethernet",
-                        "Omnipath",
-                        "Ethernet",
-                        "Internet",
-                        "Sunway"
-                    ]
-                },
-                "topology":{
-                    "dtype":"choice",
-                    "desc":"Type of the network topology",
-                    "required":true,
-                    "choice":[
-                        "3D-Torus",
-                        "Dragon-Fly",
-                        "Fat-tree",
-                        "other"
-                    ]
-                },
-                "bisection bandwidth":{
-                    "dtype":"number",
-                    "desc":"Bisection bandwidth of the network / maximum throughput",
-                    "unit":"Byte/s",
-                    "default-unit":"MiB/s"
-                },
-                "blocking factor":{
-                    "dtype":"string",
-                    "desc":"The blocking factor of the network",
-                    "unit":""
-                },
-                "SCHEMES":[
-                    "Energy",
-                    "Cost"
-                ]
-            },
+
             "StorageSystem":{
                 "name":{
                     "dtype":"text",
@@ -1787,6 +1658,138 @@
                     "IME"
                 ]
             },
+            "Supercomputer":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the supercomputer",
+                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
+                    "required":true,
+                    "db":"information_system"
+                },
+                "integrator":{
+                    "dtype":"string",
+                    "desc":"The system integrator"
+                },
+                "installation date":{
+                    "dtype":"text",
+                    "desc":"Installation date of the supercomputer YYYY-MM",
+                    "pattern":"(19|20)[0-9][0-9](-[0-9][0-9])?(-[0-9][0-9])?"
+                },
+                "total nodes":{
+                    "dtype":"integer",
+                    "desc":"Total number of nodes",
+                    "required":true,
+                    "aggregate":[
+                        "Nodes.count"
+                    ]
+                },
+                "total cores":{
+                    "required":true,
+                    "dtype":"integer",
+                    "desc":"Total number of CPU/GPU cores",
+                    "aggregate":[
+                        "Nodes.Processor.sockets * Nodes.Processor.cores per socket * Nodes.count"
+                    ]
+                },
+                "compute peak":{
+                    "dtype":"number",
+                    "desc":"Double precision FLOPS of all CPUs and accelerators",
+                    "unit":"FLOPS",
+                    "default-unit":"PFLOPS",
+                    "aggregate":[
+                        "Nodes.compute peak * Nodes.count"
+                    ]
+                },
+                "memory capacity":{
+                    "dtype":"number",
+                    "desc":"Net (usable) capacity of CPU/GPU memory",
+                    "unit":"Byte",
+                    "required":true,
+                    "default-unit":"TB",
+                    "aggregate":[
+                        "Nodes.Memory.net capacity * Nodes.count",
+                        "Nodes.Accelerator.Memory.net capacity * Nodes.Accelerator.count * Nodes.count"
+                    ]
+                },
+                "memory throughput":{
+                    "dtype":"number",
+                    "desc":"Throughput of all GPU/CPUs",
+                    "unit":"Byte/s",
+                    "default-unit":"TB/s",
+                    "aggregate":[
+                        "Nodes.Memory.bus peak throughput* Nodes.count",
+                        "Nodes.Accelerator.Memory.bus peak throughput * Nodes.Accelerator.count * Nodes.count"
+                    ]
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost",
+                    "Benchmarks"
+                ],
+                "SCHEMES_multi":[
+                    "Nodes"
+                ]
+            },
+            "Network":{
+                "name":{
+                    "dtype":"text",
+                    "desc":"Name of the network",
+                    "pattern":"[a-zA-Z]+[a-zA-Z0-9_ \\-+]+",
+                    "required":""
+                },
+                "vendor":{
+                    "dtype":"string",
+                    "desc":"Vendor",
+                    "required":true
+                },
+                "power consumption":{
+                    "dtype":"number",
+                    "desc":"Power consumption",
+                    "unit":"W",
+                    "default-unit":"W"
+                },
+                "type":{
+                    "dtype":"choice",
+                    "desc":"Type of the network",
+                    "required":true,
+                    "choice":[
+                        "Aries",
+                        "Slingshot",
+                        "Infiniband",
+                        "Ethernet",
+                        "Omnipath",
+                        "Ethernet",
+                        "Internet",
+                        "Sunway"
+                    ]
+                },
+                "topology":{
+                    "dtype":"choice",
+                    "desc":"Type of the network topology",
+                    "required":true,
+                    "choice":[
+                        "3D-Torus",
+                        "Dragon-Fly",
+                        "Fat-tree",
+                        "other"
+                    ]
+                },
+                "bisection bandwidth":{
+                    "dtype":"number",
+                    "desc":"Bisection bandwidth of the network / maximum throughput",
+                    "unit":"Byte/s",
+                    "default-unit":"MiB/s"
+                },
+                "blocking factor":{
+                    "dtype":"string",
+                    "desc":"The blocking factor of the network",
+                    "unit":""
+                },
+                "SCHEMES":[
+                    "Energy",
+                    "Cost"
+                ]
+            },
             "Building":{
                 "name":{
                     "dtype":"text",
@@ -1836,8 +1839,8 @@
                 "Building"
             ],
             "target":[
-                "Supercomputer",
                 "StorageSystem",
+                "Supercomputer",
                 "Room",
                 "Cooling",
                 "AirConditioning"
