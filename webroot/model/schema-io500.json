@@ -621,6 +621,7 @@
                 "dtype":"choice",
                 "desc":"",
                 "choice":[
+                    "Slingshot",
                     "Infiniband",
                     "Ethernet",
                     "Omni-Path",
