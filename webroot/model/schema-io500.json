@@ -92,6 +92,7 @@
                     "NAS",
                     "DAOS",
                     "WekaIO",
+                    "Ceph",
                     "IME"
                 ],
                 "db":"information_filesystem_type"
@@ -904,6 +905,45 @@
                 "Storage Server:Servers:The specification of the server running the BeeGFS server process for storage targets"
             ]
         },
+        "Ceph":{
+            "version":{
+                "dtype":"string",
+                "desc":"The Ceph Version, e.g. 2.11-patch1-XYZ",
+                "pattern":"[2-9].[0-9]+.*"
+            },
+            "replication_strategy":{
+                "dtype":"choice",
+                "desc":"Which replication strategy is used",
+                "choice":[
+                    "mirror",
+                    "2+2",
+                    "3+2",
+                    "4+2",
+                    "6+2",
+                    "6+3",
+                    "8+2",
+                    "8+3"
+                ]
+            },
+            "overlapping_metadata_dataservers":{
+                "dtype":"choice",
+                "desc":"Are MDS and OSS",
+                "choice":[
+                    "mirror",
+                    "2+2",
+                    "3+2",
+                    "4+2",
+                    "6+2",
+                    "6+3",
+                    "8+2",
+                    "8+3"
+                ]
+            },
+            "SCHEMES_multi":[
+                "OSD:Servers:The servers the Ceph object storage daemon is running on",
+                "MDS:Servers:The servers the Ceph metadata server is running on"
+            ]
+        },
         "NAS":{
             "protocol":{
                 "dtype":"choice",
@@ -1656,6 +1696,7 @@
                     "NAS",
                     "DAOS",
                     "WekaIO",
+                    "Ceph",
                     "IME"
                 ]
             },
