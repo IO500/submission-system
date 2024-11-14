@@ -927,17 +927,10 @@
             },
             "overlapping_metadata_dataservers":{
                 "dtype":"choice",
-                "desc":"Are MDS and OSS",
                 "choice":[
-                    "mirror",
-                    "2+2",
-                    "3+2",
-                    "4+2",
-                    "6+2",
-                    "6+3",
-                    "8+2",
-                    "8+3"
-                ]
+                    "yes",
+                    "no"
+                ],
             },
             "SCHEMES_multi":[
                 "OSD:Servers:The servers the Ceph object storage daemon is running on",
