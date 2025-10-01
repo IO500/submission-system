@@ -40,14 +40,18 @@
 
 <?php echo $this->element('reproducibility-questionnaire'); ?>
 
-<script src="https://cdn.tiny.cloud/1/1q5sjjedyv15tfpn9b7cvojp4i72ahfneyqj7yrfu771hcu1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<?php
+echo $this->Html->script('tinymce/tinymce.min.js', [
+     'referrerpolicy' => 'origin',
+     'crossorigin' => 'anonymous'
+]);
+?>
 
 <script type="text/javascript">
     var t_editors;
 
     editors = tinymce.init({
-        skin: 'outside',
-        icons: 'small',
+        license_key: 'gpl',
         statusbar: false,
         menubar: false,
         selector: 'textarea',
@@ -59,7 +63,7 @@
         },
         plugins: 'image link lists searchreplace table wordcount',
         toolbar: 'undo redo | bold italic underline strikethrough | link image table | numlist bullist indent outdent | removeformat',
-        content_css: ['/io-500-hub/css/editor.css']
+        content_css: ['<?php echo $this->Url->build('/css/editor.css'); ?>']
     }).then(function(editors) {
         t_editors = editors;
     });
