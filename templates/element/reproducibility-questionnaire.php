@@ -121,7 +121,7 @@
                         Inter storage data and metadata server (For example, what type of data protection mechanism does the storage system use to keep operating during node failures, e.g., active-active servers, client-directed RAID, declustered RAID, erasure-coding, 3-way replication)
                     </li>
                     <li>
-                        Intra storage data and metadata server storage media (For example, how does the storage eysstem protect against fiailure of a single storage device within a node, e.g., raid5)
+                        Intra storage data and metadata server storage media (For example, how does the storage system protect against failure of a single storage device within a node, e.g., raid5)
                     </li>
                 </ul>
 
