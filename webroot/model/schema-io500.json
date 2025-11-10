@@ -379,10 +379,12 @@
                     "SAS4",
                     "SAS5",
                     "NVMe",
+                    "NVMeOF",
                     "NVDIMM",
                     "PCIe2x",
                     "PCIe3x",
                     "PCIe4x"
+                    "PCIe5x"
                 ],
                 "db":"information_ds_storage_interface"
             },
@@ -481,7 +483,6 @@
                 "choice":[
                     "AMD",
                     "ARM",
-                    "ARM",
                     "Fujitsu",
                     "Intel",
                     "other"
@@ -491,6 +492,7 @@
                 "desc":"Processor microarchitecture",
                 "dtype":"choice",
                 "choice":[
+                    "Emerald Rapids",
                     "Sapphire Rapids",
                     "Ice Lake",
                     "Silvermont",
@@ -516,6 +518,8 @@
                     "Zen",
                     "Zen2",
                     "Zen3",
+                    "Zen4",
+                    "Zen5",
                     "other"
                 ],
                 "required":true
