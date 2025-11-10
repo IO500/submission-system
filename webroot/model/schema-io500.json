@@ -398,6 +398,7 @@
                     "XFS",
                     "ZFS",
                     "LDISKFS",
+                    "BlueStore",
                     "Btrfs",
                     "tmpfs",
                     "other"
@@ -492,6 +493,7 @@
                 "desc":"Processor microarchitecture",
                 "dtype":"choice",
                 "choice":[
+                    "Granite Rapids",
                     "Emerald Rapids",
                     "Sapphire Rapids",
                     "Ice Lake",
@@ -575,6 +577,7 @@
                 "choice":[
                     "DDR3",
                     "DDR4",
+                    "DDR5",
                     "GDDR4",
                     "GDDR5",
                     "GDDR6",
@@ -653,6 +656,7 @@
                     "100 GBit",
                     "200 GBit",
                     "400 GBit"
+                    "800 GBit"
                 ],
                 "required":true
             },
