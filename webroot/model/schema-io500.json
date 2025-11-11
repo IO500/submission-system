@@ -379,10 +379,12 @@
                     "SAS4",
                     "SAS5",
                     "NVMe",
+                    "NVMeOF",
                     "NVDIMM",
                     "PCIe2x",
                     "PCIe3x",
                     "PCIe4x"
+                    "PCIe5x"
                 ],
                 "db":"information_ds_storage_interface"
             },
@@ -396,6 +398,7 @@
                     "XFS",
                     "ZFS",
                     "LDISKFS",
+                    "BlueStore",
                     "Btrfs",
                     "tmpfs",
                     "other"
@@ -481,7 +484,6 @@
                 "choice":[
                     "AMD",
                     "ARM",
-                    "ARM",
                     "Fujitsu",
                     "Intel",
                     "other"
@@ -491,6 +493,8 @@
                 "desc":"Processor microarchitecture",
                 "dtype":"choice",
                 "choice":[
+                    "Granite Rapids",
+                    "Emerald Rapids",
                     "Sapphire Rapids",
                     "Ice Lake",
                     "Silvermont",
@@ -516,6 +520,8 @@
                     "Zen",
                     "Zen2",
                     "Zen3",
+                    "Zen4",
+                    "Zen5",
                     "other"
                 ],
                 "required":true
@@ -571,6 +577,7 @@
                 "choice":[
                     "DDR3",
                     "DDR4",
+                    "DDR5",
                     "GDDR4",
                     "GDDR5",
                     "GDDR6",
@@ -649,6 +656,7 @@
                     "100 GBit",
                     "200 GBit",
                     "400 GBit"
+                    "800 GBit"
                 ],
                 "required":true
             },
