@@ -383,7 +383,7 @@
                     "NVDIMM",
                     "PCIe2x",
                     "PCIe3x",
-                    "PCIe4x"
+                    "PCIe4x",
                     "PCIe5x"
                 ],
                 "db":"information_ds_storage_interface"
@@ -655,7 +655,7 @@
                     "50 GBit",
                     "100 GBit",
                     "200 GBit",
-                    "400 GBit"
+                    "400 GBit",
                     "800 GBit"
                 ],
                 "required":true
