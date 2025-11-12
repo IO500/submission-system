@@ -69,14 +69,14 @@
             },
             "clients network bandwidth":{
                 "dtype":"number",
-                "desc":"Client network bandwidth / maximum throughput",
+                "desc":"Client network bandwidth / maximum throughput (per client)",
                 "unit":"Byte/s",
                 "default-unit":"MiB/s",
                 "required":true
             },
             "servers network bandwidth":{
                 "dtype":"number",
-                "desc":"Server network bandwidth / maximum throughput",
+                "desc":"Server network bandwidth / maximum throughput (per server)",
                 "unit":"Byte/s",
                 "default-unit":"MiB/s",
                 "required":true
