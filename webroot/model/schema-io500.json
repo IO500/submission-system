@@ -938,7 +938,7 @@
                 "choice":[
                     "yes",
                     "no"
-                ],
+                ]
             },
             "SCHEMES_multi":[
                 "OSD:Servers:The servers the Ceph object storage daemon is running on",
