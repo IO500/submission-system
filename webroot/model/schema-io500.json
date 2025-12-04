@@ -26,7 +26,7 @@
             },
             "number_clientNodes":{
                 "dtype":"integer",
-                "desc":"The number of nodes that executed the IO500",
+                "desc":"The number of nodes that executed the IO500 benchmark",
                 "required":true,
                 "unit":"",
                 "db":"information_client_nodes"
@@ -47,7 +47,7 @@
             },
             "storage type":{
                 "dtype":"choice",
-                "desc":"Storage media type",
+                "desc":"Storage media type used for running the benchmark",
                 "required":true,
                 "choice":[
                     "Memory",                    
@@ -69,14 +69,14 @@
             },
             "clients network bandwidth":{
                 "dtype":"number",
-                "desc":"Client network bandwidth / maximum throughput",
+                "desc":"Aggregate (total) client network bandwidth / maximum throughput",
                 "unit":"Byte/s",
                 "default-unit":"MiB/s",
                 "required":true
             },
             "servers network bandwidth":{
                 "dtype":"number",
-                "desc":"Server network bandwidth / maximum throughput",
+                "desc":"Aggregate (total) server network bandwidth / maximum throughput",
                 "unit":"Byte/s",
                 "default-unit":"MiB/s",
                 "required":true
@@ -646,17 +646,17 @@
                 "dtype":"choice",
                 "desc":"",
                 "choice":[
-                    "100 MBit",
-                    "1 GBit",
-                    "4 GBit",
-                    "10 GBit",
-                    "25 GBit",
-                    "32 GBit",
-                    "50 GBit",
-                    "100 GBit",
-                    "200 GBit",
-                    "400 GBit",
-                    "800 GBit"
+                    "100 Mbit",
+                    "1 Gbit",
+                    "4 Gbit",
+                    "10 Gbit",
+                    "25 Gbit",
+                    "32 Gbit",
+                    "50 Gbit",
+                    "100 Gbit",
+                    "200 Gbit",
+                    "400 Gbit",
+                    "800 Gbit"
                 ],
                 "required":true
             },
@@ -689,7 +689,7 @@
             },
             "links":{
                 "dtype":"integer",
-                "desc":"The number of physical network links of this interconnect type",
+                "desc":"The number of physical network links of this interconnect type per node",
                 "required":true,
                 "db":"information_client_interconnect_links,information_ds_interconnect_links,information_md_interconnect_links"
             }
@@ -745,7 +745,8 @@
                 "desc":"The backend used for Lustre",
                 "choice":[
                     "LDISKFS",
-                    "ZFS"
+                    "ZFS",
+                    "Other"
                 ]
             },
             "features":{
@@ -753,7 +754,8 @@
                 "desc":"Enabled features",
                 "choice":[
                     "DNE1",
-                    "DNE2"
+                    "DNE2",
+                    "DNE3"
                 ]
             },
             "SCHEMES_multi":[
@@ -916,8 +918,8 @@
         "Ceph":{
             "version":{
                 "dtype":"string",
-                "desc":"The Ceph Version, e.g. 2.11-patch1-XYZ",
-                "pattern":"[2-9].[0-9]+.*"
+                "desc":"The Ceph Version, e.g. 15.2.9-patch1-XYZ",
+                "pattern":"[1-9]+.[0-9]+.*"
             },
             "replication_strategy":{
                 "dtype":"choice",
