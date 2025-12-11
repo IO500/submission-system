@@ -197,6 +197,8 @@
                     "SUSE Community",
                     "Ubuntu",
                     "CentOS",
+                    "RockyLinux",
+                    "AlmaLinux",
                     "other"
                 ],
                 "required":true,
@@ -1016,6 +1018,8 @@
                     "SUSE Community",
                     "Ubuntu",
                     "CentOS",
+                    "RockyLinux",
+                    "AlmaLinux",
                     "other"
                 ],
                 "db":"information_ds_operating_system,information_md_operating_system"
