@@ -16,9 +16,11 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Database\Type\EncryptedType;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Core\Exception\MissingPluginException;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
@@ -46,6 +48,10 @@ class Application extends BaseApplication
     {
         $this->addPlugin('Bugsnag');
         $this->addPlugin('Josegonzalez/Upload');
+
+        // Register the encrypted DB type for PII columns (email, first/last name).
+        // This must run before any table schema is initialised.
+        TypeFactory::map('encrypted', EncryptedType::class);
 
         // Call parent to load bootstrap from files.
         parent::bootstrap();
@@ -78,6 +84,32 @@ class Application extends BaseApplication
         Configure::write('Auth.Authenticators', $authenticators);
 
         $this->addPlugin('CakeDC/Users', ['bootstrap' => true, 'routes' => true]);
+    }
+
+    /**
+     * After all plugins bootstrap, re-apply our UsersTable override.
+     *
+     * CakeDC/Users config/bootstrap.php runs during pluginBootstrap() and
+     * unconditionally calls setConfig('CakeDC/Users.Users', ...) — overwriting
+     * anything we set in bootstrap(). Overriding pluginBootstrap() here lets us
+     * re-apply the config after the plugin bootstrap file has run.
+     */
+    public function pluginBootstrap(): void
+    {
+        parent::pluginBootstrap();
+
+        $locator = \Cake\ORM\TableRegistry::getTableLocator();
+
+        // Override both aliases so email encryption is always active regardless
+        // of which alias the plugin's internal code uses.
+        foreach (['Users', 'CakeDC/Users.Users'] as $alias) {
+            if (!$locator->exists($alias)) {
+                $locator->setConfig($alias, [
+                    'className' => \App\Model\Table\UsersTable::class,
+                ]);
+            }
+        }
+
     }
 
     /**

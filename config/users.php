@@ -174,8 +174,8 @@ $config = [
                     'password' => 'password'
                 ],
                 'resolver' => [
-                    'className' => 'Authentication.Orm',
-                    'finder' => 'active'
+                    'className' => \App\Authentication\Resolver\EncryptedEmailOrmResolver::class,
+                    'finder' => 'active',
                 ],
             ],
             "Social" => [

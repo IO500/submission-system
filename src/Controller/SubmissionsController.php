@@ -1013,7 +1013,7 @@ class SubmissionsController extends AppController
 
             $submission->release_id = $release_id;
             $submission->user_id = $this->getRequest()->getAttribute('identity')['id'];
-            $submission->information_submitter = $this->getRequest()->getAttribute('identity')['email'];
+            $submission->information_submitter = (string)$this->getRequest()->getAttribute('identity')['id'];
             $submission->information_submission_date = date('Y-m-d H:i:s');
             $submission->upload_hash = sha1($submission->user_id . $submission->information_submission_date);
 
