@@ -370,10 +370,10 @@ class ListingsController extends AppController
         $table = strtolower('list_' . $listing->release->acronym . '_' . str_replace('ten', '10node', $listing->type->url));
         $table = str_replace('-', '_', $table);
 
-        if (date('Y-m-d') > $listing->release->release_date->i18nFormat('yyyy-MM-dd')) {
+        if (date('Y-m-d') > $listing->release->release_date->addMonth()->i18nFormat('yyyy-MM-dd')) {
             $this->Flash->error(__('You are not allowed to delete an already released list!'));
 
-            return $this->redirect(['action' => 'index']);
+            return $this->redirect(['controller' => 'releases', 'action' => 'index']);
         }
 
         $listing = $this->Listings->get($id);

@@ -957,6 +957,7 @@ class SubmissionsController extends AppController
 
                 $submission->ior_easy_write = $results['ior-easy-write'] ?? null;
                 $submission->ior_easy_read = $results['ior-easy-read'] ?? null;
+                $submission->ior_easy_read_random = $results['ior-rnd4K-easy-read'] ?? null;
                 $submission->ior_hard_write = $results['ior-hard-write'] ?? null;
                 $submission->ior_hard_read = $results['ior-hard-read'] ?? null;
 
@@ -1386,10 +1387,10 @@ class SubmissionsController extends AppController
             ]);
 
         // Find all releases
-        $releases = $this->Submissions->Releases->find('list')
+        $releases = $this->Submissions->Releases->find('list'); /*
             ->where([
-                'Releases.release_date >=' => date('Y-m-d'),
-            ]);
+                'Releases.release_date' => date('Y-m-d'),
+            ]);*/
 
         $last_release = $this->Submissions->Releases->find('all')
             ->where([
