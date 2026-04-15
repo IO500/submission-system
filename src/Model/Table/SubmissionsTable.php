@@ -50,7 +50,7 @@ class SubmissionsTable extends Table
         ]);
 
         $this->belongsTo('Users', [
-            'className' => 'CakeDC/Users.Users',
+            'className' => \App\Model\Table\UsersTable::class,
             'foreignKey' => 'user_id',
             'joinType' => 'LEFT',
         ]);

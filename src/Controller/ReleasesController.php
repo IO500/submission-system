@@ -128,6 +128,64 @@ class ReleasesController extends AppController
         # We will re-create the view with all submissions
         $connection = ConnectionManager::get('default');
 
+        $found = $connection->execute(
+            "SELECT
+                COUNT(TABLE_NAME) AS total
+            FROM
+                information_schema.TABLES
+            WHERE
+                TABLE_SCHEMA = 'io500_db' AND
+                TABLE_NAME = 'listings_submissions'
+            "
+        )->fetch('assoc')['total'];
+
+        # Use a transaction to avoid data corruption
+        $connection->begin();
+
+        if ($found) {
+            $connection->execute('DROP VIEW listings_submissions');
+        }
+
+        $releases = $connection->execute(
+            "SELECT
+                TABLE_NAME
+            FROM
+                information_schema.TABLES
+            WHERE
+                TABLE_SCHEMA = 'io500_db' AND
+                TABLE_NAME LIKE 'list\_%'
+            "
+        )->fetchAll('assoc');
+
+        $query = 'CREATE VIEW listings_submissions AS ';
+
+        $lists = [];
+
+        foreach ($releases as $release) {
+            $lists[] = 'SELECT * FROM ' . $release['TABLE_NAME'];
+        }
+
+        $query .= implode(' UNION ALL ', $lists);
+
+        $connection->execute($query);
+
+        $connection->commit();
+
+        $this->Flash->success(__('The releases have been synchronized!'));
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Synchronize method
+     *
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     */
+    public function synchronize_broken()
+    {
+        # We will re-create the view with all submissions
+        $connection = ConnectionManager::get('default');
+
         # We need the name of each table that should be in the view (for valid and released lists)
         $releases = $this->Releases->find('all')
             ->where([
@@ -145,7 +203,7 @@ class ReleasesController extends AppController
             FROM 
                 information_schema.TABLES 
             WHERE
-                TABLE_SCHEMA = 'io500_db_shadow' AND
+                TABLE_SCHEMA = 'io500_db' AND
                 TABLE_NAME = 'listings_submissions'
             "
         )->fetch('assoc')['total'];
