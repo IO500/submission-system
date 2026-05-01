@@ -58,6 +58,36 @@
         ?>
     </p>
 
+    <p>
+        <?php
+
+        echo $this->Form->control('acknowledged_rules',
+            [
+                'type' => 'checkbox',
+                'label' => [
+                    'escape' => false,
+                    'text' => 'I acknowledge that I have read and followed the '
+                        . '<a href="https://io500.org/rules/submission" target="_blank" rel="noopener noreferrer">IO500 submission rules</a>.',
+                ],
+                'required'
+            ]
+        );
+        ?>
+    </p>
+
+    <p>
+        <?php
+
+        echo $this->Form->control('acknowledged_publication',
+            [
+                'type' => 'checkbox',
+                'label' => 'I grant IO500 permission to publish and use these results for the official rankings and analysis.',
+                'required'
+            ]
+        );
+        ?>
+    </p>
+
     <div class="form-buttons">
         <?php
         echo $this->Form->button(

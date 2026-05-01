@@ -124,7 +124,7 @@ class SubmissionsController extends AppController
 
             $submission = $this->Submissions->patchEntity($submission, $data);
 
-            if ($data['confirmation']) {
+            if (!empty($data['confirmation']) && !empty($data['acknowledged_rules']) && !empty($data['acknowledged_publication'])) {
                 $submission->status_id = 2;
             }
 
