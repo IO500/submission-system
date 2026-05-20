@@ -17,6 +17,7 @@
                     <th class="tb-id"><?php echo $this->Paginator->sort('id', 'ID') ?></th>
                     <th><?php echo $this->Paginator->sort('acronym') ?></th>
                     <th><?php echo $this->Paginator->sort('release_date') ?></th>
+                    <th class="tb-checklist"><?php echo __('Checklist') ?></th>
                     <th class="tb-actions"><?php echo __('Actions') ?></th>
                 </tr>
             </thead>
@@ -26,9 +27,27 @@
                     <td class="tb-id"><?php echo $this->Number->format($release->id) ?></td>
                     <td><?php echo h($release->acronym) ?></td>
                     <td><?php echo h($release->release_date) ?></td>
+                    <td class="tb-checklist">
+                        <?php
+                        $items = $release->checklist ?? [];
+                        $total = count($items);
+                        if ($total === 0) {
+                            echo '&mdash;';
+                        } else {
+                            $done = 0;
+                            foreach ($items as $i) {
+                                if (($i['status'] ?? 'pending') === 'done') { $done++; }
+                            }
+                            $pct = (int)round($done * 100 / $total);
+                            $pillClass = $done === $total ? 'status-done' : 'status-pending';
+                            echo '<strong class="status ' . $pillClass . '">' . $done . ' / ' . $total . ' (' . $pct . '%)</strong>';
+                        }
+                        ?>
+                    </td>
                     <td class="tb-actions">
                         <?php echo $this->AuthLink->link('<i class="fas fa-eye"></i>', ['action' => 'view', $release->id], ['escape' => false]) ?>
                         <?php echo $this->AuthLink->link('<i class="fas fa-highlighter"></i>', ['action' => 'edit', $release->id], ['escape' => false]) ?>
+                        <?php echo $this->AuthLink->link('<i class="fas fa-list-check"></i>', ['action' => 'checklist', $release->id], ['escape' => false]) ?>
                     </td>
                 </tr>
                 <?php } ?>

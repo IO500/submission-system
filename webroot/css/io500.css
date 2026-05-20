@@ -1252,6 +1252,67 @@ form #json {
     color: #fff;
 }
 
+.status-pending {
+    background: #ffd166;
+    color: #454545;
+}
+
+.drag-handle {
+    display: inline-block;
+    color: #888;
+    cursor: grab;
+    flex: 0 0 auto;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.checklist-edit td,
+.checklist-edit th {
+    vertical-align: middle;
+}
+
+.checklist-edit th:nth-child(2),
+.checklist-edit th:nth-child(3),
+.checklist-edit td:nth-child(2),
+.checklist-edit td:nth-child(3) {
+    text-align: center;
+}
+
+.tb-checklist {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.status-meta {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+}
+
+.checklist-row-cell {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.checklist-label-input {
+    flex: 1;
+    width: 100%;
+    margin: 0;
+}
+
+.status-done {
+    background: #06d6a0;
+    color: #fff;
+}
+
+.status-new {
+    background: #efefef;
+    color: #454545;
+}
+
 .red-stripe {
     color: #cc1717;
 }

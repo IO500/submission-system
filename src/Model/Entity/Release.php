@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property bool $enable_10_node_list
  * @property bool $enable_full_list
  * @property bool $enable_historical_list
+ * @property array|null $checklist
  *
  * @property \App\Model\Entity\Listing[] $listings
  * @property \App\Model\Entity\Submission[] $submissions
@@ -35,5 +36,6 @@ class Release extends Entity
         'release_date' => true,
         'listings' => true,
         'submissions' => true,
+        'checklist' => true,
     ];
 }
