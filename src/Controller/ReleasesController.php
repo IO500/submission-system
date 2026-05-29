@@ -313,6 +313,7 @@ class ReleasesController extends AppController
     {
         # We will re-create the view with all submissions
         $connection = ConnectionManager::get('default');
+        $database = $connection->config()['database'];
 
         $found = $connection->execute(
             "SELECT
@@ -320,9 +321,10 @@ class ReleasesController extends AppController
             FROM
                 information_schema.TABLES
             WHERE
-                TABLE_SCHEMA = 'io500_db' AND
-                TABLE_NAME = 'listings_submissions'
-            "
+                TABLE_SCHEMA = :schema AND
+                TABLE_NAME = :table
+            ",
+            ['schema' => $database, 'table' => 'listings_submissions']
         )->fetch('assoc')['total'];
 
         # Use a transaction to avoid data corruption
@@ -338,9 +340,10 @@ class ReleasesController extends AppController
             FROM
                 information_schema.TABLES
             WHERE
-                TABLE_SCHEMA = 'io500_db' AND
-                TABLE_NAME LIKE 'list\_%'
-            "
+                TABLE_SCHEMA = :schema AND
+                TABLE_NAME LIKE :prefix
+            ",
+            ['schema' => $database, 'prefix' => 'list\_%']
         )->fetchAll('assoc');
 
         $query = 'CREATE VIEW listings_submissions AS ';
@@ -371,6 +374,7 @@ class ReleasesController extends AppController
     {
         # We will re-create the view with all submissions
         $connection = ConnectionManager::get('default');
+        $database = $connection->config()['database'];
 
         # We need the name of each table that should be in the view (for valid and released lists)
         $releases = $this->Releases->find('all')
@@ -384,14 +388,15 @@ class ReleasesController extends AppController
             ]);
 
         $found = $connection->execute(
-            "SELECT 
+            "SELECT
                 COUNT(TABLE_NAME) AS total
-            FROM 
-                information_schema.TABLES 
+            FROM
+                information_schema.TABLES
             WHERE
-                TABLE_SCHEMA = 'io500_db' AND
-                TABLE_NAME = 'listings_submissions'
-            "
+                TABLE_SCHEMA = :schema AND
+                TABLE_NAME = :table
+            ",
+            ['schema' => $database, 'table' => 'listings_submissions']
         )->fetch('assoc')['total'];
 
         # Use a transaction to avoid data corruption
