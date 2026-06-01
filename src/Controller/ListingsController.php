@@ -135,16 +135,18 @@ class ListingsController extends AppController
                 $previous_table = str_replace('-', '_', $previous_table);
 
                 $connection = ConnectionManager::get('default');
+                $database = $connection->config()['database'];
 
                 $found = $connection->execute(
-                    "SELECT 
+                    "SELECT
                         COUNT(TABLE_NAME) AS total
-                    FROM 
-                        information_schema.TABLES 
+                    FROM
+                        information_schema.TABLES
                     WHERE
-                        TABLE_SCHEMA = 'io500_db' AND
-                        TABLE_NAME = '" . $previous_table . "'
-                    "
+                        TABLE_SCHEMA = :schema AND
+                        TABLE_NAME = :table
+                    ",
+                    ['schema' => $database, 'table' => $previous_table]
                 )->fetch('assoc')['total'];
 
                 if (!$found) {
