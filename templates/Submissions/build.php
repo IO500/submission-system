@@ -53,8 +53,8 @@
         <strong><?php echo strtoupper($release_acronym); ?></strong> has <strong><?php echo $total_new; ?> accepted submissions</strong>. Before building the next release, make sure all submissions are reviewed. Only accepted submissions will be available for selection!
     </fieldset>
 
-    <div class="submissions-action">
-        <button type="button" id="toggle-all" class="button-navigation">Select all</button>
+    <div style="text-align: left; margin: 10px 0;">
+        <button type="button" id="toggle-all">Select all</button>
     </div>
 
     <div class="table-responsive custom-table">
@@ -168,18 +168,22 @@
     ?>
 </div>
 
-<script type="text/javascript">
+<?php
+// Defer JS to the scriptBottom block so it runs after jQuery is loaded
+// in templates/layout/default.php. An inline <script> here in `content`
+// would execute before jQuery and silently fail.
+$this->Html->scriptBlock(
+    <<<'JS'
 $("td").click(function(e) {
     var chk = $(this).closest("tr").find("input:checkbox").get(0);
-    if(e.target != chk)
-    {
+    if (e.target != chk) {
         chk.checked = !chk.checked;
     }
 });
 
 $("#toggle-all").click(function(e) {
     e.preventDefault();
-    var $boxes = $('input[name="selected[]"]');
+    var $boxes = $('input[type="checkbox"][name="selected[]"]');
     if ($boxes.filter(':not(:checked)').length > 0) {
         $boxes.prop('checked', true);
         $(this).text('Deselect all');
@@ -188,4 +192,7 @@ $("#toggle-all").click(function(e) {
         $(this).text('Select all');
     }
 });
-</script>
+JS,
+    ['block' => 'scriptBottom']
+);
+?>
