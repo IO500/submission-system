@@ -54,7 +54,7 @@
     </fieldset>
 
     <div style="text-align: left; margin: 10px 0;">
-        <button type="button" id="toggle-all">Select all</button>
+        <button type="button" id="toggle-all" style="background: #fff; color: #d63b1e;">Select all</button>
     </div>
 
     <div class="table-responsive custom-table">
