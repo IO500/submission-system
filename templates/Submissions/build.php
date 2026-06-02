@@ -53,15 +53,13 @@
         <strong><?php echo strtoupper($release_acronym); ?></strong> has <strong><?php echo $total_new; ?> accepted submissions</strong>. Before building the next release, make sure all submissions are reviewed. Only accepted submissions will be available for selection!
     </fieldset>
 
-    <div style="text-align: left; margin: 10px 0;">
-        <button type="button" id="toggle-all" style="background: #fff; color: #d63b1e;">Select all</button>
-    </div>
-
     <div class="table-responsive custom-table">
         <table class="tb">
             <thead>
                 <tr>
-                    <th rowspan="2" class="tb-id"></th>
+                    <th rowspan="2" class="tb-id">
+                        <input type="checkbox" id="toggle-all" title="Select all">
+                    </th>
                     <th rowspan="2" class="tb-id"></th>
                     <th rowspan="2" class="tb-id">#</th>
                     <th rowspan="2" class="tb"></th>
@@ -174,24 +172,32 @@
 // would execute before jQuery and silently fail.
 $this->Html->scriptBlock(
     <<<'JS'
+function syncToggleAllState() {
+    var $boxes = $('input[type="checkbox"][name="selected[]"]');
+    var total = $boxes.length;
+    var checked = $boxes.filter(':checked').length;
+    var toggle = document.getElementById('toggle-all');
+    if (!toggle) { return; }
+    toggle.checked = (checked === total && total > 0);
+    toggle.indeterminate = (checked > 0 && checked < total);
+}
+
 $("td").click(function(e) {
     var chk = $(this).closest("tr").find("input:checkbox").get(0);
     if (e.target != chk) {
         chk.checked = !chk.checked;
+        syncToggleAllState();
     }
 });
 
-$("#toggle-all").click(function(e) {
-    e.preventDefault();
-    var $boxes = $('input[type="checkbox"][name="selected[]"]');
-    if ($boxes.filter(':not(:checked)').length > 0) {
-        $boxes.prop('checked', true);
-        $(this).text('Deselect all');
-    } else {
-        $boxes.prop('checked', false);
-        $(this).text('Select all');
-    }
+$('input[type="checkbox"][name="selected[]"]').on('change', syncToggleAllState);
+
+$('#toggle-all').on('click', function() {
+    var checked = this.checked;
+    $('input[type="checkbox"][name="selected[]"]').prop('checked', checked);
 });
+
+syncToggleAllState();
 JS,
     ['block' => 'scriptBottom']
 );
