@@ -53,6 +53,10 @@
         <strong><?php echo strtoupper($release_acronym); ?></strong> has <strong><?php echo $total_new; ?> accepted submissions</strong>. Before building the next release, make sure all submissions are reviewed. Only accepted submissions will be available for selection!
     </fieldset>
 
+    <div class="submissions-action">
+        <button type="button" id="toggle-all" class="button-navigation">Select all</button>
+    </div>
+
     <div class="table-responsive custom-table">
         <table class="tb">
             <thead>
@@ -170,6 +174,18 @@ $("td").click(function(e) {
     if(e.target != chk)
     {
         chk.checked = !chk.checked;
+    }
+});
+
+$("#toggle-all").click(function(e) {
+    e.preventDefault();
+    var $boxes = $('input[name="selected[]"]');
+    if ($boxes.filter(':not(:checked)').length > 0) {
+        $boxes.prop('checked', true);
+        $(this).text('Deselect all');
+    } else {
+        $boxes.prop('checked', false);
+        $(this).text('Select all');
     }
 });
 </script>
