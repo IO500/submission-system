@@ -283,6 +283,13 @@ class SubmissionsController extends AppController
                 $submission = $this->parse_nas($submission, $json_nas);
             }
 
+            // OTHER
+            $json_other = $this->find_information($json_storage_system, 'type', 'OTHER');
+
+            if ($json_other) {
+                $submission = $this->parse_other($submission, $json_other);
+            }
+
             // DAOS
             $json_daos = $this->find_information($json_storage_system, 'type', 'DAOS');
 
@@ -706,6 +713,56 @@ class SubmissionsController extends AppController
             $submission->information_ds_interconnect_bandwidth = isset($json_nas_server_interconnect['att']['peak throughput']) ? implode(' ', $json_nas_server_interconnect['att']['peak throughput']) : null;
             $submission->information_ds_interconnect_links = $json_nas_server_interconnect['att']['links'] ?? null;
             $submission->information_ds_interconnect_rdma = isset($json_nas_server_interconnect['att']['features']) ? (strpos($json_nas_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
+
+            $submission->information_ds_network = $submission->information_ds_interconnect_type;
+        }
+
+        return $submission;
+    }
+
+    /**
+     * parse_other method
+     *
+     * @param object|null $submission Submission.
+     * @param object|null $json_other JSON array with OTHER information.
+     * @return object|null $submission Submission.
+     */
+    private function parse_other($submission, $json_other)
+    {
+        // Data Server
+        $json_other_server = $this->find_information($json_other, 'type', 'SERVERS');
+
+        $submission->information_ds_nodes = $json_other_server['att']['count'] ?? null;
+        $submission->information_ds_operating_system = $json_other_server['att']['distribution'] ?? null;
+        $submission->information_ds_operating_system_version = $json_other_server['att']['distribution version'] ?? null;
+        $submission->information_ds_kernel_version = $json_other_server['att']['kernel version'] ?? null;
+
+        $submission->information_submission_date = $submission->information_submission_date ?? date('Y-m-d H:i:s');
+
+        $json_other_server_processor = $this->find_information($json_other_server, 'type', 'PROCESSOR');
+
+        if ($json_other_server_processor) {
+            $submission->information_ds_architecture = $json_other_server_processor['att']['architecture'] ?? null;
+            $submission->information_ds_model = $json_other_server_processor['att']['model'] ?? null;
+            $submission->information_ds_sockets = $json_other_server_processor['att']['sockets'] ?? null;
+            $submission->information_ds_cores_per_socket = $json_other_server_processor['att']['cores per socket'] ?? null;
+            $submission->information_ds_clock = isset($json_other_server_processor['att']['frequency']) ? implode(' ', $json_other_server_processor['att']['frequency']) : null;
+        }
+
+        $json_other_server_memory = $this->find_information($json_other_server, 'type', 'MEMORY');
+
+        if ($json_other_server_memory) {
+            $submission->information_ds_volatile_memory_capacity = isset($json_other_server_memory['att']['net capacity']) ? implode(' ', $json_other_server_memory['att']['net capacity']) : null;
+        }
+
+        $json_other_server_interconnect = $this->find_information($json_other_server, 'type', 'INTERCONNECT');
+
+        if ($json_other_server_interconnect) {
+            $submission->information_ds_interconnect_type = $json_other_server_interconnect['att']['type'] ?? null; // same as information_ds_network
+            $submission->information_ds_interconnect_vendor = $json_other_server_interconnect['att']['vendor'] ?? null;
+            $submission->information_ds_interconnect_bandwidth = isset($json_other_server_interconnect['att']['peak throughput']) ? implode(' ', $json_other_server_interconnect['att']['peak throughput']) : null;
+            $submission->information_ds_interconnect_links = $json_other_server_interconnect['att']['links'] ?? null;
+            $submission->information_ds_interconnect_rdma = isset($json_other_server_interconnect['att']['features']) ? (strpos($json_other_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
 
             $submission->information_ds_network = $submission->information_ds_interconnect_type;
         }
