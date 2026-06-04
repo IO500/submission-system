@@ -90,6 +90,7 @@
                     "SpectrumScale",
                     "BeeGFS",
                     "NAS",
+                    "Other",
                     "DAOS",
                     "WekaIO",
                     "Ceph",
@@ -979,6 +980,36 @@
                 "Servers"
             ]
         },
+        "Other":{
+            "protocol":{
+                "dtype":"choice",
+                "desc":"The protocol for connection to clients",
+                "choice":[
+                    "SMB",
+                    "CIFS",
+                    "NFS",
+                    "other"
+                ]
+            },
+            "protocol version":{
+                "dtype":"text",
+                "desc":"The version of the protocol in use."
+            },
+            "transfer protocol":{
+                "dtype":"choice",
+                "desc":"The protocol for connection to clients",
+                "choice":[
+                    "TCP",
+                    "UDP",
+                    "NConnect",
+                    "RoCE",
+                    "other"
+                ]
+            },
+            "SCHEMES_multi":[
+                "Servers"
+            ]
+        },
         "Servers":{
             "name":{
                 "dtype":"string",
@@ -1701,6 +1732,7 @@
                     "SpectrumScale",
                     "BeeGFS",
                     "NAS",
+                    "Other",
                     "DAOS",
                     "WekaIO",
                     "Ceph",
