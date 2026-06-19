@@ -876,6 +876,20 @@ dd {
     margin: 0 0 30px 0;
 }
 
+.tb tr.row-empty td,
+.tb tr.row-empty th {
+    background: #fdecea;
+}
+
+.tb tbody tr.row-empty:hover td,
+.tb tbody tr.row-empty:hover th {
+    background: #fbdbd6;
+}
+
+.row-empty-icon {
+    color: #d63b1e;
+}
+
 .synchronize {
     background: #d63b1e;
     border-color: #d63b1e;
