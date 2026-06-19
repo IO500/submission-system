@@ -252,6 +252,8 @@ class SubmissionsController extends AppController
 
             $submission->information_storage_vendor = $json_storage_system['att']['vendor'] ?? null;
 
+            $submission->information_production = (($json_storage_system['att']['usage'] ?? '') === 'production');
+
             $submission->information_client_spdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'SPDK') === false ? false : true) : false;
             $submission->information_client_dpdk = isset($json_storage_system['att']['frameworks']) ? (strpos($json_storage_system['att']['frameworks'], 'DPDK') === false ? false : true) : false;
 

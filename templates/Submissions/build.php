@@ -65,6 +65,7 @@
                     <th colspan="3" class="tb-center">IO500</th>
                     <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'IO500') ?></th>
                     <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', '10-NODE') ?></th>
+                    <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_production', 'PROD') ?></th>
                 </tr>
                 <tr>
                     <th class="tb-text">System</th>
@@ -140,6 +141,13 @@
                             }
                         // }
                         ?>
+                    </td>
+                    <td class="tb-center">
+                        <?php if ($submission->information_production) { ?>
+                            <i class="fas fa-check"></i>
+                        <?php } else { ?>
+                            <i class="fas fa-ban"></i>
+                        <?php } ?>
                     </td>
                 </tr>
                 <?php } ?>
