@@ -63,8 +63,8 @@
                     <th rowspan="2" class="tb"></th>
                     <th colspan="5" class="tb-center">Information</th>
                     <th colspan="3" class="tb-center">IO500</th>
-                    <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', 'IO500') ?></th>
-                    <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', '10-NODE') ?></th>
+                    <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('include_in_io500', 'IO500') ?></th>
+                    <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_10_node_challenge', '10-NODE') ?></th>
                     <th rowspan="2" class="tb-center"><?php echo $this->Paginator->sort('information_production', 'PROD') ?></th>
                 </tr>
                 <tr>
