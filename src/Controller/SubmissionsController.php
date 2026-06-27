@@ -657,6 +657,9 @@ class SubmissionsController extends AppController
             $submission->information_md_media_primary_interface = $json_beegfs_server_media['att']['interface'] ?? null;
             $submission->information_md_media_primary_count = $json_beegfs_server_media['att']['count'] ?? null;
             $submission->information_md_media_primary_capacity = isset($json_beegfs_server_media['att']['net capacity']) ? implode(' ', $json_beegfs_server_media['att']['net capacity']) : null;
+
+            $submission->information_md_storage_type = $submission->information_md_media_primary_type;
+            $submission->information_md_storage_interface = $submission->information_md_media_primary_interface;
         }
 
         $json_beegfs_server_media = $this->find_information($json_beegfs_server, 'type', 'STORAGEMEDIA', 2);
@@ -731,6 +734,12 @@ class SubmissionsController extends AppController
      */
     private function parse_other($submission, $json_other)
     {
+        // The Other node carries no version of its own; the software version is
+        // defined at the storage-system level and already parsed into
+        // information_filesystem_version (see parse()).
+        $submission->information_ds_software_version = $submission->information_filesystem_version ?? null;
+        $submission->information_md_software_version = $submission->information_filesystem_version ?? null;
+
         // The Other scheme only defines a single Servers group, so the same
         // server set populates both the data-server and metadata-server fields.
         $json_other_server = $this->find_information($json_other, 'type', 'SERVERS');
@@ -788,6 +797,36 @@ class SubmissionsController extends AppController
             $submission->information_md_interconnect_rdma = isset($json_other_server_interconnect['att']['features']) ? (strpos($json_other_server_interconnect['att']['features'], 'RDMA') === false ? false : true) : false;
 
             $submission->information_md_network = $submission->information_md_interconnect_type;
+        }
+
+        // Storage media. The Other scheme has a single Servers group, so the same
+        // media populates both the data-server and metadata-server fields, mirroring
+        // parse_lustre(). Guarded so a missing StorageMedia leaves existing values
+        // (e.g. the IO500-sourced DS storage type) untouched.
+        $json_other_server_media = $this->find_information($json_other_server, 'type', 'STORAGEMEDIA', 1);
+
+        if ($json_other_server_media) {
+            $submission->information_ds_storage_type = $json_other_server_media['att']['type'] ?? null;
+            $submission->information_ds_storage_interface = $json_other_server_media['att']['interface'] ?? null;
+
+            $submission->information_md_media_primary_type = $json_other_server_media['att']['type'] ?? null; // same as information_md_storage_type
+            $submission->information_md_media_primary_vendor = $json_other_server_media['att']['vendor'] ?? null;
+            $submission->information_md_media_primary_interface = $json_other_server_media['att']['interface'] ?? null; // same as information_md_storage_interface
+            $submission->information_md_media_primary_count = $json_other_server_media['att']['count'] ?? null;
+            $submission->information_md_media_primary_capacity = isset($json_other_server_media['att']['net capacity']) ? implode(' ', $json_other_server_media['att']['net capacity']) : null;
+
+            $submission->information_md_storage_type = $submission->information_md_media_primary_type;
+            $submission->information_md_storage_interface = $submission->information_md_media_primary_interface;
+        }
+
+        $json_other_server_media = $this->find_information($json_other_server, 'type', 'STORAGEMEDIA', 2);
+
+        if ($json_other_server_media) {
+            $submission->information_md_media_secondary_type = $json_other_server_media['att']['type'] ?? null;
+            $submission->information_md_media_secondary_vendor = $json_other_server_media['att']['vendor'] ?? null;
+            $submission->information_md_media_secondary_interface = $json_other_server_media['att']['interface'] ?? null;
+            $submission->information_md_media_secondary_count = $json_other_server_media['att']['count'] ?? null;
+            $submission->information_md_media_secondary_capacity = isset($json_other_server_media['att']['net capacity']) ? implode(' ', $json_other_server_media['att']['net capacity']) : null;
         }
 
         return $submission;
