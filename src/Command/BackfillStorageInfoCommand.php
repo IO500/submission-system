@@ -66,6 +66,13 @@ class BackfillStorageInfoCommand extends Command
             'help' => 'Limit to a single submission id (useful for verification).',
         ]);
 
+        $parser->addOption('show-conflicts', [
+            'boolean' => true,
+            'default' => false,
+            'help'    => 'Report columns whose existing DB value differs from the JSON value. ' .
+                         'Read-only: never writes, regardless of --commit.',
+        ]);
+
         return $parser;
     }
 
@@ -73,8 +80,11 @@ class BackfillStorageInfoCommand extends Command
     {
         $commit = (bool)$args->getOption('commit');
         $onlyId = $args->getOption('id');
+        $showConflicts = (bool)$args->getOption('show-conflicts');
 
-        if (!$commit) {
+        if ($showConflicts) {
+            $io->out('<warning>Conflict report — read-only, no changes will be written.</warning>');
+        } elseif (!$commit) {
             $io->out('<warning>Dry-run mode — no changes will be written. Pass --commit to write.</warning>');
         }
 
@@ -95,6 +105,7 @@ class BackfillStorageInfoCommand extends Command
         $changedRows = 0;
         $noJson = 0;
         $totalFields = 0;
+        $conflicts = 0;
 
         foreach ($rows as $row) {
             $id = (int)$row['id'];
@@ -107,6 +118,27 @@ class BackfillStorageInfoCommand extends Command
 
             $candidates = $this->extract($json);
             if ($candidates === null) {
+                continue;
+            }
+
+            // Report-only mode: flag columns where the DB already holds a non-empty
+            // value that differs from the JSON value. Never writes.
+            if ($showConflicts) {
+                foreach ($candidates as $col => $value) {
+                    if ($this->isEmpty($value) || $this->isEmpty($row[$col] ?? null)) {
+                        continue;
+                    }
+                    if (trim((string)$value) !== trim((string)$row[$col])) {
+                        $conflicts++;
+                        $io->out(sprintf(
+                            '  #%d  CONFLICT %s: db="%s" json="%s" (left unchanged)',
+                            $id,
+                            $col,
+                            (string)$row[$col],
+                            (string)$value
+                        ));
+                    }
+                }
                 continue;
             }
 
@@ -132,6 +164,12 @@ class BackfillStorageInfoCommand extends Command
             if ($commit) {
                 $this->updateRow($db, $id, $updates);
             }
+        }
+
+        if ($showConflicts) {
+            $io->out(sprintf('%d conflict(s) found. %d had no readable JSON. Nothing was changed.', $conflicts, $noJson));
+
+            return self::CODE_SUCCESS;
         }
 
         $io->out(sprintf(
