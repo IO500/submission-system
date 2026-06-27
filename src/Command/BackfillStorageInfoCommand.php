@@ -537,8 +537,21 @@ class BackfillStorageInfoCommand extends Command
 
     private function parse_spectrum($submission, $json_spectrum)
     {
-        $submission->information_ds_software_version = $json_spectrum['att']['Version'] ?? null;
-        $submission->information_md_software_version = $json_spectrum['att']['Version'] ?? null;
+        // IBM Spectrum Scale versions are V.R.M.F (Version.Release.Mod.FixPack), stored as
+        // separate attributes. Compose the full version instead of just the major digit,
+        // stopping at the first missing component so we never fabricate or malform it.
+        $spectrum_version_parts = [];
+        foreach (['Version', 'Release', 'Mod', 'FixPack'] as $vrmf) {
+            $vrmf_value = $json_spectrum['att'][$vrmf] ?? null;
+            if ($vrmf_value === null || $vrmf_value === '') {
+                break;
+            }
+            $spectrum_version_parts[] = $vrmf_value;
+        }
+        $spectrum_version = $spectrum_version_parts ? implode('.', $spectrum_version_parts) : null;
+
+        $submission->information_ds_software_version = $spectrum_version;
+        $submission->information_md_software_version = $spectrum_version;
 
         // Data Server
         $json_spectrum_server = $this->find_information($json_spectrum, 'type', 'DATA SERVERS');
