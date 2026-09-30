@@ -84,7 +84,11 @@ class UsersTable extends \CakeDC\Users\Model\Table\UsersTable
 
         $key = $this->encKey();
 
-        $where->iterateParts(function ($condition, &$condKey) use ($key) {
+        // Recurse into nested expressions (e.g. the OR built by findByUsernameOrEmail).
+        $rewrite = function ($condition, &$condKey) use ($key, &$rewrite) {
+            if ($condition instanceof \Cake\Database\Expression\QueryExpression) {
+                return $condition->iterateParts($rewrite);
+            }
             if (!($condition instanceof \Cake\Database\Expression\ComparisonExpression)) {
                 return $condition;
             }
@@ -105,7 +109,9 @@ class UsersTable extends \CakeDC\Users\Model\Table\UsersTable
             }
 
             return $condition;
-        });
+        };
+
+        $where->iterateParts($rewrite);
     }
 
     // -------------------------------------------------------------------------
